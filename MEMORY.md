@@ -14,7 +14,7 @@ NestJS 12 · TypeScript (ESM) · Prisma 7.10 · PostgreSQL 16 · Redis 7 · Stri
 - NO versionar jamás: `.env`, `generated/`, `dist/`, `node_modules/`, `*.tsbuildinfo`.
 
 ## Estado actual
-- Backend **completo y compilando** (build + lint en verde), 9 módulos:
+- Backend **completo, compilando y con runtime validado** (build + lint en verde), 9 módulos:
   - `auth` (JWT access/refresh, blacklist Redis, Argon2, RBAC)
   - `users` (CRUD, roles, /me)
   - `vehicles` (CRUD, filtros, cursor pagination cifrado, caché Redis, slug)
@@ -26,17 +26,18 @@ NestJS 12 · TypeScript (ESM) · Prisma 7.10 · PostgreSQL 16 · Redis 7 · Stri
   - `health` (`GET /api/v1/health`: Prisma + Redis)
 - Infra: `Dockerfile`, `docker-compose.yml` (postgres 16 + redis 7 + app), `.env.example` con placeholders.
 - Seed: `prisma/seed.ts` (admin/manager/2 sellers + specifications + 3 vehículos demo).
+- **Runtime validado (2026-09-08)**: migración `20260908163629_init` aplicada; seed ejecutado; API arriba en `localhost:3000` — health OK, register/login OK, `/users/me` con JWT OK, catálogo paginado (cursor) OK, RBAC (CLIENT→403 en `/audit`, ADMIN→200) OK, búsqueda full-text "rav4" OK. Swagger en `/api/docs`.
 
 ## Próximo paso
-Levantar infra y validar runtime:
-1. PostgreSQL 16 + Redis 7 (instalar local o `docker compose up -d postgres redis`).
-2. `npm run prisma:migrate` (crea `prisma/migrations/`, aún no existe) luego seed.
-3. `npm run start` y probar `GET http://localhost:3000/api/v1/health` + flujo público (register→login→catálogo).
-4. Opcional: `npm run test:e2e`.
+Runtime **validado** (ver Estado actual). Siguientes opciones en orden de valor:
+1. `npm run test:e2e` (ya hay DB/Redis) y subir cobertura de los flujos críticos (reserva→pago→webhook).
+2. Decidir y construir el **frontend** (consejo de planeación disponible) y el **panel de administración**.
+3. Preparar despliegue (S3 real, Stripe live/keys reales, DOMINIO/HTTPS, GitHub Actions CI/CD).
 
 ## Blockers
-- PostgreSQL y Redis **no instalados** en la máquina; Docker tampoco → no se ha podido probar runtime ni crear migraciones.
-- `PrismaService.onModuleInit` hace `$connect()` sin catch → si la DB no responde al boot, la app crashea (aceptado; compose usa healthchecks).
+- ~~PostgreSQL y Redis no instalados~~ → **Resueltos**: PostgreSQL 18.6 y Valkey 9.1.2 (Remedio: el paquete `redis` de Arch ahora provee Valkey, protocolo compatible) activos en la máquina.
+- `jcauto` necesita `CREATEDB` para la shadow database de Prisma (concedido con `ALTER ROLE jcauto CREATEDB`). Si migras en otra máquina, hay que repetirlo.
+- Stripe/S3/email/WhatsApp usan placeholders en `.env`: las integraciones funcionan en código pero requieren claves reales para producción.
 
 ## Decisiones clave
 - **ESM**: imports relativos con sufijo `.js` (obligatorio).
@@ -50,7 +51,9 @@ Levantar infra y validar runtime:
 - **Flujo de reservas**: vehículo `AVAILABLE→RESERVED` al reservar; `→SOLD` en `checkout.session.completed`; `→AVAILABLE` al cancelar.
 - **Auditoría**: `AuditInterceptor` global con DI de PrismaService (fire-and-forget), redacta secrets.
 - **Seed argon2**: memoryCost 19456 / timeCost 2 / parallelism 1.
+- **Seed config (Prisma 7)**: vive en `prisma.config.ts` → `migrations.seed` (formato string), no en `package.json`/`seed.import`.
 - **Cursors de paginación**: cifrados con `JWT_ACCESS_SECRET` (cursor-encoder).
+- **Infra local**: PostgreSQL 18.6 + Valkey 9.1.2 vía systemd (no Docker). `jcauto` con `CREATEDB`.
 
 ## Reglas de continuidad
 - **Al inicio de sesión**: leer este `MEMORY.md` y dar continuidad al `Próximo paso`.
@@ -58,4 +61,5 @@ Levantar infra y validar runtime:
 - Revisar los subagentes en `.opencode/agent/` (builders = implementan; consejo de planeación = diseñan; `memory-keeper` = archiva).
 
 ## Log de sesiones
+- 2026-09-08 16:40 — **Runtime validado**: instalados PostgreSQL 18.6 + Valkey 9.1.2 (systemd). Migración inicial aplicada (`20260908163629_init`), seed ejecutado (admin+sellers+3 autos). Smoke test completo OK (health, auth, JWT, catálogo por cursor, RBAC, full-text). Swagger en `/api/docs`. Fix: config de seed movida a `migrations.seed` en `prisma.config.ts` (Prisma 7).
 - 2026-09-08 — Creación del repo GitHub privado `dc4decay/jc-autoimport`, push inicial del backend completo (102 archivos). Setup de continuidad: 14 subagentes (6 builders + 7 del consejo de planeación + memory-keeper), `opencode.json` con `instructions` (AGENTS.md + MEMORY.md) y reglas de continuidad.
