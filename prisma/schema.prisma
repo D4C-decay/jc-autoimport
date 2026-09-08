@@ -1,0 +1,337 @@
+// ============================================================
+// JC AUTOIMPORT - PRISMA SCHEMA
+// Base de datos relacional para plataforma de venta de vehiculos
+// ============================================================
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ===================== ENUMS =====================
+
+enum VehicleStatus {
+  AVAILABLE
+  RESERVED
+  SOLD
+}
+
+enum UserRole {
+  CLIENT
+  SELLER
+  ADMIN
+  MANAGER
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  SCHEDULED
+  COMPLETED
+  CONVERTED
+  LOST
+}
+
+enum LeadType {
+  TEST_DRIVE
+  FINANCING
+  QUOTATION
+  GENERAL_INQUIRY
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum TransmissionType {
+  AUTOMATIC
+  MANUAL
+  CVT
+  SEMI_AUTOMATIC
+}
+
+enum FuelType {
+  GASOLINE
+  DIESEL
+  ELECTRIC
+  HYBRID
+  PLUGIN_HYBRID
+  GAS
+}
+
+enum BodyType {
+  SEDAN
+  SUV
+  HATCHBACK
+  COUPE
+  PICKUP
+  VAN
+  CONVERTIBLE
+  WAGON
+  MINIVAN
+}
+
+enum DriveType {
+  FWD
+  RWD
+  AWD
+  FOUR_X_FOUR
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  THREE_D_MODEL
+}
+
+// ===================== MODELS =====================
+
+model User {
+  id           String        @id @default(cuid())
+  email        String        @unique
+  passwordHash String        @map("password_hash")
+  firstName    String        @map("first_name")
+  lastName     String        @map("last_name")
+  phone        String?
+  role         UserRole      @default(CLIENT)
+  isActive     Boolean       @default(true) @map("is_active")
+  avatarUrl    String?       @map("avatar_url")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+
+  contactPreference String?  @map("contact_preference")
+
+  assignedLeads Lead[]       @relation("AssignedLeads")
+  reservations  Reservation[]
+  reviews       Review[]
+  refreshTokens RefreshToken[]
+
+  @@index([email])
+  @@index([role])
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([token])
+  @@map("refresh_tokens")
+}
+
+model Vehicle {
+  id              String          @id @default(cuid())
+  vin             String          @unique
+  slug            String          @unique
+  brand           String
+  model           String
+  year            Int
+  transmission    TransmissionType
+  driveType       DriveType       @map("drive_type")
+  fuelType        FuelType        @map("fuel_type")
+  bodyType        BodyType        @map("body_type")
+  engineSize      Decimal         @map("engine_size")
+  horsepower      Int             @map("horsepower")
+  mileage         Int
+  price           Decimal
+  originalPrice   Decimal?        @map("original_price")
+  currency        String          @default("USD")
+  color           String
+  interiorColor   String?         @map("interior_color")
+  doors           Int             @default(4)
+  seats           Int             @default(5)
+  status          VehicleStatus   @default(AVAILABLE)
+  description     String?
+  isFeatured      Boolean         @default(false) @map("is_featured")
+  viewsCount      Int             @default(0) @map("views_count")
+
+  countryOfOrigin String?         @map("country_of_origin")
+  importDate      DateTime?       @map("import_date")
+  portOfEntry     String?         @map("port_of_entry")
+
+  features        Json?
+
+  publishedAt     DateTime?       @map("published_at")
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime        @updatedAt @map("updated_at")
+
+  media           Media[]
+  specifications  VehicleSpecification[]
+  leads           Lead[]
+  reservations    Reservation[]
+  reviews         Review[]
+
+  @@index([brand, model])
+  @@index([year])
+  @@index([price])
+  @@index([status])
+  @@index([fuelType])
+  @@index([bodyType])
+  @@index([mileage])
+  @@index([isFeatured, publishedAt(sort: Desc)])
+  @@index([createdAt(sort: Desc)])
+  @@index([status, price, createdAt(sort: Desc)])
+  @@map("vehicles")
+}
+
+model VehicleSpecification {
+  id              String        @id @default(cuid())
+  vehicleId       String        @map("vehicle_id")
+  vehicle         Vehicle       @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  specificationId String        @map("specification_id")
+  specification   Specification @relation(fields: [specificationId], references: [id], onDelete: Cascade)
+  value           String?
+
+  @@unique([vehicleId, specificationId])
+  @@index([specificationId])
+  @@map("vehicle_specifications")
+}
+
+model Specification {
+  id       String  @id @default(cuid())
+  name     String  @unique
+  category String
+  icon     String?
+
+  vehicles VehicleSpecification[]
+
+  @@index([category])
+  @@map("specifications")
+}
+
+model Media {
+  id           String    @id @default(cuid())
+  vehicleId    String    @map("vehicle_id")
+  vehicle      Vehicle   @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  type         MediaType
+  url          String
+  thumbnailUrl String?   @map("thumbnail_url")
+  altText      String?   @map("alt_text")
+  sortOrder    Int       @default(0) @map("sort_order")
+  isPrimary    Boolean   @default(false) @map("is_primary")
+  fileKey      String?   @map("file_key")
+  fileSize     Int?      @map("file_size")
+  mimeType     String?   @map("mime_type")
+  width        Int?
+  height       Int?
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  @@index([vehicleId, sortOrder])
+  @@index([vehicleId, isPrimary])
+  @@map("media")
+}
+
+model Lead {
+  id            String     @id @default(cuid())
+  vehicleId     String?    @map("vehicle_id")
+  vehicle       Vehicle?   @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+  customerName  String     @map("customer_name")
+  customerEmail String     @map("customer_email")
+  customerPhone String?    @map("customer_phone")
+  message       String?
+  leadType      LeadType   @map("lead_type")
+  status        LeadStatus @default(NEW)
+  assignedToId  String?    @map("assigned_to_id")
+  assignedTo    User?      @relation("AssignedLeads", fields: [assignedToId], references: [id], onDelete: SetNull)
+  notes         String?
+  scheduledAt   DateTime?  @map("scheduled_at")
+  source        String?
+  createdAt     DateTime   @default(now()) @map("created_at")
+  updatedAt     DateTime   @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([leadType])
+  @@index([assignedToId])
+  @@index([createdAt(sort: Desc)])
+  @@index([vehicleId])
+  @@map("leads")
+}
+
+model Reservation {
+  id            String        @id @default(cuid())
+  vehicleId     String        @map("vehicle_id")
+  vehicle       Vehicle       @relation(fields: [vehicleId], references: [id], onDelete: Restrict)
+  userId        String        @map("user_id")
+  user          User          @relation(fields: [userId], references: [id], onDelete: Restrict)
+  depositAmount Decimal       @map("deposit_amount")
+  status        String        @default("active")
+  expiresAt     DateTime      @map("expires_at")
+  notes         String?
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+  completedAt   DateTime?     @map("completed_at")
+
+  payments      Payment[]
+
+  @@index([vehicleId])
+  @@index([userId])
+  @@index([status])
+  @@map("reservations")
+}
+
+model Payment {
+  id              String        @id @default(cuid())
+  reservationId   String        @map("reservation_id")
+  reservation     Reservation   @relation(fields: [reservationId], references: [id], onDelete: Restrict)
+  amount          Decimal
+  currency        String        @default("USD")
+  status          PaymentStatus @default(PENDING)
+  stripePaymentId String?       @map("stripe_payment_id") @unique
+  stripeSessionId String?       @map("stripe_session_id")
+  method          String?
+  metadata        Json?
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  @@index([reservationId])
+  @@index([stripePaymentId])
+  @@index([status])
+  @@map("payments")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  vehicleId String   @map("vehicle_id")
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rating    Int
+  comment   String?
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([vehicleId, rating])
+  @@index([userId])
+  @@map("reviews")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?  @map("user_id")
+  action    String
+  entity    String
+  entityId  String   @map("entity_id")
+  oldValues Json?    @map("old_values")
+  newValues Json?    @map("new_values")
+  ipAddress String?  @map("ip_address")
+  userAgent String?  @map("user_agent")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([entity, entityId])
+  @@index([userId])
+  @@index([createdAt(sort: Desc)])
+  @@map("audit_logs")
+}
