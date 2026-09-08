@@ -5,6 +5,11 @@
 - Al **cierre de cada sesión**, o tras decisiones importantes: actualizar `MEMORY.md` (estado, próximo paso, blockers, log). Para esto usar el subagente `memory-keeper`.
 - Ante un objetivo nuevo de cierta envergadura, considerar el flujo del consejo de planeación: `plan-coordinator` (agente primary seleccionable) despacha a los expertos (`arquitecto-tecnico`, `experto-negocio`, `experto-usuario`, `experto-seguridad`, `experto-operaciones`), luego refuta con `abogado-del-diablo` y entrega el plan; se ejecuta tras aprobación.
 
+## Flujo de tests (testing activo)
+- Para probar la API corriendo (`localhost:3000`), usar el agente primary **`test-coordinator`**: despacha en paralelo 5 testers (`security-pentester`, `edge-case-tester`, `data-integrity-tester`, `contract-tester`, `resilience-tester`) y consolida un diagnóstico.
+- El diagnóstico pasa al **`plan-coordinator`**, que **triangula** cada hallazgo contra el código (confirma/rechaza), lo **refuta con `abogado-del-diablo`**, prioriza y entrega al **`nest-module-builder`** para corregir.
+- Ciclo de cierre: tras las correcciones, pasar por `build-verifier` + `backend-reviewer` y **re-ejecutar los testers** que hallaron los problemas para confirmar el fix.
+
 ## Repositorio
 - Hosted en **GitHub (privado)**: `https://github.com/D4C-decay/jc-autoimport`
 - Rama principal: `main`

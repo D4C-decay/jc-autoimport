@@ -65,7 +65,19 @@ Backend **optimizado y con tests** (ver Estado actual). Siguientes opciones en o
 - **Al cierre**: actualizar este archivo (usar el subagente `memory-keeper`) con estado, próximo paso, blockers y una entrada en el log.
 - Revisar los subagentes en `.opencode/agent/` (builders = implementan; consejo de planeación = diseñan; `memory-keeper` = archiva).
 
+## Agentes de testing (2026-09-08)
+- **test-coordinator** (primary selectable): despacha 5 testers en paralelo contra la API corriendo (`localhost:3000`), consolida hallazgos en diagnóstico y lo entrega al plan-coordinator.
+- 5 testers (todos subagentes, `curl` contra la API):
+  - `security-pentester` — inyección SQL, auth bypass, JWT manipulation, path traversal, escalación de roles, rate limiting, npm audit.
+  - `edge-case-tester` — inputs vacíos/largos/Unicode, tipos incorrectos, campos extra, content-types, métodos inválidos, cursors corruptos.
+  - `data-integrity-tester` — race conditions en reservas, transiciones de estado, constraints, refresh reuse, expiración.
+  - `contract-tester` — shapes/headers de respuesta, códigos de estado, envoltura `{success,data}`, paginación.
+  - `resilience-tester` — payloads grandes, paginación profunda, carga concurrente, cache, N+1, timeouts.
+- **Flujo**: usuario → test-coordinator → (5 testers en paralelo) → diagnóstico → plan-coordinator (triangula + abogado-del-diablo) → nest-module-builder → build-verifier + review + re-test.
+- La API debe estar arriba para que los testers funcionen: `node dist/src/main.js` (log `/tmp/opencode/app.log`), seed `admin@jcautoimport.com / Admin123!`.
+
 ## Log de sesiones
+- 2026-09-08 — **Sistema de testers añadido**: 6 agentes nuevos (test-coordinator primary + 5 testers: security, edge-case, data-integrity, contract, resilience). `plan-coordinator` ampliado con fase de diagnóstico (triangulación, refutación con abogado-del-diablo, plan para builder y verificación post-fix). AGENTS.md y MEMORY.md documentan el flujo.
 - 2026-09-08 17:00 — **Optimización de rendimiento (P0+P1+P2 completo)**: migración `20260908164736_optimize_search_indexes` (search_vector GENERADO + GIN, índices `(price,id)`, `(year,id)`, `(mileage,id)`, `primary_image_url`/`thumbnail_url` desnormalizadas con backfill). `search.service` ahora usa el índice y `v.primary_image_url`; `vehicles.repository` sin subquerys de `media` y `withMedia` → `WHERE primary_image_url IS NOT NULL`; `MediaService.syncPrimaryToVehicle()` mantiene las columnas. `compression` (gzip) en `main.ts`. P1: cache de payload final descartado (el transform es trivial; la serialización ocurre tras interceptores) y audit se mantiene fire-and-forget (deuda documentada). P2: 18 tests unitarios (cursor, vehicles.repository, search, payments) + e2e extendido (catálogo, búsqueda, register→login→/me) — todos en verde. **Métricas**: full-text con 50k filas 141 ms → 2,7 ms; gzip -56% de payload; latencias (mediana) vehicles 4.7→3.2 ms, search 2.9→2.6 ms, facets 3.9→2.4 ms, detail 9.2→7.2 ms. Build + lint en verde.
 - 2026-09-08 16:40 — **Runtime validado**: instalados PostgreSQL 18.6 + Valkey 9.1.2 (systemd). Migración inicial aplicada (`20260908163629_init`), seed ejecutado (admin+sellers+3 autos). Smoke test completo OK (health, auth, JWT, catálogo por cursor, RBAC, full-text). Swagger en `/api/docs`. Fix: config de seed movida a `migrations.seed` en `prisma.config.ts` (Prisma 7).
 - 2026-09-08 — Creación del repo GitHub privado `dc4decay/jc-autoimport`, push inicial del backend completo (102 archivos). Setup de continuidad: 14 subagentes (6 builders + 7 del consejo de planeación + memory-keeper), `opencode.json` con `instructions` (AGENTS.md + MEMORY.md) y reglas de continuidad.
