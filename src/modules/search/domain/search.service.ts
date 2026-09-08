@@ -4,9 +4,7 @@ import { PrismaService } from '../../../core/database/prisma.service.js';
 import { RedisService } from '../../../core/redis/redis.service.js';
 import { Prisma } from '../../../../generated/prisma/client.js';
 import type { BodyType, FuelType } from '../../../../generated/prisma/client.js';
-
-const SEARCH_VECTOR =
-  "to_tsvector('spanish', COALESCE(brand, '') || ' ' || COALESCE(model, '') || ' ' || COALESCE(description, '') || ' ' || vin)";
+import { decodeCursor, encodeCursor } from '../../../shared/utils/cursor-encoder.js';
 
 @Injectable()
 export class SearchService {
@@ -162,8 +160,6 @@ export class SearchService {
     cursor: string | undefined,
     limit: number,
   ): Promise<SearchResponse> {
-    const { decodeCursor, encodeCursor } = await import('../../../shared/utils/cursor-encoder.js');
-
     let seek: { rank: number; id: string } | null = null;
     if (cursor) {
       try {
@@ -172,6 +168,8 @@ export class SearchService {
         throw new NotFoundException('Invalid cursor');
       }
     }
+
+    const queryTs = () => Prisma.sql`plainto_tsquery('spanish', ${query})`;
 
     const rows = await this.prisma.$queryRaw<SearchRow[]>(Prisma.sql`
       WITH ranked AS (
@@ -190,10 +188,10 @@ export class SearchService {
           v.horsepower,
           v.color,
           v.created_at,
-          ROUND((ts_rank_cd(${Prisma.raw(SEARCH_VECTOR)}, plainto_tsquery('spanish', ${query})))::numeric * 1000000)::int AS rank,
-          (SELECT url FROM media m WHERE m.vehicle_id = v.id AND m.is_primary = true LIMIT 1) AS primary_image
+          ROUND((ts_rank_cd(v.search_vector, ${queryTs()}))::numeric * 1000000)::int AS rank,
+          v.primary_image_url AS primary_image
         FROM vehicles v
-        WHERE ${Prisma.raw(SEARCH_VECTOR)} @@ plainto_tsquery('spanish', ${query})
+        WHERE v.search_vector @@ ${queryTs()}
           AND v.status = 'AVAILABLE'
       )
       SELECT * FROM ranked

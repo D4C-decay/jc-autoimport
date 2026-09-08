@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import compression from 'compression';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import type { NestExpressApplication } from '@nestjs/platform-express';
@@ -15,6 +16,8 @@ async function bootstrap(): Promise<void> {
   const config = app.get(AppConfigService);
   const logger = app.get(LoggerService);
   app.useLogger(logger);
+
+  app.use(compression());
 
   app.enableCors({
     origin: config.app.corsOrigins,

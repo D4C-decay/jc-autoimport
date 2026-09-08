@@ -55,11 +55,8 @@ const summarySelect = {
   status: true,
   isFeatured: true,
   createdAt: true,
-  media: {
-    where: { isPrimary: true },
-    select: { url: true, thumbnailUrl: true },
-    take: 1,
-  },
+  primaryImageUrl: true,
+  thumbnailUrl: true,
 } as const;
 
 const SORT_CONFIG = {
@@ -119,8 +116,8 @@ export class VehiclesRepository {
       status: item.status,
       isFeatured: item.isFeatured,
       createdAt: item.createdAt,
-      primaryImageUrl: item.media[0]?.url ?? null,
-      thumbnailUrl: item.media[0]?.thumbnailUrl ?? null,
+      primaryImageUrl: item.primaryImageUrl,
+      thumbnailUrl: item.thumbnailUrl,
     }));
 
     const lastItem = transformed.length > 0 ? transformed[transformed.length - 1] : null;
@@ -197,7 +194,7 @@ export class VehiclesRepository {
     if (filter.transmission) where.transmission = filter.transmission;
     if (filter.driveType) where.driveType = filter.driveType;
     if (filter.withMedia) {
-      where.media = { some: {} };
+      where.primaryImageUrl = { not: null };
     }
 
     return where;

@@ -21,10 +21,10 @@ describe('HealthController (e2e)', () => {
       .get('/api/v1/health')
       .expect(200)
       .expect((res) => {
-        expect(res.body).toHaveProperty('status', 'ok');
-        expect(res.body).toHaveProperty('services');
-        expect(res.body).toHaveProperty('uptime');
-        expect(res.body).toHaveProperty('timestamp');
+        expect(res.body.data).toHaveProperty('status', 'ok');
+        expect(res.body.data).toHaveProperty('services');
+        expect(res.body.data).toHaveProperty('uptime');
+        expect(res.body.data).toHaveProperty('timestamp');
       });
   });
 

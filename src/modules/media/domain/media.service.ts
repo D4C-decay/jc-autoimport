@@ -85,6 +85,7 @@ export class MediaService {
       },
     });
 
+    await this.syncPrimaryToVehicle(vehicleId);
     await this.invalidateVehicleCaches(vehicleId, vehicle.slug);
     return media;
   }
@@ -165,6 +166,10 @@ export class MediaService {
       },
     });
 
+    if (data.isPrimary !== undefined) {
+      await this.syncPrimaryToVehicle(existing.vehicleId);
+    }
+
     const vehicle = await this.prisma.vehicle.findUnique({
       where: { id: existing.vehicleId },
     });
@@ -187,6 +192,8 @@ export class MediaService {
 
     await this.prisma.media.delete({ where: { id: mediaId } });
 
+    await this.syncPrimaryToVehicle(media.vehicleId);
+
     const vehicle = await this.prisma.vehicle.findUnique({
       where: { id: media.vehicleId },
     });
@@ -208,6 +215,8 @@ export class MediaService {
         data: { isPrimary: true },
       }),
     ]);
+
+    await this.syncPrimaryToVehicle(vehicleId);
 
     const vehicle = await this.prisma.vehicle.findUnique({ where: { id: vehicleId } });
     if (vehicle) {
@@ -276,6 +285,22 @@ export class MediaService {
       throw new NotFoundException('Vehicle not found');
     }
     return vehicle;
+  }
+
+  private async syncPrimaryToVehicle(vehicleId: string): Promise<void> {
+    const primary = await this.prisma.media.findFirst({
+      where: { vehicleId, isPrimary: true, type: 'IMAGE' },
+      orderBy: { sortOrder: 'asc' },
+      select: { url: true, thumbnailUrl: true },
+    });
+
+    await this.prisma.vehicle.update({
+      where: { id: vehicleId },
+      data: {
+        primaryImageUrl: primary?.url ?? null,
+        thumbnailUrl: primary?.thumbnailUrl ?? null,
+      },
+    });
   }
 
   private async invalidateVehicleCaches(vehicleId: string, slug: string): Promise<void> {
