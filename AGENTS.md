@@ -1,5 +1,10 @@
 # Convenciones del proyecto
 
+## Memoria y continuidad
+- Al **inicio de cada sesión** en este proyecto: leer `MEMORY.md` (se carga automáticamente por `opencode.json`) y dar continuidad al "Próximo paso" que contenga.
+- Al **cierre de cada sesión**, o tras decisiones importantes: actualizar `MEMORY.md` (estado, próximo paso, blockers, log). Para esto usar el subagente `memory-keeper`.
+- Ante un objetivo nuevo de cierta envergadura, considerar el flujo del consejo de planeación: `plan-coordinator` (agente primary seleccionable) despacha a los expertos (`arquitecto-tecnico`, `experto-negocio`, `experto-usuario`, `experto-seguridad`, `experto-operaciones`), luego refuta con `abogado-del-diablo` y entrega el plan; se ejecuta tras aprobación.
+
 ## Repositorio
 - Hosted en **GitHub (privado)**: `https://github.com/D4C-decay/jc-autoimport`
 - Rama principal: `main`
