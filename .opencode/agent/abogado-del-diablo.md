@@ -1,5 +1,6 @@
 ---
 description: Abogado del diablo del consejo de planeación de JC Autoimport. Refuta planes e ideas en busca de áreas de oportunidad, riesgos y alternativas. Usar contra TODO borrador de plan.
+model: qwen2.5:7b
 mode: subagent
 permission:
   edit: deny

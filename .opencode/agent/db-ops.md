@@ -1,5 +1,6 @@
 ---
 description: Gestiona la capa de datos del proyecto (esquema Prisma, generación del cliente, migraciones y seed). Usar para cambios de esquema, migraciones o regeneración. Solo edita prisma/; el código de la app lo construye nest-module-builder.
+model: qwen2.5-coder:14b
 mode: subagent
 permission:
   edit:

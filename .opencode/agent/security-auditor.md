@@ -1,5 +1,6 @@
 ---
 description: Auditoría de seguridad del backend JC Autoimport (secrets, JWT/RBAC, pagos Stripe, rate limiting, dependencias, Docker). Solo lectura. Usar periódicamente o ante cambios sensibles.
+model: qwen2.5-coder:14b
 mode: subagent
 permission:
   edit: deny
