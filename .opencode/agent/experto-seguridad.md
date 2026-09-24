@@ -1,6 +1,6 @@
 ---
 description: Experto de seguridad del consejo de planeación de JC Autoimport. Evalúa el modelo de amenazas y riesgos de seguridad de los planes ANTES de construir.
-model: qwen2.5:7b
+model: ollama/qwen2.5:7b
 mode: subagent
 permission:
   edit: deny

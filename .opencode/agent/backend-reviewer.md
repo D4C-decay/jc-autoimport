@@ -1,6 +1,6 @@
 ---
 description: Revisa código del backend JC Autoimport (NestJS/TypeScript/Prisma) contra las convenciones del proyecto y patrones de calidad. Solo lectura: reporta findings, nunca edita. Usar ANTES de aprobar cualquier cambio.
-model: qwen2.5-coder:14b
+model: ollama/qwen2.5-coder:14b
 mode: subagent
 permission:
   edit: deny

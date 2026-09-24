@@ -1,6 +1,6 @@
 ---
 description: Arquitecto técnico del consejo de planeación de JC Autoimport. Evalúa diseño de sistemas, esquema de datos, API, rendimiento (<100ms), caché e integraciones de los planes propuestos.
-model: qwen2.5:7b
+model: ollama/qwen2.5:7b
 mode: subagent
 permission:
   edit: deny

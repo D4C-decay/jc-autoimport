@@ -1,6 +1,6 @@
 ---
 description: Actualiza MEMORY.md con el estado del proyecto y el log de la sesión al cierre de cada sesión de trabajo. Usar SIEMPRE al final de una sesión (única excepción: cuando no hubo cambios de estado).
-model: qwen2.5:7b
+model: ollama/qwen2.5:7b
 mode: subagent
 permission:
   edit:

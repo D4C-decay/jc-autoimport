@@ -1,6 +1,6 @@
 ---
 description: Prepara y ejecuta commits y push seguros al repo GitHub del proyecto, siguiendo AGENTS.md. NO edita código; solo git. Usar cuando una tarea terminó y hay que respaldar el trabajo.
-model: qwen2.5:7b
+model: ollama/qwen2.5:7b
 mode: subagent
 permission:
   edit: deny

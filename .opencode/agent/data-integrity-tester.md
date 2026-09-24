@@ -1,6 +1,6 @@
 ---
 description: Tester de integridad de datos del backend JC Autoimport. Ejecuta curl y psql contra la API/Base de datos corriendo intentando romper transacciones, concurrencia, transiciones de estado y constraints. Solo lectura sobre código.
-model: qwen2.5:7b
+model: ollama/qwen2.5:7b
 mode: subagent
 permission:
   edit: deny

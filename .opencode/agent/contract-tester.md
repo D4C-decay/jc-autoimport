@@ -1,6 +1,6 @@
 ---
 description: Tester de contratos de API del backend JC Autoimport. Ejecuta curl contra la API corriendo verificando que las respuestas cumplen el contrato esperado: shapes, tipos, códigos de estado, headers y consistentencia. Solo lectura sobre código.
-model: qwen2.5:7b
+model: ollama/qwen2.5:7b
 mode: subagent
 permission:
   edit: deny

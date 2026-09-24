@@ -1,6 +1,6 @@
 ---
 description: Coordinador del consejo de planeación de JC Autoimport. Recibe un objetivo, despacha a los expertos del consejo (subagentes), media conflictos, integra las refutaciones del abogado-del-diablo y entrega un plan final ejecutable. Seleccionar este agente para sesiones de planeación.
-model: qwen2.5:7b
+model: ollama/qwen2.5:7b
 mode: primary
 permission:
   edit: deny

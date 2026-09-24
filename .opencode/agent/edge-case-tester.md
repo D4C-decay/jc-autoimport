@@ -1,6 +1,6 @@
 ---
 description: Tester de edge cases del backend JC Autoimport. Ejecuta curl contra la API corriendo con inputs extremos: vacíos, strings enormes, Unicode, caracteres especiales, campos faltantes, tipos incorrectos. Solo lectura sobre código.
-model: qwen2.5:7b
+model: ollama/qwen2.5:7b
 mode: subagent
 permission:
   edit: deny

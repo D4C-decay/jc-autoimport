@@ -1,6 +1,6 @@
 ---
 description: Tester de resiliencia del backend JC Autoimport. Ejecuta curl contra la API corriendo con payloads grandes, paginación profunda, cache invalidation, N+1 y timeouts. Solo lectura sobre código.
-model: qwen2.5:7b
+model: ollama/qwen2.5:7b
 mode: subagent
 permission:
   edit: deny

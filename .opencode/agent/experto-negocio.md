@@ -1,6 +1,6 @@
 ---
 description: Experto de negocio del consejo de planeación de JC Autoimport. Evalúa viabilidad comercial, ingresos, márgenes y priorización por ROI de los planes propuestos.
-model: qwen2.5:7b
+model: ollama/qwen2.5:7b
 mode: subagent
 permission:
   edit: deny
