@@ -47,10 +47,8 @@ export function Navbar() {
         <nav className="container-x flex h-18 items-center justify-between py-4">
           <Link href="/" className="group flex items-center gap-3" data-cursor="Inicio">
             <Wordmark className="h-6" />
-            <span className="hidden text-[9px] leading-tight tracking-[0.22em] text-ash uppercase sm:block">
-              Import Premium
-              <br />
-              Vehicles
+            <span className="font-display text-sm leading-none tracking-[0.14em] text-smoke uppercase transition-colors duration-300 group-hover:text-brass">
+              JC Autoimport
             </span>
           </Link>
 
@@ -141,18 +139,19 @@ export function Navbar() {
 
 /* ----------------------------- Wordmark SVG ----------------------------- */
 
+/**
+ * Monogram "JC". Drawn as filled geometry (no font) so it never depends on a
+ * webfont being loaded, and it stays crisp at any size.
+ */
 export function Wordmark({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 40 24" fill="none" className={className} aria-label="JC Autoimport">
+    <svg viewBox="0 0 44 24" fill="none" className={className} aria-label="JC Autoimport">
       <path
-        d="M2 3.2h3.4v7.1c0 2.2 1.2 3.3 3.6 3.3s3.6-1.1 3.6-3.3V3.2H16v7.2c0 4.2-2.7 6.6-7 6.6S2 14.6 2 10.4V3.2Z"
+        d="M13 4h4v11c0 3.3-2.3 5.5-5.8 5.5H6v-4h4.6c1.5 0 2.4-.6 2.4-2.1V4Z"
         fill="currentColor"
       />
-      <path
-        d="M18.6 3.2h3.3v14.4h-3.3V3.2Zm0 0h8.2v3h-8.2v-3Zm0 5.7h7v2.9h-7V8.9Z"
-        fill="currentColor"
-      />
-      <path d="M32 3.2h6v3h-6v-3Z" fill="#C9A227" />
+      <path d="M24 4h16v4.2H28.2v7.6H40v4.2H24V4Z" fill="currentColor" />
+      <path d="M35.6 15.8H40v4.2h-4.4V15.8Z" fill="#C9A227" />
     </svg>
   );
 }
