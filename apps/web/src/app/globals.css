@@ -106,6 +106,22 @@
   animation: marquee 38s linear infinite;
 }
 
+/* Infinite featured rail: the track holds two identical copies, so translating
+   exactly -50% lands the second copy exactly where the first one started. */
+@keyframes rail {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-rail {
+  animation: rail var(--rail-duration, 60s) linear infinite;
+  will-change: transform;
+}
+
 @keyframes shine {
   0% {
     transform: translateX(-120%) skewX(-18deg);

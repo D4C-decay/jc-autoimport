@@ -5,10 +5,11 @@ import { useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowDown, ArrowRight, ShieldCheck, Ship, Sparkles } from 'lucide-react';
 import { api, type VehicleCard } from '@/lib/api';
-import { VehicleCardItem, VehicleCardSkeleton } from '@/components/vehicle-card';
 import { Button, Eyebrow } from '@/components/ui';
 import { Counter, Magnetic, Reveal, SectionLabel, SplitWords } from '@/components/motion';
 import { SearchBar } from '@/components/search-bar';
+import { HeroVideo } from '@/components/hero-video';
+import { FeaturedRail } from '@/components/featured-rail';
 
 const BRANDS = [
   'Porsche', 'Mercedes-Benz', 'BMW', 'Audi', 'Tesla', 'Toyota',
@@ -103,8 +104,13 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
                 'url(https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=2400&q=88)',
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-ink/85 via-ink/45 to-ink" />
-          <div className="absolute inset-0 bg-gradient-to-r from-ink via-transparent to-ink/60" />
+          <HeroVideo
+            src="/media/hero-loop.mp4"
+            poster="/media/hero-poster.jpg"
+            alt="Vehículo deportivo en movimiento"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-ink/45 via-ink/20 to-ink/95" />
+          <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/20 to-ink/55" />
         </motion.div>
 
         <motion.div
@@ -133,7 +139,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
           >
             Vehículos premium importados de{' '}
             <span className="text-smoke">Estados Unidos, Japón, Corea y Europa</span>. Inspección de
-            120 puntos, logísticaOwn y entrega llave en mano.
+            120 puntos, logística propia y entrega llave en mano.
           </motion.p>
 
           <motion.div
@@ -238,13 +244,18 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
             </Reveal>
           </div>
 
-          <div className="mt-12 grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.length === 0
-              ? Array.from({ length: 6 }).map((_, i) => <VehicleCardSkeleton key={i} />)
-              : featured.map((v, i) => (
-                  <VehicleCardItem key={v.id} vehicle={v} index={i} priority={i < 3} />
-                ))}
-          </div>
+          {featured.length === 0 ? (
+            <div className="mt-12 flex gap-5 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_6%,#000_94%,transparent)]">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="w-[78vw] max-w-[22rem] shrink-0 sm:w-[22rem]">
+                  <div className="aspect-[16/10] animate-pulse bg-ink-3" />
+                  <div className="mt-3 h-3 w-24 animate-pulse bg-ink-3" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <FeaturedRail vehicles={featured} />
+          )}
         </div>
       </section>
 

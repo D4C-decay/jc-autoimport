@@ -1,9 +1,9 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronDown, SlidersHorizontal, X } from 'lucide-react';
+import { ChevronDown, LayoutGrid, Rows3, SlidersHorizontal, X } from 'lucide-react';
 import {
   api,
   type BodyType,
@@ -14,9 +14,16 @@ import {
 } from '@/lib/api';
 import { LABELS, SORT_OPTIONS } from '@/lib/labels';
 import { cn } from '@/lib/utils';
-import { VehicleCardItem, VehicleCardSkeleton } from './vehicle-card';
+import {
+  VehicleCardItem,
+  VehicleCardSkeleton,
+  VehicleRow,
+  VehicleRowSkeleton,
+} from './vehicle-card';
 import { Button, Eyebrow } from './ui';
 import { SearchBar } from './search-bar';
+
+type ViewMode = 'grid' | 'list';
 
 type Filters = {
   brand: string;
@@ -81,6 +88,7 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
   const [loadingMore, setLoadingMore] = useState(false);
   const [facets, setFacets] = useState<Facets | null>(null);
   const [panelOpen, setPanelOpen] = useState(false);
+  const [view, setView] = useState<ViewMode>('grid');
 
   const num = (v: string) => (v === '' ? undefined : Number(v));
 
@@ -196,14 +204,17 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
       </section>
 
       {/* ============================== TOOLBAR ============================== */}
+      {/* Slim bar: count + view toggle + sort. The filter rail lives in the aside
+          below, permanently visible from lg up (no accordion needed there). */}
       <section className="sticky top-18 z-[150] border-b border-line bg-ink/88 backdrop-blur-xl">
         <div className="container-x flex items-center justify-between gap-4 py-4">
           <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={() => setPanelOpen((v) => !v)}
+              aria-expanded={panelOpen}
               className={cn(
-                'flex items-center gap-2 border px-4 py-2.5 text-[10px] font-semibold tracking-[0.2em] uppercase transition-colors',
+                'flex items-center gap-2 border px-4 py-2.5 text-[10px] font-semibold tracking-[0.2em] uppercase transition-colors lg:hidden',
                 panelOpen || activeCount > 0
                   ? 'border-brass text-brass'
                   : 'border-line text-ash hover:border-brass hover:text-brass',
@@ -226,16 +237,37 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
                 <X className="size-3" /> Limpiar
               </button>
             ) : null}
-          </div>
-
-          <div className="flex items-center gap-2">
             <span className="hidden text-[10px] tracking-[0.2em] text-ash uppercase sm:inline">
               {loading ? 'Cargando…' : `${vehicles.length}${hasMore ? '+' : ''} resultados`}
             </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <div
+              role="group"
+              aria-label="Modo de visualización"
+              className="hidden items-center border border-line sm:flex"
+            >
+              <ViewButton
+                active={view === 'grid'}
+                label="Mosaico"
+                onClick={() => setView('grid')}
+              >
+                <LayoutGrid className="size-3.5" strokeWidth={1.7} />
+              </ViewButton>
+              <ViewButton
+                active={view === 'list'}
+                label="Lista"
+                onClick={() => setView('list')}
+              >
+                <Rows3 className="size-3.5" strokeWidth={1.7} />
+              </ViewButton>
+            </div>
             <div className="relative">
               <select
                 value={filters.sort}
                 onChange={(e) => set('sort', e.target.value)}
+                aria-label="Ordenar"
                 className="appearance-none border border-line bg-ink-2 py-2.5 pr-9 pl-4 text-[10px] font-medium tracking-[0.16em] text-smoke uppercase outline-none transition-colors hover:border-brass focus:border-brass"
               >
                 {SORT_OPTIONS.map((o) => (
@@ -252,6 +284,7 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
           </div>
         </div>
 
+        {/* Mobile/tablet filters: same fields as the desktop rail. */}
         <AnimatePresence>
           {panelOpen ? (
             <motion.div
@@ -259,119 +292,111 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="overflow-hidden border-t border-line bg-ink-2"
+              className="overflow-hidden border-t border-line bg-ink-2 lg:hidden"
             >
-              <div className="container-x grid gap-6 py-8 sm:grid-cols-2 lg:grid-cols-4">
-                <SelectField
-                  label="Marca"
-                  value={filters.brand}
-                  onChange={(v) => set('brand', v)}
-                  options={(facets?.brands ?? []).map((b) => ({ value: b.value, label: `${b.value} (${b.count})` }))}
-                  placeholder="Todas"
-                />
-                <SelectField
-                  label="Carrocería"
-                  value={filters.bodyType}
-                  onChange={(v) => set('bodyType', v as Filters['bodyType'])}
-                  options={Object.entries(LABELS.bodyType).map(([value, label]) => ({ value, label }))}
-                  placeholder="Todas"
-                />
-                <SelectField
-                  label="Combustible"
-                  value={filters.fuelType}
-                  onChange={(v) => set('fuelType', v as Filters['fuelType'])}
-                  options={Object.entries(LABELS.fuelType).map(([value, label]) => ({ value, label }))}
-                  placeholder="Todos"
-                />
-                <SelectField
-                  label="Transmisión"
-                  value={filters.transmission}
-                  onChange={(v) => set('transmission', v)}
-                  options={Object.entries(LABELS.transmission).map(([value, label]) => ({ value, label }))}
-                  placeholder="Todas"
-                />
-                <RangeField
-                  label="Precio (USD)"
-                  min={filters.priceMin}
-                  max={filters.priceMax}
-                  onMin={(v) => set('priceMin', v)}
-                  onMax={(v) => set('priceMax', v)}
-                  placeholder="0"
-                />
-                <RangeField
-                  label="Año"
-                  min={filters.yearMin}
-                  max={filters.yearMax}
-                  onMin={(v) => set('yearMin', v)}
-                  onMax={(v) => set('yearMax', v)}
-                  placeholder="2015"
-                />
-                <RangeField
-                  label="Kilometraje máx. (mi)"
-                  min=""
-                  max={filters.mileageMax}
-                  onMin={() => undefined}
-                  onMax={(v) => set('mileageMax', v)}
-                  placeholder="80000"
-                />
-                <div className="flex items-end">
-                  <Button variant="ghost" onClick={clearAll} className="w-full">
-                    Restablecer filtros
-                  </Button>
-                </div>
+              <div className="container-x py-8">
+                <FilterFields filters={filters} facets={facets} set={set} clearAll={clearAll} />
               </div>
             </motion.div>
           ) : null}
         </AnimatePresence>
       </section>
 
-      {/* ============================== GRID ============================== */}
-      <section className="container-x py-14 lg:py-20">
-        {loading ? (
-          <div className="grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <VehicleCardSkeleton key={i} />
-            ))}
-          </div>
-        ) : vehicles.length === 0 ? (
-          <div className="border border-line px-6 py-24 text-center">
-            <h2 className="font-display text-2xl text-smoke">Sin resultados</h2>
-            <p className="mx-auto mt-3 max-w-sm text-sm text-ash">
-              No encontramos vehículos con esos criterios. Ajusta los filtros o cuéntanos qué buscas
-              y lo conseguimos por ti.
-            </p>
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Button onClick={clearAll}>Restablecer filtros</Button>
-              <Button href="/contacto" variant="outline">
-                Buscar por encargo
-              </Button>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div className="grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-              {vehicles.map((v, i) => (
-                <VehicleCardItem key={v.id} vehicle={v} index={i % 12} priority={i < 3} />
-              ))}
-            </div>
-
-            {hasMore ? (
-              <div className="mt-16 flex justify-center">
-                <Button
-                  variant="outline"
-                  onClick={() => cursor && load(cursor, true)}
-                  disabled={loadingMore}
-                >
-                  {loadingMore ? 'Cargando…' : 'Cargar más vehículos'}
-                </Button>
+      {/* ================== FILTERS (desktop rail) + RESULTS ================== */}
+      <section className="container-x py-12 lg:py-16">
+        <div className="grid gap-x-12 gap-y-14 lg:grid-cols-[18rem_1fr] xl:grid-cols-[20rem_1fr]">
+          <aside className="hidden lg:block">
+            <div className="sticky top-32">
+              <div className="flex items-center justify-between border-b border-line pb-3">
+                <span className="text-[10px] font-semibold tracking-[0.24em] text-smoke uppercase">
+                  Filtrar
+                </span>
+                {activeCount > 0 ? (
+                  <button
+                    type="button"
+                    onClick={clearAll}
+                    className="text-[10px] tracking-[0.18em] text-ash uppercase transition-colors hover:text-brass"
+                  >
+                    Limpiar ({activeCount})
+                  </button>
+                ) : null}
               </div>
-            ) : vehicles.length >= 12 ? (
-              <p className="mt-16 text-center text-[10px] tracking-[0.24em] text-ash uppercase">
-                Has visto todo el catálogo
-              </p>
-            ) : null}
-          </>
-        )}
+              <FilterFields filters={filters} facets={facets} set={set} clearAll={clearAll} />
+            </div>
+          </aside>
+
+          <div>
+            {loading ? (
+              view === 'grid' ? (
+                <div className="grid grid-cols-1 gap-x-6 gap-y-14 sm:grid-cols-6">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <VehicleCardSkeleton key={i} wide={i === 0 || i === 3} />
+                  ))}
+                </div>
+              ) : (
+                <div>
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <VehicleRowSkeleton key={i} />
+                  ))}
+                </div>
+              )
+            ) : vehicles.length === 0 ? (
+              <div className="border border-line px-6 py-24 text-center">
+                <h2 className="font-display text-2xl text-smoke">Sin resultados</h2>
+                <p className="mx-auto mt-3 max-w-sm text-sm text-ash">
+                  No encontramos vehículos con esos criterios. Ajusta los filtros o cuéntanos qué
+                  buscas y lo conseguimos por ti.
+                </p>
+                <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                  <Button onClick={clearAll}>Restablecer filtros</Button>
+                  <Button href="/contacto" variant="outline">
+                    Buscar por encargo
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <>
+                {view === 'grid' ? (
+                  /* Editorial rhythm: on a 6-col grid every 4th tile is a full-width
+                     banner (i0, i3) and the rest pair up. Same rule at every size. */
+                  <div className="grid grid-cols-1 gap-x-6 gap-y-14 sm:grid-cols-6">
+                    {vehicles.map((v, i) => (
+                      <VehicleCardItem
+                        key={v.id}
+                        vehicle={v}
+                        index={i % 12}
+                        priority={i < 3}
+                        wide={i % 4 === 0 || i % 4 === 3}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="border-t border-line">
+                    {vehicles.map((v, i) => (
+                      <VehicleRow key={v.id} vehicle={v} index={i % 12} />
+                    ))}
+                  </div>
+                )}
+
+                {hasMore ? (
+                  <div className="mt-16 flex justify-center">
+                    <Button
+                      variant="outline"
+                      onClick={() => cursor && load(cursor, true)}
+                      disabled={loadingMore}
+                    >
+                      {loadingMore ? 'Cargando…' : 'Cargar más vehículos'}
+                    </Button>
+                  </div>
+                ) : vehicles.length >= 12 ? (
+                  <p className="mt-16 text-center text-[10px] tracking-[0.24em] text-ash uppercase">
+                    Has visto todo el catálogo
+                  </p>
+                ) : null}
+              </>
+            )}
+          </div>
+        </div>
       </section>
     </>
   );
@@ -451,6 +476,120 @@ function RangeField({
           inputMode="numeric"
           className="w-full border border-line bg-ink px-3 py-3 text-sm text-smoke outline-none transition-colors placeholder:text-ash/50 focus:border-brass"
         />
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------ Sub-components ----------------------------- */
+
+function ViewButton({
+  active,
+  label,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  label: string;
+  onClick: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      title={label}
+      className={cn(
+        'flex size-9 items-center justify-center transition-colors',
+        active
+          ? 'bg-brass text-ink'
+          : 'text-ash hover:bg-ink-3 hover:text-smoke',
+      )}
+    >
+      {children}
+      <span className="sr-only">{label}</span>
+    </button>
+  );
+}
+
+/**
+ * One definition of the filter fields, rendered twice: inside the mobile/tablet
+ * accordion (2 up) and in the desktop rail (1 up). Both instances read and write
+ * the same state, so they can never disagree.
+ */
+function FilterFields({
+  filters,
+  facets,
+  set,
+  clearAll,
+}: {
+  filters: Filters;
+  facets: Facets | null;
+  set: <K extends keyof Filters>(key: K, value: Filters[K]) => void;
+  clearAll: () => void;
+}) {
+  return (
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-1">
+      <SelectField
+        label="Marca"
+        value={filters.brand}
+        onChange={(v) => set('brand', v)}
+        options={(facets?.brands ?? []).map((b) => ({
+          value: b.value,
+          label: `${b.value} (${b.count})`,
+        }))}
+        placeholder="Todas"
+      />
+      <SelectField
+        label="Carrocería"
+        value={filters.bodyType}
+        onChange={(v) => set('bodyType', v as Filters['bodyType'])}
+        options={Object.entries(LABELS.bodyType).map(([value, label]) => ({ value, label }))}
+        placeholder="Todas"
+      />
+      <SelectField
+        label="Combustible"
+        value={filters.fuelType}
+        onChange={(v) => set('fuelType', v as Filters['fuelType'])}
+        options={Object.entries(LABELS.fuelType).map(([value, label]) => ({ value, label }))}
+        placeholder="Todos"
+      />
+      <SelectField
+        label="Transmisión"
+        value={filters.transmission}
+        onChange={(v) => set('transmission', v)}
+        options={Object.entries(LABELS.transmission).map(([value, label]) => ({ value, label }))}
+        placeholder="Todas"
+      />
+      <RangeField
+        label="Precio (USD)"
+        min={filters.priceMin}
+        max={filters.priceMax}
+        onMin={(v) => set('priceMin', v)}
+        onMax={(v) => set('priceMax', v)}
+        placeholder="0"
+      />
+      <RangeField
+        label="Año"
+        min={filters.yearMin}
+        max={filters.yearMax}
+        onMin={(v) => set('yearMin', v)}
+        onMax={(v) => set('yearMax', v)}
+        placeholder="2015"
+      />
+      <RangeField
+        label="Kilometraje máx. (mi)"
+        min=""
+        max={filters.mileageMax}
+        onMin={() => undefined}
+        onMax={(v) => set('mileageMax', v)}
+        placeholder="80000"
+      />
+      <div className="flex items-end">
+        <Button variant="ghost" onClick={clearAll} className="w-full">
+          Restablecer filtros
+        </Button>
       </div>
     </div>
   );
