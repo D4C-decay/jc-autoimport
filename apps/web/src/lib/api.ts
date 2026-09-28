@@ -1,4 +1,17 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000';
+/**
+ * On the server we talk to the API directly. In the browser we must not: the
+ * API lives on the private network, and `NEXT_PUBLIC_*` gets inlined into the
+ * bundle, so a hardcoded host would point every visitor at their own
+ * localhost. `/backend` is a narrow proxy that runs here, on the server.
+ */
+const INTERNAL_API_URL = process.env.API_INTERNAL_URL ?? 'http://localhost:3000';
+const SERVER_API_URL = process.env.NEXT_PUBLIC_API_URL ?? INTERNAL_API_URL;
+const PROXY_PATH = '/backend';
+
+function baseUrl(): string {
+  return typeof window === 'undefined' ? SERVER_API_URL : PROXY_PATH;
+}
+
 
 export type VehicleStatus = 'AVAILABLE' | 'RESERVED' | 'SOLD';
 export type FuelType = 'GASOLINE' | 'DIESEL' | 'ELECTRIC' | 'HYBRID' | 'PLUGIN_HYBRID' | 'GAS';
@@ -107,7 +120,7 @@ async function request<T>(
   init?: RequestInit,
   options?: RequestOptions,
 ): Promise<T> {
-  const url = `${API_URL}${path}`;
+  const url = `${baseUrl()}${path}`;
   const res = await fetch(url, {
     ...init,
     headers: {

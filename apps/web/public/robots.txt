@@ -1,8 +1,0 @@
-User-agent: *
-Allow: /
-
-# Private areas — no value in the index and they need authentication.
-Disallow: /login
-Disallow: /api/
-
-Sitemap: https://jcautoimport.com/sitemap.xml
