@@ -4,11 +4,11 @@
   --color-ink: #08080a;
   --color-ink-2: #0e0e12;
   --color-ink-3: #16161c;
-  --color-brass: #c9a227;
-  --color-brass-light: #e8cf7a;
-  --color-brass-dark: #8f6f14;
-  --color-smoke: #f5f3ef;
-  --color-ash: #8b8b93;
+  --color-signal: #f02434;
+  --color-signal-light: #ff6b6b;
+  --color-signal-dark: #8f1018;
+  --color-smoke: #f4f4f5;
+  --color-ash: #96969e;
   --color-line: #26262e;
 
   --font-display: var(--font-archivo), 'Helvetica Neue', Impact, sans-serif;
@@ -35,7 +35,7 @@
   }
 
   ::selection {
-    background: var(--color-brass);
+    background: var(--color-signal);
     color: var(--color-ink);
   }
 
@@ -49,7 +49,7 @@
     background: var(--color-line);
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-brass-dark);
+    background: var(--color-signal-dark);
   }
 }
 
@@ -106,20 +106,32 @@
   animation: marquee 38s linear infinite;
 }
 
-/* Infinite featured rail: the track holds two identical copies, so translating
-   exactly -50% lands the second copy exactly where the first one started. */
-@keyframes rail {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
+/* Infinite featured rail.
+   The track is moved by JS (rAF), not by a CSS keyframe, so that only ONE extra
+   clone is ever in the DOM instead of a second full copy of the list. Each card
+   gets a --k in 0..1 (distance from the viewport centre) written per frame and
+   uses it for scale, opacity, brightness and the red glow. */
+.rail-card {
+  --k: 0;
+  transform: scale(calc(0.93 + 0.07 * var(--k)));
+  opacity: calc(0.42 + 0.58 * var(--k));
+  filter: brightness(calc(0.7 + 0.3 * var(--k)));
+  box-shadow: 0 26px 70px -30px rgba(240, 36, 52, calc(0.75 * var(--k)));
+  will-change: transform, opacity, filter;
 }
 
-.animate-rail {
-  animation: rail var(--rail-duration, 60s) linear infinite;
-  will-change: transform;
+.rail-dot {
+  width: 1.5rem;
+  height: 2px;
+  background-color: var(--color-line);
+  transition:
+    width 400ms cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 400ms ease;
+}
+
+.rail-dot[data-active='true'] {
+  width: 3rem;
+  background-color: var(--color-signal);
 }
 
 @keyframes shine {

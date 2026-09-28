@@ -47,7 +47,7 @@ export function LoginPage() {
           <Reveal>
             <Eyebrow index="Acceso">Área de cliente</Eyebrow>
             <h1 className="mt-5 font-display text-4xl leading-[0.95] text-smoke lg:text-5xl">
-              Bienvenido de <span className="text-brass">vuelta</span>
+              Bienvenido de <span className="text-signal">vuelta</span>
             </h1>
             <p className="mt-4 text-sm text-ash">
               Inicia sesión para dar seguimiento a tu importación y ver tus unidades reservadas.
@@ -62,7 +62,7 @@ export function LoginPage() {
             className="mt-10 border border-line bg-ink-2 p-7 md:p-8"
           >
             <label className="block">
-              <span className="text-[10px] font-semibold tracking-[0.2em] text-brass uppercase">
+              <span className="text-[10px] font-semibold tracking-[0.2em] text-signal uppercase">
                 Correo electrónico
               </span>
               <div className="relative mt-2.5">
@@ -77,13 +77,13 @@ export function LoginPage() {
                   required
                   autoComplete="email"
                   placeholder="tucorreo@ejemplo.com"
-                  className="w-full border border-line bg-ink py-3.5 pr-4 pl-11 text-sm text-smoke outline-none transition-colors placeholder:text-ash/50 focus:border-brass"
+                  className="w-full border border-line bg-ink py-3.5 pr-4 pl-11 text-sm text-smoke outline-none transition-colors placeholder:text-ash/50 focus:border-signal"
                 />
               </div>
             </label>
 
             <label className="mt-5 block">
-              <span className="text-[10px] font-semibold tracking-[0.2em] text-brass uppercase">
+              <span className="text-[10px] font-semibold tracking-[0.2em] text-signal uppercase">
                 Contraseña
               </span>
               <div className="relative mt-2.5">
@@ -98,7 +98,7 @@ export function LoginPage() {
                   required
                   autoComplete="current-password"
                   placeholder="••••••••"
-                  className="w-full border border-line bg-ink py-3.5 pr-4 pl-11 text-sm text-smoke outline-none transition-colors placeholder:text-ash/50 focus:border-brass"
+                  className="w-full border border-line bg-ink py-3.5 pr-4 pl-11 text-sm text-smoke outline-none transition-colors placeholder:text-ash/50 focus:border-signal"
                 />
               </div>
             </label>
@@ -112,7 +112,7 @@ export function LoginPage() {
             <button
               type="submit"
               disabled={state === 'loading'}
-              className="btn-shine group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden bg-brass px-8 py-4 text-[11px] font-semibold tracking-[0.24em] text-ink uppercase transition-colors duration-500 hover:bg-brass-light disabled:opacity-60 [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
+              className="btn-shine group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden bg-signal px-8 py-4 text-[11px] font-semibold tracking-[0.24em] text-ink uppercase transition-colors duration-500 hover:bg-signal-light disabled:opacity-60 [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
             >
               <span className="relative z-10 flex items-center gap-2.5">
                 {state === 'loading' ? (
@@ -126,7 +126,7 @@ export function LoginPage() {
 
             <p className="mt-6 text-center text-[11px] text-ash">
               ¿Aún no tienes cuenta?{' '}
-              <a href="/contacto" className="text-brass hover:underline">
+              <a href="/contacto" className="text-signal hover:underline">
                 Solicita acceso
               </a>
             </p>

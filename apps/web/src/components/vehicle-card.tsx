@@ -69,7 +69,7 @@ export function VehicleCardItem({
               <StatusBadge status={vehicle.status} label={LABELS.status[vehicle.status]} />
             ) : null}
             {off ? (
-              <span className="border border-brass/40 bg-brass/15 px-2.5 py-1 text-[9px] font-semibold tracking-[0.18em] text-brass uppercase">
+              <span className="border border-signal/40 bg-signal/15 px-2.5 py-1 text-[9px] font-semibold tracking-[0.18em] text-signal uppercase">
                 -{off}%
               </span>
             ) : null}
@@ -80,7 +80,7 @@ export function VehicleCardItem({
           </div>
 
           <div className="absolute inset-x-0 bottom-0 translate-y-full px-5 py-4 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0">
-            <span className="block text-[10px] font-semibold tracking-[0.3em] text-brass uppercase">
+            <span className="block text-[10px] font-semibold tracking-[0.3em] text-signal uppercase">
               Ver ficha →
             </span>
           </div>
@@ -88,10 +88,10 @@ export function VehicleCardItem({
           {wide ? (
             <div className="absolute inset-x-0 bottom-0 flex flex-wrap items-end justify-between gap-x-6 gap-y-3 p-5 md:p-7">
               <div className="min-w-0">
-                <span className="text-[10px] font-medium tracking-[0.3em] text-brass uppercase">
+                <span className="text-[10px] font-medium tracking-[0.3em] text-signal uppercase">
                   {vehicle.brand}
                 </span>
-                <h3 className="mt-2 font-display text-2xl leading-[0.95] text-smoke transition-colors duration-300 group-hover:text-brass md:text-4xl">
+                <h3 className="mt-2 font-display text-2xl leading-[0.95] text-smoke transition-colors duration-300 group-hover:text-signal md:text-4xl">
                   {vehicle.model}
                 </h3>
                 <p className="mt-2 text-[11px] tracking-wide text-ash">
@@ -121,10 +121,10 @@ export function VehicleCardItem({
 
         {wide ? null : (
         <div className="relative pt-5">
-          <span className="text-[10px] font-medium tracking-[0.28em] text-brass uppercase">
+          <span className="text-[10px] font-medium tracking-[0.28em] text-signal uppercase">
             {vehicle.brand}
           </span>
-          <h3 className="mt-1.5 font-display text-xl leading-tight text-smoke transition-colors duration-300 group-hover:text-brass sm:text-2xl">
+          <h3 className="mt-1.5 font-display text-xl leading-tight text-smoke transition-colors duration-300 group-hover:text-signal sm:text-2xl">
             {vehicle.model}
           </h3>
           <p className="mt-1 text-xs text-ash">
@@ -133,15 +133,15 @@ export function VehicleCardItem({
 
           <ul className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[10px] tracking-wide text-ash">
             <li className="flex items-center gap-1.5">
-              <Fuel className="size-3 text-brass/70" strokeWidth={1.6} />
+              <Fuel className="size-3 text-signal/70" strokeWidth={1.6} />
               {LABELS.fuelType[vehicle.fuelType]}
             </li>
             <li className="flex items-center gap-1.5">
-              <Gauge className="size-3 text-brass/70" strokeWidth={1.6} />
+              <Gauge className="size-3 text-signal/70" strokeWidth={1.6} />
               {formatMileage(vehicle.mileage)}
             </li>
             <li className="flex items-center gap-1.5">
-              <Settings2 className="size-3 text-brass/70" strokeWidth={1.6} />
+              <Settings2 className="size-3 text-signal/70" strokeWidth={1.6} />
               {LABELS.transmission[vehicle.transmission]}
             </li>
           </ul>
@@ -160,7 +160,7 @@ export function VehicleCardItem({
           <span
             aria-hidden
             className={cn(
-              'absolute -bottom-px left-0 h-px w-0 bg-brass transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]',
+              'absolute -bottom-px left-0 h-px w-0 bg-signal transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]',
               'group-hover:w-full',
             )}
           />
@@ -242,7 +242,7 @@ export function VehicleRow({
             </div>
           ) : null}
           {off ? (
-            <span className="absolute right-2 bottom-2 border border-brass/40 bg-brass/15 px-2 py-1 text-[9px] font-semibold tracking-[0.18em] text-brass uppercase">
+            <span className="absolute right-2 bottom-2 border border-signal/40 bg-signal/15 px-2 py-1 text-[9px] font-semibold tracking-[0.18em] text-signal uppercase">
               -{off}%
             </span>
           ) : null}
@@ -250,10 +250,10 @@ export function VehicleRow({
 
         <div className="flex min-w-0 flex-1 flex-wrap items-start justify-between gap-x-8 gap-y-4">
           <div className="min-w-0 flex-1">
-            <span className="text-[10px] font-medium tracking-[0.28em] text-brass uppercase">
+            <span className="text-[10px] font-medium tracking-[0.28em] text-signal uppercase">
               {vehicle.brand}
             </span>
-            <h3 className="mt-1.5 font-display text-xl leading-tight text-smoke transition-colors duration-300 group-hover:text-brass sm:text-2xl">
+            <h3 className="mt-1.5 font-display text-xl leading-tight text-smoke transition-colors duration-300 group-hover:text-signal sm:text-2xl">
               {vehicle.model}
             </h3>
             <p className="mt-1.5 text-xs text-ash">
@@ -262,15 +262,15 @@ export function VehicleRow({
             </p>
             <ul className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[10px] tracking-wide text-ash">
               <li className="flex items-center gap-1.5">
-                <Fuel className="size-3 text-brass/70" strokeWidth={1.6} />
+                <Fuel className="size-3 text-signal/70" strokeWidth={1.6} />
                 {LABELS.fuelType[vehicle.fuelType]}
               </li>
               <li className="flex items-center gap-1.5">
-                <Gauge className="size-3 text-brass/70" strokeWidth={1.6} />
+                <Gauge className="size-3 text-signal/70" strokeWidth={1.6} />
                 {formatMileage(vehicle.mileage)}
               </li>
               <li className="flex items-center gap-1.5">
-                <Settings2 className="size-3 text-brass/70" strokeWidth={1.6} />
+                <Settings2 className="size-3 text-signal/70" strokeWidth={1.6} />
                 {LABELS.transmission[vehicle.transmission]}
               </li>
             </ul>
@@ -285,7 +285,7 @@ export function VehicleRow({
                 </span>
               ) : null}
             </div>
-            <span className="mt-2 inline-flex items-center gap-1.5 text-[9px] font-semibold tracking-[0.2em] text-brass uppercase opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+            <span className="mt-2 inline-flex items-center gap-1.5 text-[9px] font-semibold tracking-[0.2em] text-signal uppercase opacity-0 transition-opacity duration-500 group-hover:opacity-100">
               Ver ficha
               <ArrowRight className="size-3" strokeWidth={1.8} />
             </span>

@@ -128,7 +128,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
           <h1 className="mt-7 max-w-[16ch] font-display text-[clamp(2.6rem,9vw,8.5rem)] leading-[0.86] tracking-[-0.02em] text-smoke">
             <SplitWords text="El mundo," delay={0.3} />
             <br />
-            <SplitWords text="a tu garaje." delay={0.45} className="text-brass" />
+            <SplitWords text="a tu garaje." delay={0.45} className="text-signal" />
           </h1>
 
           <motion.p
@@ -191,7 +191,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
             {[...BRANDS, ...BRANDS].map((b, i) => (
               <span
                 key={`${b}-${i}`}
-                className="whitespace-nowrap font-display text-lg tracking-tight text-ash/45 uppercase transition-colors duration-500 hover:text-brass sm:text-2xl"
+                className="whitespace-nowrap font-display text-lg tracking-tight text-ash/45 uppercase transition-colors duration-500 hover:text-signal sm:text-2xl"
               >
                 {b}
               </span>
@@ -227,13 +227,13 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
             <div>
               <SectionLabel index="01">Selección de la casa</SectionLabel>
               <h2 className="mt-5 max-w-[14ch] font-display text-[clamp(2rem,5vw,4.2rem)] leading-[0.9] text-smoke">
-                Vehículos <span className="text-brass">destacados</span>
+                Vehículos <span className="text-signal">destacados</span>
               </h2>
             </div>
             <Reveal delay={0.15}>
               <Link
                 href="/catalogo"
-                className="group inline-flex items-center gap-2.5 text-[11px] font-semibold tracking-[0.24em] text-smoke uppercase transition-colors hover:text-brass"
+                className="group inline-flex items-center gap-2.5 text-[11px] font-semibold tracking-[0.24em] text-smoke uppercase transition-colors hover:text-signal"
               >
                 Ver todo el catálogo
                 <ArrowRight
@@ -267,7 +267,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
             <h2 className="mt-5 font-display text-[clamp(2rem,5vw,4.2rem)] leading-[0.9] text-smoke">
               No importamos autos.
               <br />
-              <span className="text-brass">Eliminamos fronteras.</span>
+              <span className="text-signal">Eliminamos fronteras.</span>
             </h2>
             <p className="mt-6 text-sm leading-relaxed text-ash">
               Convertimos una compra internacional compleja en una ruta clara: selección,
@@ -281,10 +281,10 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
               <Reveal key={p.n} delay={i * 0.07}>
                 <li className="group h-full bg-ink-2 p-7 transition-colors duration-500 hover:bg-ink-3 lg:p-8">
                   <div className="flex items-baseline justify-between">
-                    <span className="font-display text-3xl text-brass/30 transition-colors duration-500 group-hover:text-brass">
+                    <span className="font-display text-3xl text-signal/30 transition-colors duration-500 group-hover:text-signal">
                       {p.n}
                     </span>
-                    <span className="h-px w-8 bg-line transition-all duration-500 group-hover:w-14 group-hover:bg-brass" />
+                    <span className="h-px w-8 bg-line transition-all duration-500 group-hover:w-14 group-hover:bg-signal" />
                   </div>
                   <h3 className="mt-6 font-display text-lg text-smoke">{p.title}</h3>
                   <p className="mt-3 text-[13px] leading-relaxed text-ash">{p.text}</p>
@@ -301,10 +301,10 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
           <div className="grid gap-10 lg:grid-cols-3">
             {PILLARS.map((p, i) => (
               <Reveal key={p.title} delay={i * 0.1}>
-                <div className="group relative border border-line p-8 transition-colors duration-500 hover:border-brass/40">
-                  <div className="absolute inset-x-0 top-0 h-px origin-left scale-x-0 bg-brass transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100" />
+                <div className="group relative border border-line p-8 transition-colors duration-500 hover:border-signal/40">
+                  <div className="absolute inset-x-0 top-0 h-px origin-left scale-x-0 bg-signal transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100" />
                   <p.icon
-                    className="size-8 text-brass"
+                    className="size-8 text-signal"
                     strokeWidth={1.2}
                   />
                   <h3 className="mt-6 font-display text-xl text-smoke">{p.title}</h3>
@@ -347,7 +347,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
                     «{t.quote}»
                   </blockquote>
                   <figcaption className="mt-8 border-t border-line pt-5">
-                    <div className="font-display text-sm text-brass">{t.name}</div>
+                    <div className="font-display text-sm text-signal">{t.name}</div>
                     <div className="mt-1 text-[10px] tracking-[0.2em] text-ash uppercase">
                       {t.role}
                     </div>
@@ -373,7 +373,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
           <Reveal>
             <Eyebrow className="justify-center">¿Listo para tu próximo auto?</Eyebrow>
             <h2 className="mx-auto mt-6 max-w-[18ch] font-display text-[clamp(2rem,6vw,5rem)] leading-[0.9] text-smoke">
-              Tu vehículo <span className="text-brass">listo para ti.</span>
+              Tu vehículo <span className="text-signal">listo para ti.</span>
             </h2>
             <p className="mx-auto mt-6 max-w-lg text-sm leading-relaxed text-ash">
               Cuéntanos qué buscas y nuestro equipo encuentra la unidad perfecta en el mercado de

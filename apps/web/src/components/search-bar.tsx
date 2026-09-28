@@ -52,8 +52,8 @@ export function SearchBar({
 
   return (
     <div className={`relative ${className ?? ''}`}>
-      <div className="flex items-center gap-3 border-b border-line pb-3 transition-colors duration-500 focus-within:border-brass">
-        <Search className="size-4 shrink-0 text-brass" strokeWidth={1.7} />
+      <div className="flex items-center gap-3 border-b border-line pb-3 transition-colors duration-500 focus-within:border-signal">
+        <Search className="size-4 shrink-0 text-signal" strokeWidth={1.7} />
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
@@ -67,7 +67,7 @@ export function SearchBar({
         {loading ? <Loader2 className="size-4 shrink-0 animate-spin text-ash" /> : null}
         {q ? (
           <button type="button" onClick={() => setQ('')} aria-label="Limpiar">
-            <X className="size-4 shrink-0 text-ash hover:text-brass" />
+            <X className="size-4 shrink-0 text-ash hover:text-signal" />
           </button>
         ) : null}
       </div>
@@ -86,9 +86,9 @@ export function SearchBar({
                 <button
                   type="button"
                   onMouseDown={() => submit(s.full)}
-                  className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-ash transition-colors hover:bg-brass/8 hover:text-smoke"
+                  className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-ash transition-colors hover:bg-signal/8 hover:text-smoke"
                 >
-                  <span className="text-[10px] tracking-[0.18em] text-brass uppercase">
+                  <span className="text-[10px] tracking-[0.18em] text-signal uppercase">
                     {s.brand}
                   </span>
                   <span className="text-smoke">{s.model}</span>

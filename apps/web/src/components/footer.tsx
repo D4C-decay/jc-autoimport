@@ -40,13 +40,13 @@ export function Footer() {
               href={CONTACT_WHATSAPP}
               target="_blank"
               rel="noreferrer"
-              className="border border-line px-4 py-2 text-[10px] tracking-[0.2em] text-ash uppercase transition-colors hover:border-brass hover:text-brass"
+              className="border border-line px-4 py-2 text-[10px] tracking-[0.2em] text-ash uppercase transition-colors hover:border-signal hover:text-signal"
             >
               WhatsApp
             </a>
             <Link
               href="/login"
-              className="border border-line px-4 py-2 text-[10px] tracking-[0.2em] text-ash uppercase transition-colors hover:border-brass hover:text-brass"
+              className="border border-line px-4 py-2 text-[10px] tracking-[0.2em] text-ash uppercase transition-colors hover:border-signal hover:text-signal"
             >
               Acceso cliente
             </Link>
@@ -55,7 +55,7 @@ export function Footer() {
 
         {columns.map((col) => (
           <div key={col.title}>
-            <h4 className="text-[10px] font-semibold tracking-[0.28em] text-brass uppercase">
+            <h4 className="text-[10px] font-semibold tracking-[0.28em] text-signal uppercase">
               {col.title}
             </h4>
             <ul className="mt-5 space-y-3">
@@ -74,7 +74,7 @@ export function Footer() {
         ))}
 
         <div>
-          <h4 className="text-[10px] font-semibold tracking-[0.28em] text-brass uppercase">
+          <h4 className="text-[10px] font-semibold tracking-[0.28em] text-signal uppercase">
             Contacto
           </h4>
           <ul className="mt-5 space-y-3 text-sm text-ash">

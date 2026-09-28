@@ -191,7 +191,7 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
           </Eyebrow>
           <h1 className="mt-5 font-display text-[clamp(2.2rem,6vw,5rem)] leading-[0.9] text-smoke">
             {textQuery ? 'Resultados' : 'Catálogo'}
-            {!textQuery ? <span className="text-brass">.</span> : null}
+            {!textQuery ? <span className="text-signal">.</span> : null}
           </h1>
           <p className="mt-5 max-w-xl text-sm leading-relaxed text-ash">
             Cada vehículo pasa inspección de 120 puntos en origen antes de ser listado. Precios
@@ -216,14 +216,14 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
               className={cn(
                 'flex items-center gap-2 border px-4 py-2.5 text-[10px] font-semibold tracking-[0.2em] uppercase transition-colors lg:hidden',
                 panelOpen || activeCount > 0
-                  ? 'border-brass text-brass'
-                  : 'border-line text-ash hover:border-brass hover:text-brass',
+                  ? 'border-signal text-signal'
+                  : 'border-line text-ash hover:border-signal hover:text-signal',
               )}
             >
               <SlidersHorizontal className="size-3.5" strokeWidth={1.7} />
               Filtros
               {activeCount > 0 ? (
-                <span className="flex size-4 items-center justify-center bg-brass text-[9px] text-ink">
+                <span className="flex size-4 items-center justify-center bg-signal text-[9px] text-ink">
                   {activeCount}
                 </span>
               ) : null}
@@ -232,7 +232,7 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
               <button
                 type="button"
                 onClick={clearAll}
-                className="flex items-center gap-1.5 text-[10px] tracking-[0.18em] text-ash uppercase transition-colors hover:text-brass"
+                className="flex items-center gap-1.5 text-[10px] tracking-[0.18em] text-ash uppercase transition-colors hover:text-signal"
               >
                 <X className="size-3" /> Limpiar
               </button>
@@ -268,7 +268,7 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
                 value={filters.sort}
                 onChange={(e) => set('sort', e.target.value)}
                 aria-label="Ordenar"
-                className="appearance-none border border-line bg-ink-2 py-2.5 pr-9 pl-4 text-[10px] font-medium tracking-[0.16em] text-smoke uppercase outline-none transition-colors hover:border-brass focus:border-brass"
+                className="appearance-none border border-line bg-ink-2 py-2.5 pr-9 pl-4 text-[10px] font-medium tracking-[0.16em] text-smoke uppercase outline-none transition-colors hover:border-signal focus:border-signal"
               >
                 {SORT_OPTIONS.map((o) => (
                   <option key={o.value} value={o.value}>
@@ -277,7 +277,7 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
                 ))}
               </select>
               <ChevronDown
-                className="pointer-events-none absolute top-1/2 right-3 size-3 -translate-y-1/2 text-brass"
+                className="pointer-events-none absolute top-1/2 right-3 size-3 -translate-y-1/2 text-signal"
                 strokeWidth={1.8}
               />
             </div>
@@ -315,7 +315,7 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
                   <button
                     type="button"
                     onClick={clearAll}
-                    className="text-[10px] tracking-[0.18em] text-ash uppercase transition-colors hover:text-brass"
+                    className="text-[10px] tracking-[0.18em] text-ash uppercase transition-colors hover:text-signal"
                   >
                     Limpiar ({activeCount})
                   </button>
@@ -419,12 +419,12 @@ function SelectField({
 }) {
   return (
     <label className="block">
-      <span className="text-[10px] font-semibold tracking-[0.2em] text-brass uppercase">{label}</span>
+      <span className="text-[10px] font-semibold tracking-[0.2em] text-signal uppercase">{label}</span>
       <div className="relative mt-2.5">
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full appearance-none border border-line bg-ink py-3 pr-9 pl-4 text-sm text-smoke outline-none transition-colors hover:border-brass/50 focus:border-brass"
+          className="w-full appearance-none border border-line bg-ink py-3 pr-9 pl-4 text-sm text-smoke outline-none transition-colors hover:border-signal/50 focus:border-signal"
         >
           <option value="">{placeholder}</option>
           {options.map((o) => (
@@ -459,14 +459,14 @@ function RangeField({
 }) {
   return (
     <div>
-      <span className="text-[10px] font-semibold tracking-[0.2em] text-brass uppercase">{label}</span>
+      <span className="text-[10px] font-semibold tracking-[0.2em] text-signal uppercase">{label}</span>
       <div className="mt-2.5 flex items-center gap-2">
         <input
           value={min}
           onChange={(e) => onMin(e.target.value.replace(/\D/g, ''))}
           placeholder={placeholder}
           inputMode="numeric"
-          className="w-full border border-line bg-ink px-3 py-3 text-sm text-smoke outline-none transition-colors placeholder:text-ash/50 focus:border-brass"
+          className="w-full border border-line bg-ink px-3 py-3 text-sm text-smoke outline-none transition-colors placeholder:text-ash/50 focus:border-signal"
         />
         <span className="text-ash">—</span>
         <input
@@ -474,7 +474,7 @@ function RangeField({
           onChange={(e) => onMax(e.target.value.replace(/\D/g, ''))}
           placeholder={placeholder}
           inputMode="numeric"
-          className="w-full border border-line bg-ink px-3 py-3 text-sm text-smoke outline-none transition-colors placeholder:text-ash/50 focus:border-brass"
+          className="w-full border border-line bg-ink px-3 py-3 text-sm text-smoke outline-none transition-colors placeholder:text-ash/50 focus:border-signal"
         />
       </div>
     </div>
@@ -503,7 +503,7 @@ function ViewButton({
       className={cn(
         'flex size-9 items-center justify-center transition-colors',
         active
-          ? 'bg-brass text-ink'
+          ? 'bg-signal text-ink'
           : 'text-ash hover:bg-ink-3 hover:text-smoke',
       )}
     >

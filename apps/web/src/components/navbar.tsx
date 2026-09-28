@@ -47,7 +47,7 @@ export function Navbar() {
         <nav className="container-x flex h-18 items-center justify-between py-4">
           <Link href="/" className="group flex items-center gap-3" data-cursor="Inicio">
             <Wordmark className="h-6" />
-            <span className="font-display text-sm leading-none tracking-[0.14em] text-smoke uppercase transition-colors duration-300 group-hover:text-brass">
+            <span className="font-display text-sm leading-none tracking-[0.14em] text-smoke uppercase transition-colors duration-300 group-hover:text-signal">
               JC Autoimport
             </span>
           </Link>
@@ -57,13 +57,13 @@ export function Navbar() {
               <li key={l.href}>
                 <Link
                   href={l.href}
-                  className="group relative text-[11px] font-medium tracking-[0.22em] uppercase transition-colors duration-300 hover:text-brass"
+                  className="group relative text-[11px] font-medium tracking-[0.22em] uppercase transition-colors duration-300 hover:text-signal"
                 >
-                  <span className={cn(path === l.href && 'text-brass')}>{l.label}</span>
+                  <span className={cn(path === l.href && 'text-signal')}>{l.label}</span>
                   <span
                     aria-hidden
                     className={cn(
-                      'absolute -bottom-1.5 left-0 h-px w-0 bg-brass transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full',
+                      'absolute -bottom-1.5 left-0 h-px w-0 bg-signal transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full',
                       path === l.href && 'w-full',
                     )}
                   />
@@ -76,7 +76,7 @@ export function Navbar() {
             <a
               href={CONTACT_PHONE_HREF}
               data-cursor="Llamar"
-              className="hidden items-center gap-2 border border-brass/35 px-4 py-2.5 text-[10px] font-semibold tracking-[0.2em] text-brass uppercase transition-colors duration-300 hover:bg-brass hover:text-ink md:inline-flex"
+              className="hidden items-center gap-2 border border-signal/35 px-4 py-2.5 text-[10px] font-semibold tracking-[0.2em] text-signal uppercase transition-colors duration-300 hover:bg-signal hover:text-ink md:inline-flex"
             >
               <Phone className="size-3" strokeWidth={1.8} />
               Llamar
@@ -85,7 +85,7 @@ export function Navbar() {
               type="button"
               onClick={() => setOpen((v) => !v)}
               aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
-              className="flex size-10 items-center justify-center border border-line text-smoke transition-colors hover:border-brass hover:text-brass lg:hidden"
+              className="flex size-10 items-center justify-center border border-line text-smoke transition-colors hover:border-signal hover:text-signal lg:hidden"
             >
               {open ? <X className="size-4" /> : <Menu className="size-4" />}
             </button>
@@ -113,9 +113,9 @@ export function Navbar() {
                   <Link
                     href={l.href}
                     onClick={() => setOpen(false)}
-                    className="block border-b border-line py-5 font-display text-4xl text-smoke transition-colors hover:text-brass"
+                    className="block border-b border-line py-5 font-display text-4xl text-smoke transition-colors hover:text-signal"
                   >
-                    <span className="mr-3 align-super text-[10px] tracking-[0.2em] text-brass">
+                    <span className="mr-3 align-super text-[10px] tracking-[0.2em] text-signal">
                       0{i + 1}
                     </span>
                     {l.label}
@@ -126,7 +126,7 @@ export function Navbar() {
                 href={CONTACT_PHONE_HREF}
                 className="mt-10 flex items-center gap-2 text-smoke"
               >
-                <Phone className="size-4 text-brass" />
+                <Phone className="size-4 text-signal" />
                 {CONTACT_PHONE_HREF}
               </a>
             </div>
@@ -151,7 +151,7 @@ export function Wordmark({ className }: { className?: string }) {
         fill="currentColor"
       />
       <path d="M24 4h16v4.2H28.2v7.6H40v4.2H24V4Z" fill="currentColor" />
-      <path d="M35.6 15.8H40v4.2h-4.4V15.8Z" fill="#C9A227" />
+      <path d="M35.6 15.8H40v4.2h-4.4V15.8Z" fill="#f02434" />
     </svg>
   );
 }

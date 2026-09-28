@@ -120,7 +120,7 @@ export function ProcessPage() {
           <h1 className="mt-6 max-w-[18ch] font-display text-[clamp(2.4rem,7.5vw,7rem)] leading-[0.88] text-smoke">
             Del catálogo
             <br />
-            a <span className="text-brass">tu garaje</span> en 5 pasos
+            a <span className="text-signal">tu garaje</span> en 5 pasos
           </h1>
           <p className="mt-7 max-w-xl text-sm leading-relaxed text-ash md:text-base">
             Convertimos una compra internacional compleja en una ruta clara. Un solo equipo coordina
@@ -136,7 +136,7 @@ export function ProcessPage() {
             <span className="text-[10px] tracking-[0.24em] text-ash uppercase">Orígenes</span>
             {ORIGINS.map((o) => (
               <div key={o.code} className="group flex items-center gap-3">
-                <span className="flex size-9 items-center justify-center border border-line text-[9px] font-semibold tracking-widest text-ash transition-colors duration-500 group-hover:border-brass group-hover:text-brass">
+                <span className="flex size-9 items-center justify-center border border-line text-[9px] font-semibold tracking-widest text-ash transition-colors duration-500 group-hover:border-signal group-hover:text-signal">
                   {o.code}
                 </span>
                 <span className="text-xs text-ash transition-colors group-hover:text-smoke">
@@ -165,7 +165,7 @@ export function ProcessPage() {
                       style={{ backgroundImage: `url(${s.image})` }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-ink/60 to-transparent" />
-                    <span className="absolute top-5 left-5 font-display text-5xl text-brass/25">
+                    <span className="absolute top-5 left-5 font-display text-5xl text-signal/25">
                       {s.n}
                     </span>
                   </div>
@@ -174,18 +174,18 @@ export function ProcessPage() {
                 <Reveal delay={0.12} className={flip ? 'lg:order-1' : undefined}>
                   <div>
                     <div className="flex items-center gap-4">
-                      <span className="text-xs tracking-[0.3em] text-brass">{s.n}</span>
-                      <span className="h-px flex-1 bg-brass/30" />
+                      <span className="text-xs tracking-[0.3em] text-signal">{s.n}</span>
+                      <span className="h-px flex-1 bg-signal/30" />
                     </div>
                     <h2 className="mt-5 font-display text-[clamp(1.6rem,3.5vw,2.8rem)] leading-[0.95] text-smoke">
                       {s.title}
                     </h2>
-                    <p className="mt-3 text-sm text-brass">{s.lead}</p>
+                    <p className="mt-3 text-sm text-signal">{s.lead}</p>
                     <p className="mt-5 max-w-lg text-sm leading-relaxed text-ash">{s.body}</p>
                     <ul className="mt-7 space-y-3">
                       {s.points.map((p) => (
                         <li key={p} className="flex items-start gap-3 text-sm text-smoke/85">
-                          <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center border border-brass text-brass">
+                          <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center border border-signal text-signal">
                             <Check className="size-2.5" strokeWidth={3} />
                           </span>
                           {p}
@@ -248,7 +248,7 @@ export function ProcessPage() {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
             <h2 className="mx-auto max-w-[20ch] font-display text-[clamp(1.8rem,5vw,3.6rem)] leading-[0.92] text-smoke">
-              Empecemos por tu <span className="text-brass">próxima unidad</span>
+              Empecemos por tu <span className="text-signal">próxima unidad</span>
             </h2>
             <p className="mx-auto mt-5 max-w-md text-sm text-ash">
               Escríbenos por WhatsApp o completa el formulario. Te respondemos el mismo día.
@@ -261,7 +261,7 @@ export function ProcessPage() {
             </div>
             <Link
               href="/catalogo"
-              className="group mt-8 inline-flex items-center gap-2 text-[11px] tracking-[0.22em] text-ash uppercase transition-colors hover:text-brass"
+              className="group mt-8 inline-flex items-center gap-2 text-[11px] tracking-[0.22em] text-ash uppercase transition-colors hover:text-signal"
             >
               Ver catálogo completo
               <ArrowRight

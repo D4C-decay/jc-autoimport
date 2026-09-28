@@ -2,7 +2,7 @@
 /**
  * Generates the desktop app icon without any image dependency.
  *
- * Draws a 512x512 RGBA mark (carved carbon background + brass chevron, matching the
+ * Draws a 512x512 RGBA mark (carved carbon background + red chevron, matching the
  * site's diagonal identity) and encodes it as PNG with Node's built-in zlib.
  * electron-builder derives the Windows .ico and other densities from this file.
  */
@@ -16,8 +16,8 @@ const OUT_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..',
 
 const INK = [10, 10, 11];
 const INK_SOFT = [22, 22, 24];
-const BRASS = [200, 164, 77];
-const BRASS_LIGHT = [226, 197, 122];
+const SIGNAL = [240, 36, 52];
+const SIGNAL_LIGHT = [255, 107, 107];
 
 const crcTable = Array.from({ length: 256 }, (_, n) => {
   let c = n;
@@ -104,9 +104,9 @@ const stroke = (x0, y0, x1, y1, half, color) => {
         // Vertical gradient across the stroke for a brushed-metal feel.
         const f = (cyp + dy) / SIZE;
         const col = [
-          Math.round(color[0] + (BRASS_LIGHT[0] - color[0]) * (1 - f)),
-          Math.round(color[1] + (BRASS_LIGHT[1] - color[1]) * (1 - f)),
-          Math.round(color[2] + (BRASS_LIGHT[2] - color[2]) * (1 - f)),
+          Math.round(color[0] + (SIGNAL_LIGHT[0] - color[0]) * (1 - f)),
+          Math.round(color[1] + (SIGNAL_LIGHT[1] - color[1]) * (1 - f)),
+          Math.round(color[2] + (SIGNAL_LIGHT[2] - color[2]) * (1 - f)),
         ];
         set(Math.round(cxp + dx), Math.round(cyp + dy), col);
       }
@@ -114,16 +114,16 @@ const stroke = (x0, y0, x1, y1, half, color) => {
   }
 };
 
-stroke(214, 150, 316, 256, 30, BRASS);
-stroke(316, 256, 214, 362, 30, BRASS);
+stroke(214, 150, 316, 256, 30, SIGNAL);
+stroke(316, 256, 214, 362, 30, SIGNAL);
 
-// Thin brass frame, inset.
+// Thin red frame, inset.
 for (let y = 0; y < SIZE; y++) {
   for (let x = 0; x < SIZE; x++) {
     if (!inRounded(x, y)) continue;
     const onEdge =
       inRounded(x + 10, y + 10) && inRounded(x - 10, y + 10) && inRounded(x + 10, y - 10) && inRounded(x - 10, y - 10);
-    if (!onEdge) set(x, y, BRASS, 190);
+    if (!onEdge) set(x, y, SIGNAL, 190);
   }
 }
 

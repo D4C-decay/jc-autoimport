@@ -28,7 +28,7 @@ export default function Page() {
         <div>
           <Eyebrow index="01">Hablemos</Eyebrow>
           <h1 className="mt-5 font-display text-[clamp(2.2rem,6vw,5rem)] leading-[0.9] text-smoke">
-            Cuéntanos qué <span className="text-brass">buscas.</span>
+            Cuéntanos qué <span className="text-signal">buscas.</span>
           </h1>
           <p className="mt-6 max-w-md text-sm leading-relaxed text-ash">
             Completa el formulario o escríbenos directamente. Un asesor te contacta en menos de 24
@@ -43,7 +43,7 @@ export default function Page() {
               { label: 'Oficina', value: CONTACT_ADDRESS, href: undefined },
             ].map((c) => (
               <div key={c.label} className="bg-ink-2 p-5">
-                <div className="text-[10px] font-semibold tracking-[0.24em] text-brass uppercase">
+                <div className="text-[10px] font-semibold tracking-[0.24em] text-signal uppercase">
                   {c.label}
                 </div>
                 {c.href ? (
@@ -51,7 +51,7 @@ export default function Page() {
                     href={c.href}
                     target={c.href.startsWith('http') ? '_blank' : undefined}
                     rel="noreferrer"
-                    className="mt-1.5 block text-sm text-smoke transition-colors hover:text-brass"
+                    className="mt-1.5 block text-sm text-smoke transition-colors hover:text-signal"
                   >
                     {c.value}
                   </a>

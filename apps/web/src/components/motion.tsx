@@ -59,7 +59,7 @@ export function CustomCursor() {
             <motion.span
               initial={{ opacity: 0, scale: 0.7 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="text-[10px] font-semibold tracking-[0.18em] text-brass uppercase"
+              className="text-[10px] font-semibold tracking-[0.18em] text-signal uppercase"
             >
               {label}
             </motion.span>
@@ -279,16 +279,16 @@ export function PageTransition({ children }: { children: ReactNode }) {
 }
 
 /* ------------------------------------------------------------------ *
- * Section label with the brass hairline                                *
+ * Section label with the signal hairline                                *
  * ------------------------------------------------------------------ */
 
 export function SectionLabel({ children, index }: { children: ReactNode; index?: string }) {
   return (
     <Reveal className="flex items-center gap-4">
       {index ? (
-        <span className="font-display text-xs tracking-[0.3em] text-brass">{index}</span>
+        <span className="font-display text-xs tracking-[0.3em] text-signal">{index}</span>
       ) : null}
-      <span className="h-px w-10 bg-brass/50" />
+      <span className="h-px w-10 bg-signal/50" />
       <span className="text-[11px] font-medium tracking-[0.34em] text-ash uppercase">{children}</span>
     </Reveal>
   );

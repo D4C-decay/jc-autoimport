@@ -62,9 +62,9 @@ export function LeadForm({
       <motion.div
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="border border-brass/35 bg-brass/8 p-7 text-center"
+        className="border border-signal/35 bg-signal/8 p-7 text-center"
       >
-        <span className="mx-auto flex size-11 items-center justify-center rounded-full border border-brass text-brass">
+        <span className="mx-auto flex size-11 items-center justify-center rounded-full border border-signal text-signal">
           <Check className="size-5" strokeWidth={2.2} />
         </span>
         <h3 className="mt-4 font-display text-lg text-smoke">Solicitud recibida</h3>
@@ -73,7 +73,7 @@ export function LeadForm({
           {vehicleName ? (
             <>
               {' '}
-              sobre <span className="text-brass">{vehicleName}</span>
+              sobre <span className="text-signal">{vehicleName}</span>
             </>
           ) : null}
           . También te escribiremos por WhatsApp.
@@ -85,7 +85,7 @@ export function LeadForm({
   return (
     <form onSubmit={onSubmit} className={cn('space-y-4', compact && 'text-sm')}>
       <div>
-        <span className="text-[10px] font-semibold tracking-[0.2em] text-brass uppercase">
+        <span className="text-[10px] font-semibold tracking-[0.2em] text-signal uppercase">
           Motivo de contacto
         </span>
         <div className="mt-2.5 flex flex-wrap gap-2">
@@ -97,8 +97,8 @@ export function LeadForm({
               className={cn(
                 'border px-3 py-2 text-[10px] font-medium tracking-[0.14em] uppercase transition-colors duration-300',
                 type === t.value
-                  ? 'border-brass bg-brass/12 text-brass'
-                  : 'border-line text-ash hover:border-brass/50 hover:text-smoke',
+                  ? 'border-signal bg-signal/12 text-signal'
+                  : 'border-line text-ash hover:border-signal/50 hover:text-smoke',
               )}
             >
               {t.label}
@@ -136,7 +136,7 @@ export function LeadForm({
       />
 
       <label className="block">
-        <span className="text-[10px] font-semibold tracking-[0.2em] text-brass uppercase">
+        <span className="text-[10px] font-semibold tracking-[0.2em] text-signal uppercase">
           Mensaje {vehicleName ? <span className="text-ash/60 normal-case">(opcional)</span> : null}
         </span>
         <textarea
@@ -148,7 +148,7 @@ export function LeadForm({
               ? 'Me interesa este vehículo. Quisiera saber disponibilidad y opciones de financiamiento…'
               : 'Cuéntanos qué vehículo buscas, presupuesto y prazo.'
           }
-          className="mt-2.5 w-full resize-none border border-line bg-ink px-4 py-3 text-sm text-smoke outline-none transition-colors placeholder:text-ash/50 focus:border-brass"
+          className="mt-2.5 w-full resize-none border border-line bg-ink px-4 py-3 text-sm text-smoke outline-none transition-colors placeholder:text-ash/50 focus:border-signal"
         />
       </label>
 
@@ -168,7 +168,7 @@ export function LeadForm({
       <button
         type="submit"
         disabled={state === 'sending'}
-        className="btn-shine group relative flex w-full items-center justify-center gap-2.5 overflow-hidden bg-brass px-8 py-4 text-[11px] font-semibold tracking-[0.24em] text-ink uppercase transition-colors duration-500 hover:bg-brass-light disabled:opacity-60 [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
+        className="btn-shine group relative flex w-full items-center justify-center gap-2.5 overflow-hidden bg-signal px-8 py-4 text-[11px] font-semibold tracking-[0.24em] text-ink uppercase transition-colors duration-500 hover:bg-signal-light disabled:opacity-60 [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
       >
         <span className="relative z-10 flex items-center gap-2.5">
           {state === 'sending' ? <Loader2 className="size-3.5 animate-spin" /> : <Send className="size-3.5" strokeWidth={1.8} />}
@@ -203,9 +203,9 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="text-[10px] font-semibold tracking-[0.2em] text-brass uppercase">
+      <span className="text-[10px] font-semibold tracking-[0.2em] text-signal uppercase">
         {label}
-        {required ? <span className="ml-1 text-brass/60">*</span> : null}
+        {required ? <span className="ml-1 text-signal/60">*</span> : null}
       </span>
       <input
         type={type}
@@ -214,7 +214,7 @@ function Field({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        className="mt-2.5 w-full border border-line bg-ink px-4 py-3 text-sm text-smoke outline-none transition-colors placeholder:text-ash/50 focus:border-brass"
+        className="mt-2.5 w-full border border-line bg-ink px-4 py-3 text-sm text-smoke outline-none transition-colors placeholder:text-ash/50 focus:border-signal"
       />
     </label>
   );

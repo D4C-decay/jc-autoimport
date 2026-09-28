@@ -89,7 +89,7 @@ export function VehicleDetailPage({ vehicle }: { vehicle: VehicleDetail }) {
         <div className="container-x pt-8">
           <Link
             href="/catalogo"
-            className="group inline-flex items-center gap-2 text-[10px] tracking-[0.22em] text-ash uppercase transition-colors hover:text-brass"
+            className="group inline-flex items-center gap-2 text-[10px] tracking-[0.22em] text-ash uppercase transition-colors hover:text-signal"
           >
             <ArrowLeft
               className="size-3.5 transition-transform duration-500 group-hover:-translate-x-1"
@@ -139,7 +139,7 @@ export function VehicleDetailPage({ vehicle }: { vehicle: VehicleDetail }) {
                 data-cursor="Ver"
                 className={cn(
                   'group relative aspect-16/10 overflow-hidden bg-ink-3 text-left transition-opacity duration-500',
-                  active === i + 1 ? 'ring-1 ring-brass' : 'opacity-65 hover:opacity-100',
+                  active === i + 1 ? 'ring-1 ring-signal' : 'opacity-65 hover:opacity-100',
                 )}
               >
                 <Image
@@ -167,17 +167,17 @@ export function VehicleDetailPage({ vehicle }: { vehicle: VehicleDetail }) {
             </h1>
             <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-ash">
               <span className="flex items-center gap-2">
-                <Hash className="size-3.5 text-brass" strokeWidth={1.7} /> VIN {vehicle.vin}
+                <Hash className="size-3.5 text-signal" strokeWidth={1.7} /> VIN {vehicle.vin}
               </span>
               {vehicle.portOfEntry ? (
                 <span className="flex items-center gap-2">
-                  <Globe2 className="size-3.5 text-brass" strokeWidth={1.7} /> Puerto{' '}
+                  <Globe2 className="size-3.5 text-signal" strokeWidth={1.7} /> Puerto{' '}
                   {vehicle.portOfEntry}
                 </span>
               ) : null}
               {vehicle.importDate ? (
                 <span className="flex items-center gap-2">
-                  <Calendar className="size-3.5 text-brass" strokeWidth={1.7} /> Importado{' '}
+                  <Calendar className="size-3.5 text-signal" strokeWidth={1.7} /> Importado{' '}
                   {new Date(vehicle.importDate).toLocaleDateString('es-DO', {
                     month: 'long',
                     year: 'numeric',
@@ -199,7 +199,7 @@ export function VehicleDetailPage({ vehicle }: { vehicle: VehicleDetail }) {
                     key={f}
                     className="flex items-center gap-1.5 border border-line px-3 py-1.5 text-[11px] text-ash"
                   >
-                    <Check className="size-3 text-brass" strokeWidth={2.2} />
+                    <Check className="size-3 text-signal" strokeWidth={2.2} />
                     {f}
                   </li>
                 ))}
@@ -224,7 +224,7 @@ export function VehicleDetailPage({ vehicle }: { vehicle: VehicleDetail }) {
                 ) : null}
               </div>
               {off ? (
-                <div className="mt-3 inline-block border border-brass/40 bg-brass/12 px-3 py-1 text-[10px] font-semibold tracking-[0.18em] text-brass uppercase">
+                <div className="mt-3 inline-block border border-signal/40 bg-signal/12 px-3 py-1 text-[10px] font-semibold tracking-[0.18em] text-signal uppercase">
                   Ahorro {off}% sobre precio de lista
                 </div>
               ) : null}
@@ -258,7 +258,7 @@ export function VehicleDetailPage({ vehicle }: { vehicle: VehicleDetail }) {
           {quickFacts.map((f, i) => (
             <Reveal key={f.label} delay={i * 0.03}>
               <div className="flex items-start gap-4 bg-ink-2 p-5 transition-colors duration-500 hover:bg-ink-3">
-                <f.icon className="mt-0.5 size-4 shrink-0 text-brass" strokeWidth={1.6} />
+                <f.icon className="mt-0.5 size-4 shrink-0 text-signal" strokeWidth={1.6} />
                 <div className="min-w-0">
                   <dt className="text-[9px] font-semibold tracking-[0.22em] text-ash uppercase">
                     {f.label}
@@ -281,7 +281,7 @@ export function VehicleDetailPage({ vehicle }: { vehicle: VehicleDetail }) {
             {Object.entries(grouped).map(([cat, items], gi) => (
               <Reveal key={cat} delay={gi * 0.08}>
                 <div className="border border-line p-6">
-                  <h3 className="text-[10px] font-semibold tracking-[0.24em] text-brass uppercase">
+                  <h3 className="text-[10px] font-semibold tracking-[0.24em] text-signal uppercase">
                     {cat}
                   </h3>
                   <ul className="mt-5 space-y-3">

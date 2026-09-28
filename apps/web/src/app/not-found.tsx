@@ -7,7 +7,7 @@ export default function NotFound() {
       <div className="container-x text-center">
         <Eyebrow className="justify-center">Error 404</Eyebrow>
         <h1 className="mt-6 font-display text-[clamp(3rem,12vw,9rem)] leading-[0.85] text-smoke">
-          <span className="text-brass">404</span>
+          <span className="text-signal">404</span>
         </h1>
         <p className="mx-auto mt-6 max-w-md text-sm text-ash">
           Esta unidad no está en nuestro inventario. Puede que ya haya sido vendida o que la dirección
@@ -17,7 +17,7 @@ export default function NotFound() {
           <Button href="/catalogo">Ir al catálogo</Button>
           <Link
             href="/contacto"
-            className="text-[11px] tracking-[0.24em] text-ash uppercase transition-colors hover:text-brass"
+            className="text-[11px] tracking-[0.24em] text-ash uppercase transition-colors hover:text-signal"
           >
             Buscar por encargo →
           </Link>

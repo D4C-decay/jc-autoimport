@@ -88,7 +88,7 @@ export function HeroVideo({
           onClick={toggle}
           aria-label={playing ? 'Pausar el video de fondo' : 'Reproducir el video de fondo'}
           data-cursor={playing ? 'Pausa' : 'Play'}
-          className="group absolute right-4 bottom-4 z-20 flex size-10 items-center justify-center border border-white/15 bg-ink/45 text-smoke/70 backdrop-blur-sm transition-colors duration-300 hover:border-brass/60 hover:text-brass md:right-8 md:bottom-8"
+          className="group absolute right-4 bottom-4 z-20 flex size-10 items-center justify-center border border-white/15 bg-ink/45 text-smoke/70 backdrop-blur-sm transition-colors duration-300 hover:border-signal/60 hover:text-signal md:right-8 md:bottom-8"
         >
           {playing ? (
             <Pause className="size-3.5" strokeWidth={1.6} />
