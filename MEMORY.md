@@ -1,17 +1,20 @@
-# Memoria del proyecto JC Autoimport (Backend)
+# Memoria del proyecto JC Autoimport
 
 > Este archivo se carga automáticamente al inicio de cada sesión de opencode (via `opencode.json` → `instructions`). Es la fuente de continuidad entre sesiones.
 
 ## Objetivo
-Plataforma de venta/importación de vehículos "JC Autoimport". Backend API completo orientado a: catálogo + búsqueda (<100ms), gestión de leads/CRM, reservas y pagos (Stripe), media, auditoría y RBAC. Meta de rendimiento: respuestas de catálogo <100ms vía caché Redis.
+Plataforma de venta/importación de vehículos "JC Autoimport": backend API (catálogo + búsqueda <100ms, leads/CRM, reservas y pagos, media, auditoría, RBAC) **y ahora también sitio web público premium + app de escritorio Windows/Linux**.
 
 ## Stack
-NestJS 12 · TypeScript (ESM) · Prisma 7.10 · PostgreSQL 16 · Redis 7 · Stripe · Sharp · Argon2 · oxlint · pino.
+- **Backend**: NestJS 12 · TypeScript (ESM) · Prisma 7.10 · PostgreSQL 16 · Redis 7 · Stripe · Sharp · Argon2 · oxlint · pino.
+- **Web** (`apps/web`): Next.js 15.5.26 (App Router) · React 19 · Tailwind 4 · Framer Motion · lucide-react.
+- **Desktop** (`apps/desktop`): Electron 44.4.5 · electron-builder 26.15.3 · TypeScript 6.
 
 ## Repositorio
 - GitHub **privado**: `https://github.com/D4C-decay/jc-autoimport` — rama `main`.
 - `gh` autenticada como `D4C-decay` (HTTPS, scopes `gist,read:org,repo,workflow`). Push directo aprobado (reglas en `AGENTS.md`, verifícalas antes de cualquier commit).
-- NO versionar jamás: `.env`, `generated/`, `dist/`, `node_modules/`, `*.tsbuildinfo`.
+- **Estructura**: el backend vive en la raíz; `apps/web` y `apps/desktop` son **paquetes independientes con sus propios `package-lock.json`** (no hay workspaces npm). Instalar y compilar cada uno por separado.
+- NO versionar jamás: `.env`, `generated/`, `dist/`, `node_modules/`, `*.tsbuildinfo`, `apps/*/release/`, `apps/web/.next/`.
 - Bóveda de documentación: `jcautoimport-obsidian` (`~/Documentos/Obsidian/JC-Autoimport`). Bóveda personal: `vault-personal` (`~/Documentos/Obsidian/Personal`). Detalle en el log de sesiones.
 
 ## Estado actual
@@ -26,20 +29,29 @@ NestJS 12 · TypeScript (ESM) · Prisma 7.10 · PostgreSQL 16 · Redis 7 · Stri
   - `audit` (interceptor global + consulta ADMIN)
   - `health` (`GET /api/v1/health`: Prisma + Redis)
 - Infra: `Dockerfile`, `docker-compose.yml` (postgres 16 + redis 7 + app), `.env.example` con placeholders.
-- Seed: `prisma/seed.ts` (admin/manager/2 sellers + specifications + 3 vehículos demo).
-- **Runtime validado (2026-09-08)**: migración `20260908163629_init` aplicada; seed ejecutado; API arriba en `localhost:3000` — health OK, register/login OK, `/users/me` con JWT OK, catálogo paginado (cursor) OK, RBAC (CLIENT→403 en `/audit`, ADMIN→200) OK, búsqueda full-text "rav4" OK. Swagger en `/api/docs`.
+- Seed: `prisma/seed.ts` + `prisma/seed-data.ts` (idempotente; admin/manager/2 sellers + specifications + **75 vehículos** con 12 destacados y 3 imágenes c/u de URLs verificadas de Unsplash).
+- **Runtime validado (2026-09-28)**: API arriba en `localhost:3000` (log en `/tmp/opencode/app.log`) — health OK, lead POST 201 con autoasignación a SELLER, login OK, catálogo con SSR.
+- **Web pública `apps/web` (2026-09-28)**: Next.js 15.5.26 + React 19 + Tailwind 4 + Framer Motion. Rutas: `/`, `/catalogo` (filtros + cursor), `/vehiculo/[slug]`, `/contacto`, `/proceso`, `/login`, `not-found`, `/sitemap.xml`, `/icon.png`. Identidad: negro carbón + latón, Archivo Black + Inter, cursor propio, parallax, reveals, botones magnéticos, clip-path diagonal. **SEO**: home estática (`revalidate 3600`) y catálogo renderizado en servidor (`revalidate 300`) → 6 destacados y 12 unidades presentes en el HTML.
+- **App de escritorio `apps/desktop` (2026-09-28)**: Electron 44.4.5 + electron-builder. Arranca el server standalone de Next **empaquetado** con `ELECTRON_RUN_AS_NODE=1` (puerto 47821), sin exigir Node al usuario. Artefactos verificados en `apps/desktop/release/`: `JC Autoimport-Setup-1.0.0-x64.exe` (NSIS), `JC Autoimport-1.0.0.AppImage`, `JC Autoimport-1.0.0-amd64.deb`.
+- **Contratos reales del API (verificados, no suponer)**: paginación `{ success, data: { data: [], meta: { nextCursor, prevCursor, hasMore, total } }, timestamp }`; sugerencias = `[{ brand, model, full }]`; `POST /leads` usa **`leadType`** (no `type`); `POST /auth/login` devuelve `{ user, tokens: { accessToken, refreshToken, expiresIn } }` (no tokens planos).
+- **Verificación (2026-09-28)**: backend `build` + `lint` + 18 unit + 4 e2e en verde; web `typecheck` + `build` (10/10 páginas) en verde; desktop `build` en verde. El server empaquetado se validó sirviendo el sitio real (home/catalogo/proceso/detalle 200, 404 correcto, CSS y JS 200, robots y sitemap 200).
 - **Optimización de rendimiento (2026-09-08)**: migración `20260908164736_optimize_search_indexes` aplicada — columna generada `search_vector tsvector` + índice **GIN** (búsqueda full-text sin full scan), índices compuestos de keyset `(price,id)`, `(year,id)`, `(mileage,id)`, y media **desnormalizada** (`primary_image_url`/`thumbnail_url` en `vehicles`). Middleware `compression` (gzip) en `main.ts`. Validado: misma query con 50k filas pasa de 141 ms (to_tsvector en vuelo) a 2,7 ms (GIN). Payload del catálogo -56% con gzip. Tests: 18 unit + 4 e2e en verde.
 
 ## Próximo paso
-Backend **optimizado y con tests** (ver Estado actual). Siguientes opciones en orden de valor:
-1. **Ampliar dataset de demo + benchmark** (p. ej. >10k vehículos) para validar latencia de catálogo/búsqueda a escala real y ajustar TTLs de caché.
-2. Preparar despliegue (S3 real, Stripe live/keys reales, DOMINIO/HTTPS, GitHub Actions CI/CD).
-3. Decidir y construir el **frontend** y el **panel de administración**.
+Backend + web + desktop **compilando, empaquetado y verificado** (ver Estado actual). Siguientes pasos en orden de valor:
+1. **Revisar la UI en un navegador real** (el build está validado por HTTP/CDP, no visualmente) y pulir responsive/móvil.
+2. **Decidir si la app de escritorio es necesaria** o si una PWA instalable cubre el caso con mucha menos complejidad de empaquetado (los .exe/AppImage ya construyen, pero el mantenimiento de firma y actualizaciones pesa).
+3. Despliegue real: dominio + HTTPS, `NEXT_PUBLIC_API_URL`/`NEXT_PUBLIC_SITE_URL` de producción, claves reales de Stripe/S3/email.
+4. Firmar el `.exe` de Windows (evita el SmartScreen) y, si se mantiene el desktop, configurar auto-update.
+5. GitHub Actions CI/CD (build + lint + tests + empaquetado de los tres artefactos).
 
 ## Blockers
-- ~~PostgreSQL y Redis no instalados~~ → **Resueltos**: PostgreSQL 18.6 y Valkey 9.1.2 (Remedio: el paquete `redis` de Arch ahora provee Valkey, protocolo compatible) activos en la máquina.
+- **GitHub CLI roto**: `The token in keyring is invalid.` → hace falta `gh auth refresh -h github.com -s repo,workflow` (interactivo). **`git push` sí funciona** con las credenciales Git, así que los pushes no están bloqueados.
 - `jcauto` necesita `CREATEDB` para la shadow database de Prisma (concedido con `ALTER ROLE jcauto CREATEDB`). Si migras en otra máquina, hay que repetirlo.
 - Stripe/S3/email/WhatsApp usan placeholders en `.env`: las integraciones funcionan en código pero requieren claves reales para producción.
+- El `.exe` de Windows va **sin firmar** (SmartScreen lo marcará). Requiere certificado de firma de código.
+- En esta máquina el **proceso GPU de Electron falla** (`GPU process isn't usable`): hay que pasar `--disable-gpu` para pruebas headless. No afecta a los usuarios finales.
+- `apps/web` y `apps/desktop` son paquetes independientes: un `npm install` en la raíz NO los instala.
 
 ## Decisiones clave
 - **ESM**: imports relativos con sufijo `.js` (obligatorio).
@@ -56,6 +68,15 @@ Backend **optimizado y con tests** (ver Estado actual). Siguientes opciones en o
 - **Seed config (Prisma 7)**: vive en `prisma.config.ts` → `migrations.seed` (formato string), no en `package.json`/`seed.import`.
 - **Cursors de paginación**: cifrados con `JWT_ACCESS_SECRET` (cursor-encoder).
 - **Full-text indexado**: columna generada `search_vector tsvector` (brand+model+description+vin) + índice `USING GIN`, creados **solo en SQL de migración** (Prisma no emite DDL para `Unsupported("tsvector")`/GIN). Posible aviso de drift en `migrate dev`; en prod usar `migrate deploy`.
+- **Alias de Next (`apps/web`)**: Next infiere el *workspace root* como el repo padre y acaba usando el `tsconfig.json` del backend (sin `@/*`) → `Module not found: @/components/...`. Solución: `outputFileTracingRoot` + `turbopack.root` + alias explícito `@` en `next.config.mjs`. **No quitar esto.**
+- **TypeScript pineado a `~6.0.3`** en `apps/web` y `apps/desktop`. Con `^6.0.2` npm resuelve a **7.0.2**, y Next 15 lo rechaza (`TypeScript 7.0.2 is not supported`).
+- **`declare module '*.css'`** en `apps/web/globals.d.ts` (TS 6 exige declaración explícita para imports side-effect de CSS) y ese archivo debe estar en `tsconfig.json` `include`.
+- **`next lint` no existe en Next 15**: el script `lint` de `apps/web` es `tsc --noEmit` (root: `npm run web:typecheck`).
+- **`next start` es incompatible con `output: 'standalone'`**: `apps/web/scripts/start-standalone.mjs` copia `.next/static` y `public/` junto a `server.js` y lo arranca (`npm run web:start`).
+- **Electron preload path**: `__dirname` es `dist/main`, pero el preload compilado queda en `dist/preload` → usar `path.join(__dirname, '..', 'preload', 'preload.cjs')`. El preload debe ser **CJS (`.cts`)** porque `sandbox: true` no admite preload ESM.
+- **electron-builder excluye `node_modules` de `extraResources` SIEMPRE**: el server standalone se quedaba sin `require('next')`. Resuelto con el hook `afterPack: scripts/after-pack.mjs`, que copia el árbol completo (server.js + node_modules + `.next/static` + public) y valida `server.js` + `node_modules/next/package.json` antes de terminar.
+- **Nombres de artefacto**: el paquete npm `@jcautoimport/desktop` no sirve como `executableName` (caracteres inválidos) → `linux.executableName: jcautoimport`; y el nombre de `.deb` por defecto (`@jcautoimport/desktop_...`) rompe la ruta → `deb.artifactName` explícito.
+- **Icono sin dependencias**: `apps/desktop/scripts/make-icon.mjs` genera el PNG 512x512 codificándolo con `zlib` de Node (no hay `sharp` en `apps/*`). electron-builder deriva el `.ico` de ahí.
 - **Media desnormalizada**: `primaryImageUrl`/`thumbnailUrl` en `vehicles` (path caliente sin join). `MediaService.syncPrimaryToVehicle()` mantiene ambas al subir/borrar/hacer primary. Consultas que antes resolvían subqueries por fila ahora usan columnas.
 - **Compresión**: `compression` (gzip) como primer middleware de `main.ts`. `helmet` deliberadamente NO (pendiente).
 - **Tests**: `npm run test` = 18 unit (vitest); `npm run test:e2e` = 4 e2e contra DB/Redis reales. La spec de health asume el `TransformInterceptor` (`data.*`).
@@ -78,6 +99,15 @@ Backend **optimizado y con tests** (ver Estado actual). Siguientes opciones en o
 - La API debe estar arriba para que los testers funcionen: `node dist/src/main.js` (log `/tmp/opencode/app.log`), seed `admin@jcautoimport.com / Admin123!`.
 
 ## Log de sesiones
+- 2026-09-28 — **Frontend premium + app de escritorio (entrega completa, commit `a32ef0b` pusheado a `main`)**:
+  - **Infra**: PostgreSQL 18.6 + Valkey 9.1.2 activos; rol `jcauto` (CREATEDB) + BD `jcautoimport`; migraciones aplicadas; `.env` local. API arriba en `:3000` (log en `/tmp/opencode/app.log`).
+  - **Seed ampliado**: `prisma/seed-data.ts` con **75 vehículos** (12 destacados), 22 especificaciones y 225 imágenes de Unsplash verificadas; `prisma/seed.ts` idempotente.
+  - **`apps/web` (Next.js 15.5.26)**: landing, `/catalogo` (filtros + cursor), `/vehiculo/[slug]`, `/contacto`, `/proceso`, `/login`, 404, `sitemap.xml`, `robots.txt`. Identidad negro carbón + latón, Archivo Black + Inter, cursor propio, parallax, reveals, botones magnéticos, clip-path diagonal. **SSR/SEO**: home estática (`revalidate 3600`) y catálogo renderizado en servidor (`revalidate 300`) → 6 destacados y 12 unidades presentes en el HTML.
+  - **Contratos corregidos contra la API real**: paginación `{data, meta}`, sugerencias `{brand, model, full}`, `leadType` en leads (no `type`), login con `{user, tokens}`. Validados con `curl` contra la API viva (lead 201 con autoasignación a SELLER, login 200).
+  - **`apps/desktop` (Electron 44.4.5 + electron-builder 26.15.3)**: arranca el server standalone de Next **empaquetado** con `ELECTRON_RUN_AS_NODE=1` (puerto 47821) → no exige Node en la máquina del usuario. `contextIsolation` + `sandbox` activos, preload CJS mínimo. Artefactos verificados: `JC Autoimport-Setup-1.0.0-x64.exe`, `JC Autoimport-1.0.0.AppImage`, `JC Autoimport-1.0.0-amd64.deb`.
+  - **Bugs reales encontrados y corregidos** (ver "Decisiones clave"): workspace-root de Next, TypeScript 7 no soportado, `next lint` inexistente, `next start` vs `output: 'standalone'`, ruta del preload, `node_modules` excluido de `extraResources`, `executableName` inválido, e2e de catálogo que exigía modelo exacto.
+  - **Verificación**: backend `build`+`lint`+18 unit+4 e2e en verde; web `typecheck`+`build` (10/10 páginas) en verde; desktop `build` en verde; el server empaquetado sirvió el sitio real (home/catalogo/proceso/detalle 200, 404 correcto, CSS/JS/robots/sitemap 200).
+  - **Nota operativa**: el subagente `memory-keeper` en esta sesión reportó su resumen pero **no escribió `MEMORY.md`** → la actualización se hizo a mano. Verificar con `git status` que el archivo cambió de verdad tras delegar.
 - 2026-09-24 — **Fix de agentes (prefijo de modelo)**: los 21 agentes (20 en `.opencode/agent/` + global `mentor-linux.md`) referenciaban `model: qwen2.5:7b` / `qwen2.5-coder:14b` **sin prefijo de proveedor**, id que no resuelve a ningún modelo registrado (opencode los registra como `ollama/qwen2.5:7b` y `ollama/qwen2.5-coder:14b`). Corregida la línea `model:` en todos (prefijo `ollama/`); los symlinks de `~/.config/opencode/agent/` quedan cubiertos. Commit `32efef6` pusheado. Decisión del usuario: NO se fijó modelo default en `opencode.json`. Pendiente: **reiniciar opencode** para que cargue la config (no es hot-reload — verificado al fallar memory-keeper con la config vieja en esta sesión).
 - 2026-09-08 — **Bóvedas Obsidian con sync Git**: montadas 2 bóvedas bajo `~/Documentos/Obsidian/` — `JC-Autoimport` (repo privado `jcautoimport-obsidian`, documentación del proyecto) y `Personal` (repo privado `vault-personal`, diario/notas/tareas). Obsidian pasó de flatpak a binario nativo (`pacman -S obsidian` — requerido por obsidian-git). Plugins: `obsidian-git` 2.39.0 (auto commit-and-sync 10 min, pull on boot, commit on close, merge strategy) + `dataview` + `templater`. `.obsidian` versionado SOLO configs de decisión (workspace/plugins binarios/data.json en `.gitignore`). Seed: Estado/Backend (de MEMORY.md), Arquitectura/Agentes (de AGENTS.md), ADR `001-esm`, Diario, Home dashboard Dataview; Personal con estructura Inbox/Diario/Notas/Proyectos/Tareas/Temas/Templates/Assets/Archivo. Workflow `vault-security` (gitleaks + conflict-markers + JSON + >10MB) en CI 1×/día en AMBOS repos, verificado verde. **Hallazgos**: GitHub Free no permite secret scanning/push protection ni branch protection en repos privados (suplidos con gitleaks en CI); el token `gh` requería scope `workflow` para commitear `.github/workflows` (autorizado vía `gh auth refresh -s workflow`). Pendiente: mente manual (re)abrir las bóvedas en Obsidian y primer auto-sync desde la app; validar con segunda PC.
 - 2026-09-08 — **Sistema de testers añadido**: 6 agentes nuevos (test-coordinator primary + 5 testers: security, edge-case, data-integrity, contract, resilience). `plan-coordinator` ampliado con fase de diagnóstico (triangulación, refutación con abogado-del-diablo, plan para builder y verificación post-fix). AGENTS.md y MEMORY.md documentan el flujo.
