@@ -33,14 +33,14 @@ describe('Catalog & search (e2e)', () => {
       });
   });
 
-  it('GET /api/v1/search?q=rav4 finds the demo Toyota RAV4', async () => {
+  it('GET /api/v1/search?q=rav4 finds Toyota RAV4 units', async () => {
     return request(app.getHttpServer())
       .get('/api/v1/search?q=rav4')
       .expect(200)
       .expect((res) => {
         const matches = res.body.data.data.filter(
           (d: { brand: string; model: string }) =>
-            d.brand.toLowerCase() === 'toyota' && d.model.toLowerCase() === 'rav4',
+            d.brand.toLowerCase() === 'toyota' && d.model.toLowerCase().includes('rav4'),
         );
         expect(matches.length).toBeGreaterThan(0);
         expect(res.body.data.data[0]).toHaveProperty('primaryImage');

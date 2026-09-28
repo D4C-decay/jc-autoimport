@@ -24,7 +24,17 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:deploy": "prisma migrate deploy",
     "prisma:seed": "prisma db seed",
-    "prisma:studio": "prisma studio"
+    "prisma:studio": "prisma studio",
+    "web:dev": "npm --prefix apps/web run dev",
+    "web:build": "npm --prefix apps/web run build",
+    "web:start": "npm --prefix apps/web run start",
+    "web:typecheck": "npm --prefix apps/web run lint",
+    "desktop:build": "npm --prefix apps/desktop run build",
+    "desktop:dev": "npm --prefix apps/desktop run dev",
+    "desktop:icon": "node apps/desktop/scripts/make-icon.mjs",
+    "desktop:smoke": "node apps/desktop/scripts/smoke.mjs",
+    "package:win": "npm run web:build && npm --prefix apps/desktop run package:win",
+    "package:linux": "npm run web:build && npm --prefix apps/desktop run package:linux"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -91,6 +101,8 @@
   },
   "allowScripts": {
     "argon2@0.45.1": true,
-    "esbuild@0.28.2": true
+    "esbuild@0.28.2": true,
+    "prisma@7.10.0": true,
+    "@prisma/engines@7.10.0": true
   }
 }

@@ -1,0 +1,9 @@
+node_modules/
+dist/
+release/
+*.log
+
+# build/ is gitignored at the repo root, but build/icon.png is a source asset
+# (regenerable with `npm run desktop:icon`).
+!build/
+!build/icon.png

@@ -1,0 +1,73 @@
+appId: com.jcautoimport.desktop
+productName: JC Autoimport
+copyright: Copyright © 2026 JC Autoimport
+
+directories:
+  output: release
+  buildResources: build
+
+files:
+  - dist/**/*
+  - package.json
+  - '!**/*.map'
+
+# The Next.js standalone server ships as an app resource and booted by the main
+# process (see src/main/main.ts). electron-builder strips node_modules from
+# extraResources, so scripts/after-pack.mjs performs the copy instead.
+afterPack: scripts/after-pack.mjs
+
+asar: true
+
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  icon: build/icon.ico
+  artifactName: ${productName}-Setup-${version}-${arch}.${ext}
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: JC Autoimport
+  deleteAppDataOnUninstall: false
+  installerLanguages: [es_ES, en_US]
+
+linux:
+  # The npm package name (@jcautoimport/desktop) is not a safe executable name.
+  executableName: jcautoimport
+  target:
+    - target: AppImage
+      arch: [x64]
+    - target: deb
+      arch: [x64]
+  icon: build/icon.png
+  category: Office;Automotive
+  synopsis: Catálogo de vehículos importados
+  # Links the running window to the .desktop entry (taskbar icon, WM_CLASS).
+  desktop:
+    entry:
+      Name: JC Autoimport
+      Comment: Catálogo de vehículos importados
+      Categories: Office;Automotive;
+      StartupWMClass: jcautoimport
+  description: >
+    JC Autoimport — Catálogo premium de vehículos importados, inspeccionados y
+    listos para entregar. Explora el inventario, cotiza y agenda prueba de manejo.
+
+deb:
+  # The default name derives from the npm package name (@jcautoimport/desktop),
+  # whose slash breaks the output path.
+  artifactName: ${productName}-${version}-${arch}.${ext}
+  depends:
+    - libgtk-3-0
+    - libnotify4
+    - libnss3
+    - libxss1
+    - libxtst6
+    - xdg-utils
+    - libatspi2.0-0
+    - libuuid1
+    - libsecret-1-0
