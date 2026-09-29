@@ -20,6 +20,7 @@ export class AppConfigService {
     return {
       nodeEnv: this.config.get<string>('NODE_ENV', 'development'),
       port: this.config.get<number>('PORT', 3000),
+      host: this.config.get<string>('API_HOST', '0.0.0.0'),
       name: this.config.get<string>('APP_NAME', 'jc-autoimport-backend'),
       url: this.config.get<string>('APP_URL', 'http://localhost:3000'),
       corsOrigins: this.config

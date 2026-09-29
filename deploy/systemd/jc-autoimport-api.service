@@ -1,0 +1,25 @@
+[Unit]
+Description=JC Autoimport API (NestJS)
+Documentation=https://github.com/D4C-decay/jc-autoimport
+After=network-online.target postgresql.service redis-server.service
+Wants=network-online.target
+# The API waits for Postgres and Redis on its own: if they are not up yet it
+# exits and systemd restarts it a few seconds later.
+
+[Service]
+Type=simple
+User=%RUN_USER%
+Group=%RUN_GROUP%
+WorkingDirectory=%PROJECT_DIR%
+Environment=NODE_ENV=production
+EnvironmentFile=-%PROJECT_DIR%/.env
+ExecStart=%NODE_BIN% dist/src/main.js
+Restart=always
+RestartSec=5
+KillSignal=SIGINT
+TimeoutStopSec=20
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

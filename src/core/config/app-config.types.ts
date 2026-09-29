@@ -45,6 +45,8 @@ export interface RateLimitConfig {
 export interface AppConfig {
   nodeEnv: string;
   port: number;
+  /** Interface the API binds to. 127.0.0.1 keeps it off the local network. */
+  host: string;
   name: string;
   url: string;
   corsOrigins: string[];

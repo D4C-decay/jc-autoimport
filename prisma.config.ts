@@ -7,6 +7,9 @@ export default defineConfig({
     seed: 'tsx prisma/seed.ts',
   },
   datasource: {
-    url: 'postgresql://jcauto:jcauto_password@localhost:5432/jcautoimport?schema=public',
+    // Set DATABASE_URL (e.g. exported from .env) to point at another database.
+    url:
+      process.env.DATABASE_URL ??
+      'postgresql://jcauto:jcauto_password@localhost:5432/jcautoimport?schema=public',
   },
 });

@@ -39,8 +39,11 @@ async function bootstrap(): Promise<void> {
   SwaggerModule.setup('api/docs', app, document);
 
   const port = config.app.port;
-  await app.listen(port, '0.0.0.0');
-  logger.log(`JC Autoimport backend running on http://localhost:${port}/api/v1`, 'Bootstrap');
+  // 127.0.0.1 keeps the API off the network; 0.0.0.0 is needed to reach it from
+  // a phone on the same wifi. The public tunnel only ever points at the web.
+  const host = config.app.host;
+  await app.listen(port, host);
+  logger.log(`JC Autoimport backend running on http://${host}:${port}/api/v1`, 'Bootstrap');
 }
 
 await bootstrap();

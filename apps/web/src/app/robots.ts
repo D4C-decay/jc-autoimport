@@ -1,9 +1,10 @@
 import type { MetadataRoute } from 'next';
-import { SITE_URL } from '@/lib/site';
+import { resolveSiteUrl } from '@/lib/site';
 
 export const dynamic = 'force-dynamic';
 
-export default function robots(): MetadataRoute.Robots {
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  const site = await resolveSiteUrl();
   return {
     rules: {
       userAgent: '*',
@@ -11,6 +12,6 @@ export default function robots(): MetadataRoute.Robots {
       // Private areas: no value in the index and they need authentication.
       disallow: ['/login', '/api/', '/backend/'],
     },
-    sitemap: `${SITE_URL}/sitemap.xml`,
+    sitemap: `${site}/sitemap.xml`,
   };
 }

@@ -33,6 +33,9 @@
     "desktop:dev": "npm --prefix apps/desktop run dev",
     "desktop:icon": "node apps/desktop/scripts/make-icon.mjs",
     "desktop:smoke": "node apps/desktop/scripts/smoke.mjs",
+    "deploy:setup": "bash deploy/setup-debian.sh",
+    "deploy:verify": "bash deploy/verify.sh",
+    "deploy:update": "bash deploy/update.sh",
     "package:win": "npm run web:build && npm --prefix apps/desktop run package:win",
     "package:linux": "npm run web:build && npm --prefix apps/desktop run package:linux"
   },

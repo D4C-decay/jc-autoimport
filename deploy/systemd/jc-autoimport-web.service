@@ -1,0 +1,27 @@
+[Unit]
+Description=JC Autoimport web (Next.js standalone)
+After=network-online.target jc-autoimport-api.service
+Wants=network-online.target jc-autoimport-api.service
+
+[Service]
+Type=simple
+User=%RUN_USER%
+Group=%RUN_GROUP%
+WorkingDirectory=%PROJECT_DIR%/apps/web
+Environment=PORT=4200
+Environment=HOSTNAME=0.0.0.0
+# API_INTERNAL_URL is where the /backend proxy forwards to. Keep it on
+# loopback: the API is never meant to be reached from outside this machine.
+Environment=API_INTERNAL_URL=http://127.0.0.1:3000
+# Leave SITE_URL unset with a quick tunnel so the sitemap and robots.txt follow
+# whatever hostname Cloudflare handed out. With a named tunnel, set it once:
+# Environment=SITE_URL=https://web.tudominio.com
+ExecStart=%NODE_BIN% scripts/start-standalone.mjs
+Restart=always
+RestartSec=5
+TimeoutStopSec=20
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
