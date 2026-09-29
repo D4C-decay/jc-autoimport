@@ -80,12 +80,23 @@ Plataforma de venta/importación de vehículos "JC Autoimport": backend API (cat
 - **DNS**: `systemd-resolved` (stub `127.0.0.53`) cachea **negativo** el hostname nuevo del quick tunnel y `curl` falla con `Could not resolve host`, aunque el túnel esté bien. Solución: `resolvectl flush-caches` (no hace falta root). No afecta a los dispositivos remotos.
 - Verificado **desde internet** (salida a `104.16.x`): home, catálogo, contacto, proceso, login, sitemap, robots y detalle 200; ruta inexistente 404; proxy 200 y bloqueados 404; lead real 201 autoasignado a SELLER; CSRF 403.
 
+## Despliegue reproducible en portatil Debian (2026-09-28)
+- Objetivo: clonar el repo en otra maquina y que levante **todo** (PostgreSQL + Redis + API + web + tunel) sin pasos manuales.
+- **`deploy/setup-debian.sh`** (idempotente, `npm run deploy:setup`): Node 22 via NodeSource si falta; `postgresql` + `redis-server` por apt; rol `jcauto` **con `CREATEDB`** (base sombra de Prisma) y BD `jcautoimport`; `cloudflared` a `~/.local/bin` **sin root** (binario de GitHub releases); `.env` desde `.env.example` con **secretos JWT aleatorios** (`openssl rand -hex 32`), `NODE_ENV=production` y **`API_HOST=127.0.0.1`**, `chmod 600`; `npm install` **en la raiz y en `apps/web` por separado** (no hay workspaces); `prisma generate` + `migrate deploy` + `db seed`; builds; y tres unidades de **systemd de sistema** en `/etc/systemd/system` con `enable --now` (arrancan solas al encender, sin `enable-linger`).
+- **`deploy/verify.sh`** (`npm run deploy:verify`): 24 comprobaciones y diagnostico. Ejecutado en esta maquina: **24 OK, 0 fallos**. Es tolerante: acepta servicios de **sistema o de usuario**, Redis **o Valkey**, y si una unidad no esta gestionada por systemd pero el puerto responde 200 lo da por bueno.
+- **`deploy/update.sh`** (`npm run deploy:update`): `git pull --ff-only` + deps + `prisma generate`/`migrate deploy` + build + restart de api y web. **No reinicia el tunel a proposito**, para no cambiar la URL.
+- Las unidades usan marcadores `%PROJECT_DIR%`, `%NODE_BIN%`, `%CLOUDFLARED_BIN%`, `%RUN_USER%`, `%RUN_GROUP%`, `%LOG_DIR%` que el instalador sustituye con `sed`, asi que el repo sirve en cualquier ruta y usuario. Logs del tunel en `/var/log/jc-autoimport/tunnel.log`.
+- **El tunel es saliente**: Cloudflare conecta hacia la maquina, asi que **no hay que abrir puertos en el router** y `ufw` puede quedarse cerrado. Solo sale el 4200.
+- Cambios de portabilidad que exiten: `API_HOST` configurable (por defecto `0.0.0.0` para no cambiar el comportamiento actual; el `.env` del portatil pone `127.0.0.1`); `prisma.config.ts` ahora respeta `process.env.DATABASE_URL` con fallback a la URL anterior; `resolveSiteUrl()` en `apps/web/src/lib/site.ts` deriva la URL del **`Host` de la peticion** (con `x-forwarded-*` de reserva), y lo usan `sitemap.xml` y `robots.ts` → ya no dependen de conocer el hostname del quick tunnel.
+- `README.md` de la raiz reescrito: dejo de ser el boilerplate de NestJS.
+- **Pendiente del usuario**: meter un dominio en Cloudflare para dejar de usar quick tunnels (cada reinicio cambia la URL). Los pasos exactos estan en la seccion "La URL cambia en cada reinicio" de `deploy/README.md`.
+
 ## Próximo paso
 Backend + web + desktop **compilando, empaquetado y verificado** (ver Estado actual). Siguientes pasos en orden de valor:
 1. **Revisar la UI en un navegador real** (el build está validado por HTTP/CDP, no visualmente) y pulir responsive/móvil.
 2. **Abrir los puertos en `ufw`** (`4200/tcp` y `3000/tcp`) para poder abrir la web desde el móvil o el portátil en `http://192.168.11.129:4200`.
 2. **Decidir si la app de escritorio es necesaria** o si una PWA instalable cubre el caso con mucha menos complejidad de empaquetado (los .exe/AppImage ya construyen, pero el mantenimiento de firma y actualizaciones pesa).
-3. **Dominio propio + Cloudflare Tunnel nombrado**: el quick tunnel cambia de hostname en cada reinicio, que no sirve como dirección estable. Con un dominio en Cloudflare, `cloudflared tunnel login` + túnel nombrado da algo tipo `web.tudominio.com`, fijo y con HTTPS ya resuelto. Es el paso que convierte esto en una URL de verdad. Pendiente también `sudo loginctl enable-linger d4c` para que los servicios sobrevivan a un reinicio, y claves reales de Stripe/S3/email.
+3. **Dominio propio + Cloudflare Tunnel nombrado**: el quick tunnel cambia de hostname en cada reinicio, que no sirve como dirección estable. Con un dominio en Cloudflare, `cloudflared tunnel login` + túnel nombrado da algo tipo `web.tudominio.com`, fijo y con HTTPS ya resuelto. Es el paso que convierte esto en una URL de verdad, y los pasos exactos están en `deploy/README.md`. Pendientes también las claves reales de Stripe/S3/email.
 4. Firmar el `.exe` de Windows (evita el SmartScreen) y, si se mantiene el desktop, configurar auto-update.
 5. GitHub Actions CI/CD (build + lint + tests + empaquetado de los tres artefactos).
 
