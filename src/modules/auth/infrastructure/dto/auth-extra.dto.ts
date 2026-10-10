@@ -39,3 +39,16 @@ export class LogoutDto {
   @MinLength(1)
   refreshToken?: string;
 }
+
+export class VerifyEmailDto {
+  @ApiProperty({ description: 'Email verification token from the email link' })
+  @IsString()
+  @MinLength(1)
+  token!: string;
+}
+
+export class ResendVerificationDto {
+  @ApiProperty({ example: 'user@example.com' })
+  @IsEmail()
+  email!: string;
+}

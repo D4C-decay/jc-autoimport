@@ -17,6 +17,7 @@ type TwoFactorUser = {
   role: string;
   firstName: string;
   lastName: string;
+  emailVerified: boolean;
 };
 
 @Injectable()
@@ -131,6 +132,7 @@ export class TwoFactorService {
       role: user.role,
       firstName: user.firstName,
       lastName: user.lastName,
+      emailVerified: user.emailVerified,
     };
   }
 }

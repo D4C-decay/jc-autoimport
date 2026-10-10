@@ -230,22 +230,40 @@ export const api = {
 
   login: (body: { email: string; password: string }) =>
     request<{
-      user?: { id: string; email: string; role: string; firstName: string | null; lastName: string | null };
+      user?: { id: string; email: string; role: string; firstName: string | null; lastName: string | null; emailVerified: boolean };
       tokens?: { accessToken: string; refreshToken: string; expiresIn: number };
       requires2FA?: boolean;
       tempToken?: string;
     }>('/api/v1/auth/login', { method: 'POST', body: JSON.stringify(body) }),
 
+  register: (body: { email: string; password: string; firstName: string; lastName: string; phone?: string }) =>
+    request<{
+      user: { id: string; email: string; role: string; firstName: string | null; lastName: string | null; emailVerified: boolean };
+      tokens: { accessToken: string; refreshToken: string; expiresIn: number };
+    }>('/api/v1/auth/register', { method: 'POST', body: JSON.stringify(body) }),
+
+  verifyEmail: (token: string) =>
+    request<{ success: boolean }>('/api/v1/auth/verify-email', {
+      method: 'POST',
+      body: JSON.stringify({ token }),
+    }),
+
+  resendVerification: (email: string) =>
+    request<{ success: boolean }>('/api/v1/auth/resend-verification', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    }),
+
   verify2fa: (body: { tempToken: string; code: string }) =>
     request<{
-      user: { id: string; email: string; role: string; firstName: string | null; lastName: string | null };
+      user: { id: string; email: string; role: string; firstName: string | null; lastName: string | null; emailVerified: boolean };
       tokens: { accessToken: string; refreshToken: string; expiresIn: number };
     }>('/api/v1/auth/2fa/verify', { method: 'POST', body: JSON.stringify(body) }),
 
   logout: () => request<{ success: boolean }>('/api/v1/auth/logout', { method: 'POST', body: '{}' }),
 
   me: () =>
-    request<{ id: string; email: string; role: string; firstName: string | null }>(
+    request<{ id: string; email: string; role: string; firstName: string | null; lastName: string | null; emailVerified: boolean }>(
       '/api/v1/auth/me',
     ),
 
@@ -278,6 +296,7 @@ export type SessionUser = {
   role: string;
   firstName: string | null;
   lastName?: string | null;
+  emailVerified?: boolean;
 };
 
 /**

@@ -158,8 +158,8 @@ export function LoginPage() {
 
               <p className="mt-6 text-center text-[11px] text-ash">
                 ¿Aún no tienes cuenta?{' '}
-                <a href="/contacto" className="text-signal hover:underline">
-                  Solicita acceso
+                <a href="/registro" className="text-signal hover:underline">
+                  Crear una cuenta
                 </a>
               </p>
             </motion.form>

@@ -24,6 +24,7 @@ export class AppConfigService {
       host: this.config.get<string>('API_HOST', '0.0.0.0'),
       name: this.config.get<string>('APP_NAME', 'jc-autoimport-backend'),
       url: this.config.get<string>('APP_URL', 'http://localhost:3000'),
+      webUrl: this.config.get<string>('WEB_URL', 'http://localhost:4200'),
       corsOrigins: this.config
         .get<string>('CORS_ORIGINS', 'http://localhost:4200')
         .split(',')

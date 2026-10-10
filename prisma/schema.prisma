@@ -112,6 +112,8 @@ model User {
   twoFactorSecret  String?   @map("two_factor_secret")
   twoFactorEnabled Boolean   @default(false) @map("two_factor_enabled")
 
+  emailVerified Boolean @default(false) @map("email_verified")
+
   assignedLeads Lead[]       @relation("AssignedLeads")
   reservations  Reservation[]
   reviews       Review[]

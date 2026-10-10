@@ -54,5 +54,7 @@ export interface AppConfig {
   host: string;
   name: string;
   url: string;
+  /** Public URL of the web frontend, used for links sent by email. */
+  webUrl: string;
   corsOrigins: string[];
 }

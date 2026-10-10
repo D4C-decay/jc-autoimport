@@ -5,6 +5,7 @@ import { BadgeCheck, Mail, ShieldCheck, UserRound } from 'lucide-react';
 import { serverMe } from '@/lib/api';
 import { LogoutButton } from '@/components/logout-button';
 import { TwoFactorSettings } from '@/components/two-factor-settings';
+import { EmailVerifyBanner } from '@/components/email-verify-banner';
 import { Eyebrow } from '@/components/ui';
 
 export const metadata: Metadata = {
@@ -36,6 +37,12 @@ export default async function AccountPage() {
         <p className="mt-4 max-w-xl text-sm text-ash">
           Aquí puedes revisar tu sesión y la seguridad de tu cuenta.
         </p>
+
+        {user.emailVerified === false ? (
+          <div className="mt-10">
+            <EmailVerifyBanner email={user.email} />
+          </div>
+        ) : null}
 
         <div className="mt-12 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="border border-line bg-ink-2 p-7 md:p-8">

@@ -16,7 +16,9 @@ import {
   ForgotPasswordDto,
   LogoutDto,
   RefreshTokenDto,
+  ResendVerificationDto,
   ResetPasswordDto,
+  VerifyEmailDto,
 } from './dto/auth-extra.dto.js';
 import { TwoFactorCodeDto, TwoFactorVerifyDto } from './dto/two-factor.dto.js';
 import { Public } from '../../../common/decorators/public.decorator.js';
@@ -83,11 +85,29 @@ export class AuthController {
     return this.authService.resetPassword(dto.token, dto.newPassword);
   }
 
+  @Public()
+  @Post('verify-email')
+  @Throttle({ ttl: 60, limit: 10 })
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Confirm an email address with the token from the email link' })
+  verifyEmail(@Body() dto: VerifyEmailDto) {
+    return this.authService.verifyEmail(dto.token);
+  }
+
+  @Public()
+  @Post('resend-verification')
+  @Throttle({ ttl: 300, limit: 3 })
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Resend the email confirmation link' })
+  resendVerification(@Body() dto: ResendVerificationDto) {
+    return this.authService.resendVerification(dto.email);
+  }
+
   @Get('me')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get current authenticated user' })
   me(@CurrentUser() user: JwtPayload) {
-    return user;
+    return this.authService.profile(user.sub);
   }
 
   @Public()
