@@ -3,6 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { EmailService } from '../../../shared/services/email.service.js';
 import { WhatsAppService } from '../../../shared/services/whatsapp.service.js';
+import { EncryptionService } from '../../../shared/services/encryption.service.js';
 import { PrismaService } from '../../../core/database/prisma.service.js';
 
 export interface LeadCreatedEvent {
@@ -29,6 +30,7 @@ export class LeadNotificationsListener {
     private readonly email: EmailService,
     private readonly whatsapp: WhatsAppService,
     private readonly prisma: PrismaService,
+    private readonly encryption: EncryptionService,
   ) {}
 
   @OnEvent('lead.created')
@@ -70,7 +72,7 @@ export class LeadNotificationsListener {
 
     if (seller?.phone) {
       await this.whatsapp.sendMessage({
-        to: seller.phone,
+        to: this.encryption.decrypt(seller.phone),
         body,
       });
     }
@@ -96,7 +98,7 @@ export class LeadNotificationsListener {
     }
 
     if (seller?.phone) {
-      await this.whatsapp.sendMessage({ to: seller.phone, body });
+      await this.whatsapp.sendMessage({ to: this.encryption.decrypt(seller.phone), body });
     }
   }
 }

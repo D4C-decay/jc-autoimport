@@ -5,7 +5,10 @@ import './globals.css';
 import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
 import { CustomCursor } from '@/components/motion';
+import { THEME_STORAGE_KEY } from '@/components/theme-toggle';
 import { SITE_URL } from '@/lib/site';
+
+const themeScript = `(function(){try{var t=localStorage.getItem('${THEME_STORAGE_KEY}');if(t==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();`;
 
 const inter = Inter({
   subsets: ['latin'],
@@ -54,14 +57,20 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#08080a',
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#08080a' },
+    { media: '(prefers-color-scheme: light)', color: '#f5f5f6' },
+  ],
   width: 'device-width',
   initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={`${inter.variable} ${archivoBlack.variable}`}>
+    <html lang="es" className={`${inter.variable} ${archivoBlack.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="antialiased">
         <CustomCursor />
         <Navbar />

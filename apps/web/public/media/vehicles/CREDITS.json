@@ -1,0 +1,278 @@
+{
+  "note": "Fotos de vehiculos obtenidas de las fichas de Wikipedia en ingles (Wikimedia Commons). Uso educativo.",
+  "count": 68,
+  "images": [
+    {
+      "file": "acura-mdx.webp",
+      "article": "Acura MDX"
+    },
+    {
+      "file": "audi-a6.webp",
+      "article": "Audi A6"
+    },
+    {
+      "file": "audi-e-tron-gt.webp",
+      "article": "Audi e-tron GT"
+    },
+    {
+      "file": "audi-q8.webp",
+      "article": "Audi Q8"
+    },
+    {
+      "file": "audi-rs7.webp",
+      "article": "Audi A7"
+    },
+    {
+      "file": "audi-s6.webp",
+      "article": "Audi S6"
+    },
+    {
+      "file": "bmw-m4.webp",
+      "article": "BMW M4"
+    },
+    {
+      "file": "bmw-m5.webp",
+      "article": "BMW M5"
+    },
+    {
+      "file": "bmw-x3.webp",
+      "article": "BMW X3"
+    },
+    {
+      "file": "bmw-x5.webp",
+      "article": "BMW X5"
+    },
+    {
+      "file": "cadillac-escalade.webp",
+      "article": "Cadillac Escalade"
+    },
+    {
+      "file": "chevrolet-camaro.webp",
+      "article": "Chevrolet Camaro"
+    },
+    {
+      "file": "chevrolet-equinox.webp",
+      "article": "Chevrolet Equinox"
+    },
+    {
+      "file": "chevrolet-silverado.webp",
+      "article": "Chevrolet Silverado"
+    },
+    {
+      "file": "chevrolet-traverse.webp",
+      "article": "Chevrolet Traverse"
+    },
+    {
+      "file": "dodge-challenger.webp",
+      "article": "Dodge Challenger"
+    },
+    {
+      "file": "ford-bronco.webp",
+      "article": "Ford Bronco"
+    },
+    {
+      "file": "ford-explorer.webp",
+      "article": "Ford Explorer"
+    },
+    {
+      "file": "ford-f-150.webp",
+      "article": "Ford F-Series"
+    },
+    {
+      "file": "ford-mustang-mach-e.webp",
+      "article": "Ford Mustang Mach-E"
+    },
+    {
+      "file": "ford-mustang.webp",
+      "article": "Ford Mustang"
+    },
+    {
+      "file": "ford-transit.webp",
+      "article": "Ford Transit"
+    },
+    {
+      "file": "genesis-g80.webp",
+      "article": "Genesis G80"
+    },
+    {
+      "file": "genesis-gv70.webp",
+      "article": "Genesis GV70"
+    },
+    {
+      "file": "gmc-yukon.webp",
+      "article": "Chevrolet Tahoe"
+    },
+    {
+      "file": "honda-accord.webp",
+      "article": "Honda Accord"
+    },
+    {
+      "file": "honda-cr-v.webp",
+      "article": "Honda CR-V"
+    },
+    {
+      "file": "honda-hr-v.webp",
+      "article": "Honda HR-V"
+    },
+    {
+      "file": "honda-odyssey.webp",
+      "article": "Honda Odyssey (international)"
+    },
+    {
+      "file": "hyundai-grandeur.webp",
+      "article": "Hyundai Grandeur"
+    },
+    {
+      "file": "hyundai-tucson.webp",
+      "article": "Hyundai Tucson"
+    },
+    {
+      "file": "jeep-grand-cherokee.webp",
+      "article": "Jeep Grand Cherokee"
+    },
+    {
+      "file": "jeep-wrangler.webp",
+      "article": "Jeep Wrangler"
+    },
+    {
+      "file": "kia-carnival.webp",
+      "article": "Kia Carnival"
+    },
+    {
+      "file": "kia-k5.webp",
+      "article": "Kia K5"
+    },
+    {
+      "file": "kia-sportage.webp",
+      "article": "Kia Sportage"
+    },
+    {
+      "file": "kia-telluride.webp",
+      "article": "Kia Telluride"
+    },
+    {
+      "file": "land-rover-defender.webp",
+      "article": "Land Rover Defender"
+    },
+    {
+      "file": "land-rover-range-rover-sport.webp",
+      "article": "Range Rover Sport"
+    },
+    {
+      "file": "land-rover-range-rover-velar.webp",
+      "article": "Range Rover Velar"
+    },
+    {
+      "file": "mazda-cx-5.webp",
+      "article": "Mazda CX-5"
+    },
+    {
+      "file": "mazda3.webp",
+      "article": "Mazda3"
+    },
+    {
+      "file": "mercedes-c-class.webp",
+      "article": "Mercedes-Benz C-Class"
+    },
+    {
+      "file": "mercedes-gle.webp",
+      "article": "Mercedes-Benz GLE"
+    },
+    {
+      "file": "mercedes-sprinter.webp",
+      "article": "Mercedes-Benz Sprinter"
+    },
+    {
+      "file": "nissan-altima.webp",
+      "article": "Nissan Altima"
+    },
+    {
+      "file": "nissan-ariya.webp",
+      "article": "Nissan Ariya"
+    },
+    {
+      "file": "nissan-kicks.webp",
+      "article": "Nissan Kicks"
+    },
+    {
+      "file": "nissan-rogue.webp",
+      "article": "Nissan Rogue"
+    },
+    {
+      "file": "nissan-z.webp",
+      "article": "Nissan Z (RZ34)"
+    },
+    {
+      "file": "porsche-911.webp",
+      "article": "Porsche 911"
+    },
+    {
+      "file": "porsche-cayenne.webp",
+      "article": "Porsche Cayenne"
+    },
+    {
+      "file": "porsche-macan.webp",
+      "article": "Porsche Macan"
+    },
+    {
+      "file": "ram-1500.webp",
+      "article": "Ram pickup"
+    },
+    {
+      "file": "ram-promaster.webp",
+      "article": "Fiat Ducato"
+    },
+    {
+      "file": "subaru-outback.webp",
+      "article": "Subaru Outback"
+    },
+    {
+      "file": "tesla-model-3.webp",
+      "article": "Tesla Model 3"
+    },
+    {
+      "file": "tesla-model-s.webp",
+      "article": "Tesla Model S"
+    },
+    {
+      "file": "tesla-model-y.webp",
+      "article": "Tesla Model Y"
+    },
+    {
+      "file": "toyota-camry.webp",
+      "article": "Toyota Camry"
+    },
+    {
+      "file": "toyota-corolla-cross.webp",
+      "article": "Toyota Corolla Cross"
+    },
+    {
+      "file": "toyota-highlander.webp",
+      "article": "Toyota Highlander"
+    },
+    {
+      "file": "toyota-rav4.webp",
+      "article": "Toyota RAV4"
+    },
+    {
+      "file": "toyota-sienna.webp",
+      "article": "Toyota Sienna"
+    },
+    {
+      "file": "toyota-tacoma.webp",
+      "article": "Toyota Tacoma"
+    },
+    {
+      "file": "volkswagen-atlas.webp",
+      "article": "Volkswagen Atlas"
+    },
+    {
+      "file": "volkswagen-golf-gti.webp",
+      "article": "Volkswagen Golf"
+    },
+    {
+      "file": "volkswagen-jetta.webp",
+      "article": "Volkswagen Jetta"
+    }
+  ]
+}

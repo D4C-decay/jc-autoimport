@@ -95,7 +95,12 @@ export function Footer() {
 
       <div className="border-t border-line">
         <div className="container-x flex flex-col gap-3 py-6 text-[10px] tracking-[0.18em] text-ash/60 uppercase sm:flex-row sm:items-center sm:justify-between">
-          <span>© {new Date().getFullYear()} JC Autoimport. Todos los derechos reservados.</span>
+          <span>
+            © {new Date().getFullYear()} JC Autoimport. Todos los derechos reservados.
+            <span className="mt-1 block text-[9px] tracking-[0.14em] normal-case">
+              Proyecto de desarrollo web para IPPJB, con fines educativos.
+            </span>
+          </span>
           <div className="flex gap-6">
             <span>Aviso de privacidad</span>
             <span>Términos y condiciones</span>

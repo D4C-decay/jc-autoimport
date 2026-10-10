@@ -102,6 +102,7 @@ else
   gen() { openssl rand -hex 32; }
   sed -i "s|^JWT_ACCESS_SECRET=.*|JWT_ACCESS_SECRET=$(gen)|"  "$PROJECT_DIR/.env"
   sed -i "s|^JWT_REFRESH_SECRET=.*|JWT_REFRESH_SECRET=$(gen)|" "$PROJECT_DIR/.env"
+  sed -i "s|^DATA_ENCRYPTION_KEY=.*|DATA_ENCRYPTION_KEY=$(gen)|" "$PROJECT_DIR/.env"
   sed -i "s|^NODE_ENV=.*|NODE_ENV=production|"              "$PROJECT_DIR/.env"
   # Por defecto la API solo en loopback: el tunel publico nunca la toca.
   sed -i "s|^API_HOST=.*|API_HOST=127.0.0.1|"                "$PROJECT_DIR/.env"

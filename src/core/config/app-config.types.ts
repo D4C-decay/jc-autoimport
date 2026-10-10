@@ -42,6 +42,11 @@ export interface RateLimitConfig {
   authLimit: number;
 }
 
+export interface EncryptionConfig {
+  /** 64-char hex (32 bytes) or any passphrase (hashed to 32 bytes). */
+  key: string;
+}
+
 export interface AppConfig {
   nodeEnv: string;
   port: number;

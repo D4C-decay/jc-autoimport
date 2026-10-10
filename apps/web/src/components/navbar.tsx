@@ -3,9 +3,10 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Menu, Phone, X } from 'lucide-react';
+import { Menu, Phone, UserRound, X } from 'lucide-react';
 import { CONTACT_PHONE_HREF } from '@/lib/site';
 import { cn } from '@/lib/utils';
+import { ThemeToggle } from './theme-toggle';
 
 const links = [
   { href: '/', label: 'Inicio' },
@@ -73,6 +74,15 @@ export function Navbar() {
           </ul>
 
           <div className="flex items-center gap-3">
+            <Link
+              href="/cuenta"
+              aria-label="Área de cliente"
+              title="Área de cliente"
+              className="hidden size-10 items-center justify-center border border-line text-smoke transition-colors duration-300 hover:border-signal hover:text-signal sm:flex"
+            >
+              <UserRound className="size-4" strokeWidth={1.8} />
+            </Link>
+            <ThemeToggle />
             <a
               href={CONTACT_PHONE_HREF}
               data-cursor="Llamar"
@@ -129,6 +139,14 @@ export function Navbar() {
                 <Phone className="size-4 text-signal" />
                 {CONTACT_PHONE_HREF}
               </a>
+              <Link
+                href="/cuenta"
+                onClick={() => setOpen(false)}
+                className="mt-6 flex items-center gap-2 text-sm font-semibold tracking-[0.2em] text-signal uppercase"
+              >
+                <UserRound className="size-4" />
+                Área de cliente
+              </Link>
             </div>
           </motion.div>
         ) : null}

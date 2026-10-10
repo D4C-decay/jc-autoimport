@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 type ButtonVariant = 'solid' | 'outline' | 'ghost';
 
 const base =
-  'group relative inline-flex items-center justify-center gap-2.5 overflow-hidden px-8 py-4 text-[11px] font-semibold tracking-[0.24em] uppercase transition-all duration-500 [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]';
+  'group relative inline-flex items-center justify-center gap-2.5 overflow-hidden px-8 py-4 text-[11px] font-semibold tracking-[0.24em] uppercase transition-all duration-500 active:scale-[0.98] disabled:pointer-events-none [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]';
 
 const variants: Record<ButtonVariant, string> = {
   solid: 'bg-signal text-ink hover:bg-signal-light',
@@ -97,7 +97,7 @@ export function Eyebrow({
 const statusStyles: Record<string, string> = {
   AVAILABLE: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/25',
   RESERVED: 'bg-amber-500/15 text-amber-300 border-amber-500/25',
-  SOLD: 'bg-white/5 text-ash border-white/10',
+  SOLD: 'bg-ink-3 text-ash border-line',
 };
 
 export function StatusBadge({ status, label }: { status: string; label: string }) {

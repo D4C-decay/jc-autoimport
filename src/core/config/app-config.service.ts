@@ -10,6 +10,7 @@ import type {
   AwsConfig,
   StripeConfig,
   RateLimitConfig,
+  EncryptionConfig,
 } from './app-config.types.js';
 
 @Injectable()
@@ -86,6 +87,12 @@ export class AppConfigService {
       globalLimit: this.config.get<number>('RATE_LIMIT_GLOBAL_LIMIT', 120),
       authTtl: this.config.get<number>('RATE_LIMIT_AUTH_TTL', 60),
       authLimit: this.config.get<number>('RATE_LIMIT_AUTH_LIMIT', 5),
+    };
+  }
+
+  get encryption(): EncryptionConfig {
+    return {
+      key: this.config.get<string>('DATA_ENCRYPTION_KEY', ''),
     };
   }
 }

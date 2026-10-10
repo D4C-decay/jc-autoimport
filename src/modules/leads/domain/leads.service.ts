@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PrismaService } from '../../../core/database/prisma.service.js';
+import { EncryptionService } from '../../../shared/services/encryption.service.js';
 import { LeadAssignmentService } from './lead-assignment.service.js';
 import {
   AssignLeadDto,
@@ -16,7 +17,27 @@ export class LeadsService {
     private readonly prisma: PrismaService,
     private readonly assignment: LeadAssignmentService,
     private readonly eventEmitter: EventEmitter2,
+    private readonly encryption: EncryptionService,
   ) {}
+
+  /** Decrypts PII stored at rest before returning a lead to a caller. */
+  private presentLead<T>(lead: T): T {
+    const record = lead as {
+      customerPhone?: string | null;
+      message?: string | null;
+      assignedTo?: { phone?: string | null } | null;
+    };
+    return {
+      ...lead,
+      ...(record.customerPhone !== undefined
+        ? { customerPhone: this.encryption.decrypt(record.customerPhone) }
+        : {}),
+      ...(record.message !== undefined ? { message: this.encryption.decrypt(record.message) } : {}),
+      ...(record.assignedTo?.phone !== undefined
+        ? { assignedTo: { ...record.assignedTo, phone: this.encryption.decrypt(record.assignedTo.phone) } }
+        : {}),
+    } as T;
+  }
 
   async create(dto: CreateLeadDto) {
     const leadType = dto.leadType;
@@ -27,8 +48,8 @@ export class LeadsService {
         vehicleId: dto.vehicleId,
         customerName: dto.customerName,
         customerEmail: dto.customerEmail,
-        customerPhone: dto.customerPhone,
-        message: dto.message,
+        customerPhone: this.encryption.encrypt(dto.customerPhone),
+        message: this.encryption.encrypt(dto.message),
         leadType,
         status: 'NEW',
         assignedToId: assignedSeller ?? undefined,
@@ -46,14 +67,14 @@ export class LeadsService {
       sellerId: lead.assignedToId,
       customerName: lead.customerName,
       customerEmail: lead.customerEmail,
-      customerPhone: lead.customerPhone,
+      customerPhone: this.encryption.decrypt(lead.customerPhone),
       leadType: lead.leadType,
       vehicle: lead.vehicle
         ? { brand: lead.vehicle.brand, model: lead.vehicle.model, year: lead.vehicle.year }
         : null,
     });
 
-    return lead;
+    return this.presentLead(lead);
   }
 
   async findAll(query: LeadQueryDto, userId?: string, userRole?: string) {
@@ -91,7 +112,7 @@ export class LeadsService {
     ]);
 
     return {
-      data,
+      data: data.map((lead) => this.presentLead(lead)),
       meta: {
         page: safePage,
         limit: safeLimit,
@@ -115,7 +136,7 @@ export class LeadsService {
     if (!lead) {
       throw new NotFoundException('Lead not found');
     }
-    return lead;
+    return this.presentLead(lead);
   }
 
   async update(id: string, dto: UpdateLeadDto) {
@@ -141,7 +162,7 @@ export class LeadsService {
       });
     }
 
-    return lead;
+    return this.presentLead(lead);
   }
 
   async assign(id: string, dto: AssignLeadDto) {
@@ -170,7 +191,7 @@ export class LeadsService {
       customerName: lead.customerName,
     });
 
-    return lead;
+    return this.presentLead(lead);
   }
 
   async getStats() {

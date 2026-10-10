@@ -101,7 +101,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
             className="absolute inset-0 bg-cover bg-center"
             style={{
               backgroundImage:
-                'url(https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=2400&q=88)',
+                'url(/media/backgrounds/bg-photo-1503376780353-7e6692767b70.webp)',
             }}
           />
           <HeroVideo
@@ -365,7 +365,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
           className="absolute inset-0 bg-cover bg-center opacity-25"
           style={{
             backgroundImage:
-              'url(https://images.unsplash.com/photo-1550355291-bbee04a92027?auto=format&fit=crop&w=2000&q=80)',
+              'url(/media/backgrounds/bg-photo-1550355291-bbee04a92027.webp)',
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink" />

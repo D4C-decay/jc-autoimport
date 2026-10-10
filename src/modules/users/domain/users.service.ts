@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../../../core/database/prisma.service.js';
 import { PasswordService } from '../../auth/infrastructure/providers/password.service.js';
+import { EncryptionService } from '../../../shared/services/encryption.service.js';
 import { UpdateMeDto } from '../infrastructure/dto/update-me.dto.js';
 import { CreateUserDto } from '../infrastructure/dto/create-user.dto.js';
 import type { UserRole } from '../../../../generated/prisma/client.js';
@@ -26,7 +27,17 @@ export class UsersService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly password: PasswordService,
+    private readonly encryption: EncryptionService,
   ) {}
+
+  /** Decrypts encrypted-at-rest PII before it leaves the service. */
+  private present<T extends { phone: string | null }>(user: T): T {
+    return { ...user, phone: this.encryption.decrypt(user.phone) };
+  }
+
+  private presentAll<T extends { phone: string | null }>(users: T[]): T[] {
+    return users.map((u) => this.present(u));
+  }
 
   async findMe(userId: string) {
     const user = await this.prisma.user.findUnique({
@@ -37,7 +48,7 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    return user;
+    return this.present(user);
   }
 
   async updateMe(userId: string, dto: UpdateMeDto) {
@@ -56,12 +67,14 @@ export class UsersService {
         ...(dto.email ? { email: dto.email.toLowerCase() } : {}),
         ...(dto.firstName ? { firstName: dto.firstName } : {}),
         ...(dto.lastName ? { lastName: dto.lastName } : {}),
-        ...(dto.phone !== undefined ? { phone: dto.phone } : {}),
+        ...(dto.phone !== undefined
+          ? { phone: dto.phone ? this.encryption.encrypt(dto.phone) : null }
+          : {}),
       },
       select: safeUserSelect,
     });
 
-    return user;
+    return this.present(user);
   }
 
   async findAll(filter: { search?: string; role?: UserRole; page: number; limit: number }) {
@@ -90,7 +103,7 @@ export class UsersService {
     ]);
 
     return {
-      data: users,
+      data: this.presentAll(users),
       meta: {
         page: filter.page,
         limit: filter.limit,
@@ -109,7 +122,7 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    return user;
+    return this.present(user);
   }
 
   async create(dto: CreateUserDto) {
@@ -128,13 +141,13 @@ export class UsersService {
         passwordHash,
         firstName: dto.firstName,
         lastName: dto.lastName,
-        ...(dto.phone ? { phone: dto.phone } : {}),
+        ...(dto.phone ? { phone: this.encryption.encrypt(dto.phone) } : {}),
         role: dto.role ?? 'CLIENT',
       },
       select: safeUserSelect,
     });
 
-    return user;
+    return this.present(user);
   }
 
   async updateUserRole(id: string, role: UserRole) {
@@ -143,11 +156,12 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    return this.prisma.user.update({
+    const updated = await this.prisma.user.update({
       where: { id },
       data: { role },
       select: safeUserSelect,
     });
+    return this.present(updated);
   }
 
   async setActive(id: string, isActive: boolean) {
@@ -156,11 +170,12 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    return this.prisma.user.update({
+    const updated = await this.prisma.user.update({
       where: { id },
       data: { isActive },
       select: safeUserSelect,
     });
+    return this.present(updated);
   }
 
   async findByEmail(email: string) {

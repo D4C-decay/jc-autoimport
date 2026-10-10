@@ -8,10 +8,19 @@ import { PrismaService } from '../../../core/database/prisma.service.js';
 import { AppConfigService } from '../../../core/config/app-config.service.js';
 import { PasswordService } from '../infrastructure/providers/password.service.js';
 import { TokenService, type TokenPair } from '../infrastructure/providers/token.service.js';
+import { TwoFactorService } from './two-factor.service.js';
 import { EmailService } from '../../../shared/services/email.service.js';
+import { EncryptionService } from '../../../shared/services/encryption.service.js';
 import { RegisterDto } from '../infrastructure/dto/register.dto.js';
 import { LoginDto } from '../infrastructure/dto/login.dto.js';
 import type { UserRole } from '../../../../generated/prisma/client.js';
+
+export type LoginResult =
+  | {
+      user: { id: string; email: string; role: UserRole; firstName: string; lastName: string };
+      tokens: TokenPair;
+    }
+  | { requires2FA: true; tempToken: string };
 
 @Injectable()
 export class AuthService {
@@ -19,8 +28,10 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly password: PasswordService,
     private readonly tokenService: TokenService,
+    private readonly twoFactor: TwoFactorService,
     private readonly config: AppConfigService,
     private readonly email: EmailService,
+    private readonly encryption: EncryptionService,
   ) {}
 
   async register(dto: RegisterDto): Promise<{ user: { id: string; email: string; firstName: string; lastName: string; role: UserRole }; tokens: TokenPair }> {
@@ -40,7 +51,7 @@ export class AuthService {
         passwordHash,
         firstName: dto.firstName,
         lastName: dto.lastName,
-        ...(dto.phone ? { phone: dto.phone } : {}),
+        ...(dto.phone ? { phone: this.encryption.encrypt(dto.phone) } : {}),
         role: dto.role ?? 'CLIENT',
       },
     });
@@ -65,7 +76,7 @@ export class AuthService {
     };
   }
 
-  async login(dto: LoginDto): Promise<{ user: { id: string; email: string; role: UserRole; firstName: string; lastName: string }; tokens: TokenPair }> {
+  async login(dto: LoginDto): Promise<LoginResult> {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email.toLowerCase() },
     });
@@ -83,6 +94,12 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    // Second factor enabled: hand back a short-lived challenge instead of tokens.
+    if (user.twoFactorEnabled) {
+      const tempToken = await this.twoFactor.createChallenge(user.id);
+      return { requires2FA: true, tempToken };
+    }
+
     const tokens = await this.tokenService.generateTokenPair({
       sub: user.id,
       email: user.email,
@@ -96,6 +113,30 @@ export class AuthService {
         id: user.id,
         email: user.email,
         role: user.role,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      },
+      tokens,
+    };
+  }
+
+  /** Completes a two-factor login: validates the code, then issues tokens. */
+  async login2fa(tempToken: string, code: string): Promise<{ user: { id: string; email: string; role: UserRole; firstName: string; lastName: string }; tokens: TokenPair }> {
+    const user = await this.twoFactor.verifyChallenge(tempToken, code);
+
+    const tokens = await this.tokenService.generateTokenPair({
+      sub: user.id,
+      email: user.email,
+      role: user.role as UserRole,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    });
+
+    return {
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role as UserRole,
         firstName: user.firstName,
         lastName: user.lastName,
       },

@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import compression from 'compression';
+import helmet from 'helmet';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import type { NestExpressApplication } from '@nestjs/platform-express';
@@ -16,6 +17,20 @@ async function bootstrap(): Promise<void> {
   const config = app.get(AppConfigService);
   const logger = app.get(LoggerService);
   app.useLogger(logger);
+
+  // Cabeceras de seguridad. La CSP se deja `false` porque Swagger UI inyecta
+  // scripts inline; la política de contenido real la aplica la web pública.
+  app.use(
+    helmet({
+      contentSecurityPolicy: false,
+      referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
+    }),
+  );
+
+  // Detrás del túnel (y de reverse proxies) para que la IP real llegue al
+  // rate limiting y a las cookies `Secure` del proxy.
+  app.set('trust proxy', 1);
 
   app.use(compression());
 

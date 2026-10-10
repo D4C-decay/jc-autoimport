@@ -179,7 +179,7 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
           className="absolute inset-0 opacity-20"
           style={{
             backgroundImage:
-              'url(https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=2000&q=80)',
+              'url(/media/backgrounds/bg-photo-1511919884226-fd3cad34687c.webp)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}

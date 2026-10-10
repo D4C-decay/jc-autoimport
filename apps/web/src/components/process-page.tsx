@@ -19,7 +19,7 @@ const STEPS = [
       'Presupuesto detallado en 48 h',
     ],
     image:
-      'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1400&q=82',
+      '/media/backgrounds/bg-photo-1552519507-da3b142c6e3d.webp',
   },
   {
     n: '02',
@@ -32,7 +32,7 @@ const STEPS = [
       'Verificación de VIN e historial de accidentes',
     ],
     image:
-      'https://images.unsplash.com/photo-1489824904134-891ab64532f1?auto=format&fit=crop&w=1400&q=82',
+      '/media/backgrounds/bg-photo-1489824904134-891ab64532f1.webp',
   },
   {
     n: '03',
@@ -45,7 +45,7 @@ const STEPS = [
       'Rastreo puerta a puerta',
     ],
     image:
-      'https://images.unsplash.com/photo-1494412519320-aa613dfb7738?auto=format&fit=crop&w=1400&q=82',
+      '/media/backgrounds/bg-photo-1494412519320-aa613dfb7738.webp',
   },
   {
     n: '04',
@@ -58,7 +58,7 @@ const STEPS = [
       'Placas y matrícula entregadas',
     ],
     image:
-      'https://images.unsplash.com/photo-1486006920555-c77dcf18193c?auto=format&fit=crop&w=1400&q=82',
+      '/media/backgrounds/bg-photo-1486006920555-c77dcf18193c.webp',
   },
   {
     n: '05',
@@ -71,7 +71,7 @@ const STEPS = [
       '90 días de garantía mecánica',
     ],
     image:
-      'https://images.unsplash.com/photo-1550355291-bbee04a92027?auto=format&fit=crop&w=1400&q=82',
+      '/media/backgrounds/bg-photo-1550355291-bbee04a92027.webp',
   },
 ];
 
@@ -111,7 +111,7 @@ export function ProcessPage() {
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              'url(https://images.unsplash.com/photo-1502161254066-6c74afbf07aa?auto=format&fit=crop&w=2400&q=86)',
+              'url(/media/backgrounds/bg-photo-1502161254066-6c74afbf07aa.webp)',
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/85 via-ink/50 to-ink" />

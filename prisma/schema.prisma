@@ -109,6 +109,9 @@ model User {
 
   contactPreference String?  @map("contact_preference")
 
+  twoFactorSecret  String?   @map("two_factor_secret")
+  twoFactorEnabled Boolean   @default(false) @map("two_factor_enabled")
+
   assignedLeads Lead[]       @relation("AssignedLeads")
   reservations  Reservation[]
   reviews       Review[]

@@ -17,7 +17,7 @@ export default function Page() {
         className="absolute inset-0 opacity-12"
         style={{
           backgroundImage:
-            'url(https://images.unsplash.com/photo-1502161254066-6c74afbf07aa?auto=format&fit=crop&w=2000&q=80)',
+            'url(/media/backgrounds/bg-photo-1502161254066-6c74afbf07aa.webp)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}

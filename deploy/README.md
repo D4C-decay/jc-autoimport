@@ -116,11 +116,17 @@ desde el movil. Para la web, `sudo ufw allow 4200/tcp` y
 ## Seguridad
 
 - La API **no** sale a internet. Lo unico publico es el puerto 4200.
-- `/backend` es un proxy con **lista blanca**: 10 endpoints. `users`, `audit`,
-  `payments`, `media` y `health` devuelven 404. Un POST con `Origin` ajeno
-  recibe 403 (CSRF).
-- `.env` queda en `chmod 600` y no se versiona; los secretos JWT se generan
-  por maquina.
+- `/backend` es un proxy con **lista blanca**: catalogo, busqueda, leads,
+  auth (login/refresh/logout/me) y 2FA. `users`, `audit`, `payments`,
+  `media` y `health` devuelven 404. Un POST con `Origin` ajeno recibe 403
+  (CSRF).
+- `.env` queda en `chmod 600` y no se versiona; los secretos JWT y
+  `DATA_ENCRYPTION_KEY` (clave AES-256-GCM para PII en reposo) se generan
+  por maquina. Sin `DATA_ENCRYPTION_KEY` en `production` la API no arranca.
+- La sesion web vive en cookies `httpOnly` (`jca_token`/`jca_refresh`): el
+  proxy las firma, las manda en `Set-Cookie`, las suple en `refresh` y las
+  limpia en `logout`. Las rutas `/cuenta` se protegen en el server (middleware
+  + validacion del token contra la API).
 - `CORS_ORIGINS` solo hace falta si abres la API a otro origen; el sitio
   publico habla siempre por el proxy del mismo origen.
 - Stripe, S3, email y WhatsApp siguen con placeholders: en produccion hacen

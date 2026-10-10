@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowRight, Fuel, Gauge, Settings2 } from 'lucide-react';
@@ -8,6 +7,7 @@ import type { VehicleCard } from '@/lib/api';
 import { LABELS } from '@/lib/labels';
 import { cn, discountPct, formatMileage, formatPrice } from '@/lib/utils';
 import { StatusBadge } from './ui';
+import { VehiclePhoto } from './vehicle-photo';
 
 export function VehicleCardItem({
   vehicle,
@@ -39,20 +39,17 @@ export function VehicleCardItem({
             wide ? 'aspect-[16/9] lg:aspect-[21/9]' : 'aspect-[4/3]',
           )}
         >
-          {image ? (
-            <Image
-              src={image}
-              alt={`${vehicle.brand} ${vehicle.model} ${vehicle.year}`}
-              fill
-              priority={priority}
-              sizes={
-                wide
-                  ? '(max-width: 640px) 100vw, 100vw'
-                  : '(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw'
-              }
-              className="object-cover transition-transform duration-[1100ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.07]"
-            />
-          ) : null}
+          <VehiclePhoto
+            src={image}
+            alt={`${vehicle.brand} ${vehicle.model} ${vehicle.year}`}
+            priority={priority}
+            sizes={
+              wide
+                ? '(max-width: 640px) 100vw, 100vw'
+                : '(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw'
+            }
+            className="object-cover transition-transform duration-[1100ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.07]"
+          />
 
           <div
             className={cn(
@@ -62,7 +59,7 @@ export function VehicleCardItem({
                 : 'bg-gradient-to-t from-ink via-ink/10 to-transparent',
             )}
           />
-          <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: 'radial-gradient(120% 90% at 50% 100%, rgba(201,162,39,0.22), transparent 60%)' }} />
+          <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: 'radial-gradient(120% 90% at 50% 100%, rgba(240,36,52,0.22), transparent 60%)' }} />
 
           <div className="absolute top-3 left-3 flex flex-wrap gap-2">
             {vehicle.status !== 'AVAILABLE' ? (
@@ -226,15 +223,12 @@ export function VehicleRow({
         className="flex flex-col gap-5 py-6 sm:flex-row sm:items-center sm:gap-8"
       >
         <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-ink-3 sm:w-56">
-          {image ? (
-            <Image
-              src={image}
-              alt={`${vehicle.brand} ${vehicle.model} ${vehicle.year}`}
-              fill
-              sizes="(max-width: 640px) 100vw, 14rem"
-              className="object-cover transition-transform duration-[1100ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.07]"
-            />
-          ) : null}
+          <VehiclePhoto
+            src={image}
+            alt={`${vehicle.brand} ${vehicle.model} ${vehicle.year}`}
+            sizes="(max-width: 640px) 100vw, 14rem"
+            className="object-cover transition-transform duration-[1100ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.07]"
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-ink/70 to-transparent" />
           {vehicle.status !== 'AVAILABLE' ? (
             <div className="absolute top-2 left-2">

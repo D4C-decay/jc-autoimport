@@ -33,7 +33,7 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest<Request & { user?: JwtPayload }>();
-    const token = this.extractTokenFromHeader(request);
+    const token = this.extractToken(request);
 
     if (!token) {
       throw new UnauthorizedException('Authentication required');
@@ -59,8 +59,25 @@ export class JwtAuthGuard implements CanActivate {
     }
   }
 
-  private extractTokenFromHeader(request: Request): string | undefined {
+  /**
+   * The token may arrive as an `Authorization: Bearer` header (API clients) or
+   * as the httpOnly session cookie set by the public web proxy. Reading both is
+   * what lets the web force authentication server-side.
+   */
+  private extractToken(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+    if (type === 'Bearer' && token) {
+      return token;
+    }
+    return this.readCookie(request.headers.cookie, 'jca_token');
+  }
+
+  private readCookie(header: string | undefined, name: string): string | undefined {
+    if (!header) return undefined;
+    for (const part of header.split(';')) {
+      const [key, ...rest] = part.trim().split('=');
+      if (key === name) return decodeURIComponent(rest.join('='));
+    }
+    return undefined;
   }
 }

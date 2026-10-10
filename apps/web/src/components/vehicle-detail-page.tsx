@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -25,6 +24,7 @@ import { cn, discountPct, formatMileage, formatPrice } from '@/lib/utils';
 import { Button, Eyebrow, StatusBadge } from './ui';
 import { Reveal, SplitWords } from './motion';
 import { LeadForm } from './lead-form';
+import { VehiclePhoto } from './vehicle-photo';
 
 const FUEL_ICON: Record<string, typeof Fuel> = {
   ELECTRIC: Zap,
@@ -111,10 +111,9 @@ export function VehicleDetailPage({ vehicle }: { vehicle: VehicleDetail }) {
                 className="absolute inset-0"
               >
                 {gallery[active] ? (
-                  <Image
+                  <VehiclePhoto
                     src={gallery[active].url}
                     alt={gallery[active].altText ?? `${vehicle.brand} ${vehicle.model}`}
-                    fill
                     priority
                     sizes="(max-width: 1024px) 100vw, 66vw"
                     className="object-cover"
@@ -142,10 +141,9 @@ export function VehicleDetailPage({ vehicle }: { vehicle: VehicleDetail }) {
                   active === i + 1 ? 'ring-1 ring-signal' : 'opacity-65 hover:opacity-100',
                 )}
               >
-                <Image
+                <VehiclePhoto
                   src={m.url}
                   alt={m.altText ?? `${vehicle.brand} ${vehicle.model} ${i + 2}`}
-                  fill
                   sizes="(max-width: 1024px) 50vw, 33vw"
                   className="object-cover transition-transform duration-[1100ms] group-hover:scale-105"
                 />
