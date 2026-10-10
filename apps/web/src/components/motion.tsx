@@ -12,19 +12,20 @@ import {
 import { cn } from '@/lib/utils';
 
 /* ------------------------------------------------------------------ *
- * Custom cursor — Lamborghini signature move: a dot + trailing ring  *
+ * Custom cursor — a soft, blurred glow that trails the pointer        *
  * ------------------------------------------------------------------ */
 
 export function CustomCursor() {
   const x = useMotionValue(-100);
   const y = useMotionValue(-100);
-  const sx = useSpring(x, { stiffness: 380, damping: 34, mass: 0.55 });
-  const sy = useSpring(y, { stiffness: 380, damping: 34, mass: 0.55 });
+  const sx = useSpring(x, { stiffness: 240, damping: 30, mass: 0.7 });
+  const sy = useSpring(y, { stiffness: 240, damping: 30, mass: 0.7 });
   const [label, setLabel] = useState<string | null>(null);
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
     if (!window.matchMedia('(pointer: fine)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     setEnabled(true);
 
     const move = (e: PointerEvent) => {
@@ -45,26 +46,35 @@ export function CustomCursor() {
         style={{ x: sx, y: sy }}
         className="absolute -translate-x-1/2 -translate-y-1/2"
       >
-        <motion.div
-          animate={{
-            width: label ? 84 : 32,
-            height: label ? 84 : 32,
-            backgroundColor: label ? 'rgba(240,36,52,0.14)' : 'rgba(240,36,52,0.9)',
-            borderColor: label ? 'rgba(240,36,52,0.85)' : 'rgba(240,36,52,0)',
-          }}
-          transition={{ type: 'spring', stiffness: 260, damping: 26 }}
-          className="flex items-center justify-center rounded-full border backdrop-blur-[1px]"
-        >
+        <div className="relative flex items-center justify-center">
+          <motion.div
+            animate={{
+              width: label ? 360 : 280,
+              height: label ? 360 : 280,
+              opacity: label ? 0.6 : 0.4,
+            }}
+            transition={{ type: 'spring', stiffness: 200, damping: 28 }}
+            className="rounded-full"
+            style={{
+              background:
+                'radial-gradient(circle, rgba(240,36,52,0.30) 0%, rgba(240,36,52,0.11) 42%, rgba(240,36,52,0) 72%)',
+              filter: 'blur(32px)',
+            }}
+          />
           {label ? (
-            <motion.span
-              initial={{ opacity: 0, scale: 0.7 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="text-[10px] font-semibold tracking-[0.18em] text-signal uppercase"
-            >
-              {label}
-            </motion.span>
+            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+              <motion.span
+                initial={{ opacity: 0, scale: 0.85 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ type: 'spring', stiffness: 240, damping: 24 }}
+                className="block font-display text-[11px] tracking-[0.22em] text-smoke uppercase"
+                style={{ textShadow: '0 0 16px rgba(240,36,52,0.55)' }}
+              >
+                {label}
+              </motion.span>
+            </span>
           ) : null}
-        </motion.div>
+        </div>
       </motion.div>
     </div>
   );
