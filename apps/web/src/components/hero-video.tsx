@@ -8,13 +8,11 @@ import { cn } from '@/lib/utils';
 /**
  * Cinematic background loop for the hero.
  *
- * The clip is a 15 s cross-dissolve loop: the last second blends the end of the
- * shot back into the very first frame, so the loop point is 0.46% of the value
- * range away from where playback restarts (a real 0.5 s cut measures 4.59 on the
- * same scale) — i.e. visually seamless.
+ * 1080p H.264 (~6.6 s, 1920x1080 source) with the final 0.8 s cross-dissolved
+ * back into the first frame, so the loop seam is smoothed instead of a hard cut.
  *
  * The element is only mounted after hydration, so crawlers and the no-JS path
- * never download 3.4 MB of video and always paint the poster first.
+ * never download the ~5 MB of video and always paint the poster first.
  */
 export function HeroVideo({
   src,

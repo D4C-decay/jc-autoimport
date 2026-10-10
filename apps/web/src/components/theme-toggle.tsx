@@ -3,8 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-export const THEME_STORAGE_KEY = 'jca_theme';
+import { THEME_STORAGE_KEY } from '@/lib/theme';
 
 /**
  * Interruptor de tema claro/oscuro. El modo oscuro es el de por defecto; el

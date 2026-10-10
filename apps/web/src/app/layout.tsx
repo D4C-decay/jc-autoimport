@@ -5,7 +5,7 @@ import './globals.css';
 import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
 import { CustomCursor } from '@/components/motion';
-import { THEME_STORAGE_KEY } from '@/components/theme-toggle';
+import { THEME_STORAGE_KEY } from '@/lib/theme';
 import { SITE_URL } from '@/lib/site';
 
 const themeScript = `(function(){try{var t=localStorage.getItem('${THEME_STORAGE_KEY}');if(t==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();`;

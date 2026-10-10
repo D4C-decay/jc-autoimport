@@ -48,7 +48,30 @@ const PROCESS = [
   {
     n: '05',
     title: 'Entrega llave en mano',
-    text: 'Matrícula, placas y entrega en tu domicilio o en nuestras instalaciones. garantía mecánica de 90 días.',
+    text: 'Matrícula, placas y entrega en tu domicilio o en nuestras instalaciones. Garantía mecánica de 90 días.',
+  },
+];
+
+const ORIGINS = [
+  {
+    country: 'Estados Unidos',
+    note: 'Subastas Copart/IAAI, dealers certificados y flotas corporativas.',
+    days: '30–45 días',
+  },
+  {
+    country: 'Japón',
+    note: 'Subastas USS con calificación de condición 4.5 y kilometraje auditado.',
+    days: '45–60 días',
+  },
+  {
+    country: 'Corea del Sur',
+    note: 'Concesionarios oficiales con historial de mantenimiento completo.',
+    days: '40–55 días',
+  },
+  {
+    country: 'Europa',
+    note: 'Alemania e Italia: premium alemán y deportivos italianos.',
+    days: '35–50 días',
   },
 ];
 
@@ -66,7 +89,28 @@ const PILLARS = [
   {
     icon: Sparkles,
     title: 'Garantía mecánica',
-    text: '90 días de garantía o 5,000 km en motor y transmisión. transparencia total en cada factura.',
+    text: '90 días de garantía o 5,000 km en motor y transmisión. Transparencia total en cada factura.',
+  },
+];
+
+const TESTIMONIALS = [
+  {
+    quote:
+      'Buscaba un Tacoma específico durante 8 meses. JC lo encontró, lo inspeccionó y me lo entregaron matriculado en casa. Servicio impecable.',
+    name: 'Rafael Ureña',
+    role: 'Toyota Tacoma TRD Pro',
+  },
+  {
+    quote:
+      'Me cotizaban 3 importadoras y solo JC me envió fotos del VIN, historial de pintura y video de prueba de ruta antes de pagar.',
+    name: 'María Fernanda Santos',
+    role: 'Porsche Macan GTS',
+  },
+  {
+    quote:
+      'El seguimiento fue constante por WhatsApp en cada etapa. Sabía exactamente dónde estaba mi auto y cuándo llegaría.',
+    name: 'Andrés Batista',
+    role: 'Tesla Model S Plaid',
   },
 ];
 
@@ -260,55 +304,81 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
       </section>
 
       {/* ============================== PROCESO ============================== */}
-      <section className="relative clip-slant-sm border-y border-line bg-ink-2 py-24 lg:py-32">
+      <section className="relative clip-slant-sm border-y border-line bg-ink-2 py-20 lg:py-28">
         <div className="container-x">
-          <div className="max-w-2xl">
-            <SectionLabel index="02">De cualquier parte del mundo</SectionLabel>
-            <h2 className="mt-5 font-display text-[clamp(2rem,5vw,4.2rem)] leading-[0.9] text-smoke">
-              No importamos autos.
-              <br />
-              <span className="text-signal">Eliminamos fronteras.</span>
-            </h2>
-            <p className="mt-6 text-sm leading-relaxed text-ash">
-              Convertimos una compra internacional compleja en una ruta clara: selección,
-              verificación, compra bancarizada, embarque, aduanas, taller, matrícula y entrega. Un solo
-              equipo coordina toda la operación.
-            </p>
-          </div>
+          <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
+            <div className="lg:sticky lg:top-28 lg:self-start">
+              <SectionLabel index="02">De cualquier parte del mundo</SectionLabel>
+              <h2 className="mt-5 font-display text-[clamp(2rem,5vw,4.2rem)] leading-[0.9] text-smoke">
+                No importamos autos.
+                <br />
+                <span className="text-signal">Eliminamos fronteras.</span>
+              </h2>
+              <p className="mt-6 max-w-md text-sm leading-relaxed text-ash">
+                Convertimos una compra internacional compleja en una ruta clara: selección,
+                verificación, compra bancarizada, embarque, aduanas, taller, matrícula y entrega. Un
+                solo equipo coordina toda la operación.
+              </p>
+              <div className="mt-8">
+                <Button href="/proceso" variant="outline" cursor="Ver">
+                  El proceso completo
+                </Button>
+              </div>
+            </div>
 
-          <ol className="mt-16 grid gap-px bg-line md:grid-cols-2 lg:grid-cols-5">
-            {PROCESS.map((p, i) => (
-              <Reveal key={p.n} delay={i * 0.07}>
-                <li className="group h-full bg-ink-2 p-7 transition-colors duration-500 hover:bg-ink-3 lg:p-8">
-                  <div className="flex items-baseline justify-between">
-                    <span className="font-display text-3xl text-signal/30 transition-colors duration-500 group-hover:text-signal">
+            <ol className="divide-y divide-line">
+              {PROCESS.map((p, i) => (
+                <Reveal key={p.n} delay={i * 0.06}>
+                  <li className="group grid grid-cols-[auto_1fr] gap-6 py-7">
+                    <span className="font-display text-3xl text-signal/30 transition-colors duration-500 group-hover:text-signal sm:text-4xl">
                       {p.n}
                     </span>
-                    <span className="h-px w-8 bg-line transition-all duration-500 group-hover:w-14 group-hover:bg-signal" />
-                  </div>
-                  <h3 className="mt-6 font-display text-lg text-smoke">{p.title}</h3>
-                  <p className="mt-3 text-[13px] leading-relaxed text-ash">{p.text}</p>
-                </li>
-              </Reveal>
-            ))}
-          </ol>
+                    <div>
+                      <h3 className="font-display text-lg text-smoke">{p.title}</h3>
+                      <p className="mt-2 max-w-lg text-[13px] leading-relaxed text-ash">{p.text}</p>
+                    </div>
+                  </li>
+                </Reveal>
+              ))}
+            </ol>
+          </div>
         </div>
       </section>
 
-      {/* ============================== PILARES ============================== */}
-      <section className="py-20 lg:py-28">
-        <div className="container-x">
-          <div className="grid gap-10 lg:grid-cols-3">
-            {PILLARS.map((p, i) => (
-              <Reveal key={p.title} delay={i * 0.1}>
-                <div className="group relative border border-line p-8 transition-colors duration-500 hover:border-signal/40">
-                  <div className="absolute inset-x-0 top-0 h-px origin-left scale-x-0 bg-signal transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100" />
-                  <p.icon
-                    className="size-8 text-signal"
-                    strokeWidth={1.2}
-                  />
-                  <h3 className="mt-6 font-display text-xl text-smoke">{p.title}</h3>
-                  <p className="mt-3 text-[13px] leading-relaxed text-ash">{p.text}</p>
+      {/* ============================== ORIGENES ============================== */}
+      <section className="relative overflow-hidden border-b border-line py-20 lg:py-28">
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-[0.14]"
+          style={{
+            backgroundImage:
+              'url(/media/backgrounds/bg-photo-1494412519320-aa613dfb7738.webp)',
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-ink via-ink/85 to-ink" />
+        <div className="container-x relative">
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div>
+              <SectionLabel index="03">Mercados de origen</SectionLabel>
+              <h2 className="mt-5 max-w-[16ch] font-display text-[clamp(2rem,5vw,4.2rem)] leading-[0.9] text-smoke">
+                Cuatro mercados, <span className="text-signal">un estándar.</span>
+              </h2>
+            </div>
+            <p className="max-w-sm text-sm leading-relaxed text-ash">
+              Compramos en subastas, dealers y concesionarios verificados de los mercados más sólidos
+              del mundo, con historial y kilometraje auditados.
+            </p>
+          </div>
+
+          <div className="mt-12 grid grid-cols-2 gap-px bg-line lg:grid-cols-4">
+            {ORIGINS.map((o, i) => (
+              <Reveal key={o.country} delay={i * 0.07}>
+                <div className="group h-full bg-ink p-6 transition-colors duration-500 hover:bg-ink-2 lg:p-8">
+                  <div className="font-display text-xl text-smoke sm:text-2xl">{o.country}</div>
+                  <p className="mt-3 text-[13px] leading-relaxed text-ash">{o.note}</p>
+                  <div className="mt-6 flex items-center gap-2 text-[10px] tracking-[0.22em] text-signal uppercase">
+                    <span className="h-px w-6 bg-signal/50" />
+                    {o.days}
+                  </div>
                 </div>
               </Reveal>
             ))}
@@ -316,31 +386,58 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
         </div>
       </section>
 
+      {/* ============================== PILARES ============================== */}
+      <section className="py-20 lg:py-28">
+        <div className="container-x grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <Reveal className="relative order-last lg:order-first">
+            <div className="relative aspect-[4/3] overflow-hidden border border-line">
+              <div
+                className="absolute inset-0 bg-cover bg-center"
+                style={{
+                  backgroundImage:
+                    'url(/media/backgrounds/bg-photo-1486006920555-c77dcf18193c.webp)',
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/35 to-transparent" />
+              <div className="absolute bottom-0 left-0 p-8">
+                <div className="font-display text-4xl text-smoke lg:text-5xl">
+                  120<span className="text-signal">.</span>
+                </div>
+                <div className="mt-1 text-[10px] tracking-[0.24em] text-ash uppercase">
+                  Puntos de inspección por unidad
+                </div>
+              </div>
+            </div>
+          </Reveal>
+
+          <div>
+            <SectionLabel>Por qué JC Autoimport</SectionLabel>
+            <h2 className="mt-5 max-w-[16ch] font-display text-[clamp(1.8rem,4vw,3.2rem)] leading-[0.95] text-smoke">
+              Comprar importado, <span className="text-signal">sin sorpresas.</span>
+            </h2>
+            <div className="mt-8 space-y-7">
+              {PILLARS.map((p, i) => (
+                <Reveal key={p.title} delay={i * 0.08}>
+                  <div className="flex gap-5">
+                    <p.icon className="mt-0.5 size-6 shrink-0 text-signal" strokeWidth={1.3} />
+                    <div>
+                      <h3 className="font-display text-lg text-smoke">{p.title}</h3>
+                      <p className="mt-2 text-[13px] leading-relaxed text-ash">{p.text}</p>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ============================== TESTIMONIOS ============================== */}
       <section className="border-y border-line bg-ink-2 py-20 lg:py-28">
         <div className="container-x">
-          <SectionLabel index="03">Lo que dicen nuestros clientes</SectionLabel>
+          <SectionLabel index="04">Lo que dicen nuestros clientes</SectionLabel>
           <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {[
-              {
-                quote:
-                  'Buscaba un Tacoma específico durante 8 meses. JC lo encontró, lo inspeccionó y me lo entregaron matriculado en casa. Servicio impecable.',
-                name: 'Rafael Ureña',
-                role: 'Toyota Tacoma TRD Pro',
-              },
-              {
-                quote:
-                  'Me Cotizaban 3 importadoras y solo JC me envió fotos del VIN, historial de pintura y video de prueba de ruta antes de pagar.',
-                name: 'María Fernanda Santos',
-                role: 'Porsche Macan GTS',
-              },
-              {
-                quote:
-                  'El seguimiento fue constante por WhatsApp en cada etapa. Sabía exactamente dónde estaba mi auto y cuándo llegaría.',
-                name: 'Andrés Batista',
-                role: 'Tesla Model S Plaid',
-              },
-            ].map((t, i) => (
+            {TESTIMONIALS.map((t, i) => (
               <Reveal key={t.name} delay={i * 0.1}>
                 <figure className="flex h-full flex-col justify-between border border-line p-8">
                   <blockquote className="text-sm leading-relaxed text-smoke/90">
