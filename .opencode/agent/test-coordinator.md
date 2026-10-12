@@ -1,6 +1,6 @@
 ---
 description: Coordinador del sistema de tests del backend JC Autoimport. Despacha 5 testers especializados contra la API corriendo, recoge hallazgos, consolida un diagnóstico estructurado y lo entrega al plan-coordinator. Seleccionar este agente para testear el backend.
-model: ollama/qwen2.5:7b
+model: opencode/big-pickle
 mode: primary
 permission:
   edit: deny
