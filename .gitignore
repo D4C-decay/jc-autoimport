@@ -45,3 +45,6 @@ Thumbs.db
 # Temporary
 tmp/
 .tmp/
+
+# Intermedios del generador de vídeo demo (el export final sí se versiona)
+scripts/demo-video/out/

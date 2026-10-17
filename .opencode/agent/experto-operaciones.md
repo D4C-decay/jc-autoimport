@@ -1,6 +1,6 @@
 ---
 description: Experto de operaciones del consejo de planeación de JC Autoimport. Evalúa mantenibilidad, calidad, pruebas, observabilidad, despliegue y costos de los planes.
-model: ollama/qwen2.5:7b
+model: opencode/big-pickle
 mode: subagent
 permission:
   edit: deny

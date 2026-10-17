@@ -31,9 +31,35 @@
 - Autenticación: `gh` (GitHub CLI) autenticada como `D4C-decay` en esta máquina.
 - Bóvedas Obsidian (repos privados aparte): `jcautoimport-obsidian` y `vault-personal` (ver "Contexto externo").
 
-## Directiva de push directo
-- El usuario **aprueba commits y `git push` directos** a `origin/main` como respaldo de seguridad.
-- Tras completar una tarea de código: verificar con `npm run build` y `npm run lint`, luego `git add` (de los archivos implicados), `git commit` descriptivo y `git push`.
+## Política de git (push directo aprobado)
+- El usuario **aprueba commits y `git push` directos** a `origin/main` como respaldo de seguridad, pero **`git commit` y `git push` SIEMPRE preguntan** (nunca automáticos).
+- Tras completar una tarea de código: verificar con `npm run build` y `npm run lint`, revisar `git status`, `git add` **solo** de los archivos implicados, `git commit` descriptivo y `git push`.
+
+## Autonomía y permisos (opencode.json)
+- Modo **autónomo con guardarraíles**: `edit` y `bash` en `allow` por defecto; `git commit/push`, `git reset --hard`, `git clean` en **ask**; `sudo`, `rm -rf /` y `rm -rf ~` en **deny**.
+- `external_directory` permite `/tmp/opencode`, `~/.local/state/jcautoimport`, `~/.cache/ms-playwright` y `~/Documentos/Obsidian/**`; el resto **pregunta**.
+- **La config NO es hot-reload**: tras tocar `opencode.json`, agentes, skills, comandos o plugins → **reiniciar opencode**.
+- Escape hatch si algo rompe el arranque: `OPENCODE_DISABLE_PROJECT_CONFIG=1` (ignora el config del proyecto) o `OPENCODE_PURE=1` (sin plugins externos).
+
+## Modelos por agente (tier free de opencode)
+- En esta máquina **solo** hay disponibles los modelos **free de opencode** + los 2 de `ollama` (no hay credenciales de pago). Lista: `opencode models`.
+- Builders y verificación → `opencode/glm-5.3-flash-free`; revisores/seguridad → `opencode/deepseek-v4.1-flash-free`; consejo (`arquitecto-tecnico`, `abogado-del-diablo`, `experto-*`) y coordinadores → `opencode/big-pickle`; `memory-keeper` → `opencode/longcat-2.5-preview-free`; `small_model` (títulos) → `opencode/nemotron-3.5-lightning-free`.
+- **Privacidad**: PII/secretos SOLO a modelos **zero-retention** (`glm-5.3-flash-free`, `deepseek-v4.1-flash-free`, `space-bunny-free`, `longcat-2.5-preview-free`). Nunca a Nemotron (trial NVIDIA: "no datos confidenciales") ni a `big-pickle`/`MiMo` (entrenan durante el periodo free).
+- **Fallback**: si un modelo free falla o va rate-limited, cambia la línea `model:` del agente a `ollama/qwen2.5-coder:14b` (offline, privado, lento).
+
+## Capacidades web (navegador por CDP)
+- El navegador del usuario es **Brave** (Chromium ≥136): `bash scripts/chrome-debug.sh` lo lanza con perfil dedicado y CDP en `http://localhost:9222`. (Nunca el perfil por defecto: Brave ignora el flag y no expone CDP.)
+- MCP: `playwright` (navegar/capturar), `chrome-devtools` (perf/consola/network), `context7` (docs), `postgres` (**solo lectura**, `scripts/mcp-postgres.sh`).
+- Skills: `jca-browser`, `jca-design-system`, `jca-known-traps`.
+
+## Flujo frontend (web, `apps/web`)
+- Builder: **`web-builder`** (máx. 2–4 archivos) usando el skill `jca-design-system` y el contrato **`apps/web/DESIGN.md`**.
+- Revisión: **`ui-reviewer`** (capturas reales por CDP, 1440/390 y modo claro/oscuro). Rendimiento: **`perf-auditor`**.
+- Verificación: `npm --prefix apps/web run lint` (typecheck) + `npm --prefix apps/web run build` + **reiniciar el server standalone** (si no, sirve sin CSS). No aprobar sin ambos en verde.
+
+## Plugins y comandos de opencode
+- Plugins en `.opencode/plugin/`: `auto-verify` (al final del turno, condicional + timeout), `web-restart-guard`, `session-boot`, `notify`, `secret-guard`, `trap-guard`, `session-log`. Logs en `~/.local/state/jcautoimport/`. Desactivables por env (`JCA_AUTO_VERIFY=0`, `JCA_NOTIFY=0`, …).
+- Comandos: `/estado`, `/ui-review`, `/web-build`, `/deploy`.
 
 ## Reglas de seguridad (nunca commitear)
 - NO subir `.env` (queda excluido por `.gitignore`; solo se versiona `.env.example`).
@@ -47,4 +73,4 @@
 - Verificación estándar: `npm run build` (nest build) y `npm run lint` (oxlint). No aprobar cambio hasta que ambos pasen.
 
 ## Estado conocido
-- Backend completo, compilando y lint limpio. Pendiente: levantar PostgreSQL 16 + Redis 7 y ejecutar `prisma migrate dev` + seed antes de probar en runtime.
+- Backend completo, compilando y con runtime validado (build + lint en verde). Infra local: PostgreSQL 18.6 + Valkey 9.1.2 (systemd). Web `apps/web` (Next.js 15) y desktop `apps/desktop` (Electron) construidos. Hay un **túnel de Cloudflare** (quick tunnel) sirviendo la web; la API (3000) queda privada. El estado detallado y el "Próximo paso" viven en `MEMORY.md`.

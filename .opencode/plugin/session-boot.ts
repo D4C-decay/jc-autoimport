@@ -1,0 +1,54 @@
+import type { Plugin } from "@opencode-ai/plugin"
+import { appendFileSync, existsSync, mkdirSync, statSync } from "node:fs"
+import { homedir } from "node:os"
+import { join } from "node:path"
+
+// Al primer evento de cada sesión: asegura /tmp/opencode, registra el arranque y
+// anota si el resumen del vault está fresco (<6h). Apoyo a las "Reglas de
+// continuidad" de AGENTS.md. Desactivable: JCA_SESSION_BOOT=0
+
+const DIR = join(homedir(), ".local", "state", "jcautoimport")
+const LOG = join(DIR, "session-boot.log")
+const VAULT = "/tmp/opencode/vault-context-latest.md"
+
+const seen = new Set<string>()
+
+function boot(directory: string) {
+  try {
+    mkdirSync("/tmp/opencode", { recursive: true })
+    mkdirSync(DIR, { recursive: true })
+
+    let vault = "no existe"
+    if (existsSync(VAULT)) {
+      const ageH = (Date.now() - statSync(VAULT).mtimeMs) / 3_600_000
+      vault = ageH < 6 ? `fresco (${ageH.toFixed(1)}h)` : `viejo (${ageH.toFixed(1)}h)`
+    }
+
+    appendFileSync(
+      LOG,
+      `${new Date().toISOString()} cwd=${directory} vault-context=${vault}\n`,
+    )
+  } catch {
+    /* ignore */
+  }
+}
+
+export default (async ({ directory }) => {
+  return {
+    event: async (input: unknown) => {
+      try {
+        if (process.env.JCA_SESSION_BOOT === "0") return
+        const anyIn = input as { event?: { type?: string; properties?: { sessionID?: string } } }
+        const ev = anyIn?.event ?? input
+        const type = (ev as { type?: string })?.type
+        if (type !== "session.created") return
+        const sid = (ev as { properties?: { sessionID?: string } })?.properties?.sessionID ?? "?"
+        if (seen.has(sid)) return
+        seen.add(sid)
+        boot(directory)
+      } catch {
+        /* ignore */
+      }
+    },
+  }
+}) satisfies Plugin

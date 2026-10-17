@@ -1,6 +1,6 @@
 ---
 description: Auditoría de seguridad del backend JC Autoimport (secrets, JWT/RBAC, pagos Stripe, rate limiting, dependencias, Docker). Solo lectura. Usar periódicamente o ante cambios sensibles.
-model: ollama/qwen2.5-coder:14b
+model: opencode/deepseek-v4.1-flash-free
 mode: subagent
 permission:
   edit: deny

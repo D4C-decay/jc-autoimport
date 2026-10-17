@@ -1,6 +1,6 @@
 ---
 description: Actualiza MEMORY.md con el estado del proyecto y el log de la sesión al cierre de cada sesión de trabajo. Usar SIEMPRE al final de una sesión (única excepción: cuando no hubo cambios de estado).
-model: ollama/qwen2.5:7b
+model: opencode/longcat-2.5-preview-free
 mode: subagent
 permission:
   edit:

@@ -1,6 +1,6 @@
 ---
 description: Experto de usuario del consejo de planeación de JC Autoimport. Evalúa la experiencia del cliente final (comprador y vendedor) en los flujos propuestos.
-model: ollama/qwen2.5:7b
+model: opencode/big-pickle
 mode: subagent
 permission:
   edit: deny

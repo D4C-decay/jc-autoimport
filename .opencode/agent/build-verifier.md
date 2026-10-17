@@ -1,6 +1,6 @@
 ---
 description: Ejecuta la suite de verificación del proyecto (typecheck, build, lint) y reporta verde/rojo con los errores exactos. No arregla nada: solo valida. Usar tras cada cambio de código antes de aprobar.
-model: ollama/qwen2.5-coder:14b
+model: opencode/glm-5.3-flash-free
 mode: subagent
 permission:
   edit: deny

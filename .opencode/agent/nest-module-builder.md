@@ -1,6 +1,6 @@
 ---
 description: Construye módulos NestJS completos en el backend JC Autoimport siguiendo la arquitectura existente (domain/application/infrastructure). Usar cuando haya que crear o ampliar una feature, CRUD, endpoint o integración.
-model: ollama/qwen2.5-coder:14b
+model: opencode/glm-5.3-flash-free
 mode: subagent
 permission:
   edit: allow
