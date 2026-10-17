@@ -14,8 +14,8 @@ Plataforma de venta/importación de vehículos "JC Autoimport": backend API (cat
 - GitHub **privado**: `https://github.com/D4C-decay/jc-autoimport` — rama `main`.
 - `gh` autenticada como `D4C-decay` (HTTPS, scopes `gist,read:org,repo,workflow`). Push directo aprobado (reglas en `AGENTS.md`, verifícalas antes de cualquier commit).
 - **Estructura**: el backend vive en la raíz; `apps/web` y `apps/desktop` son **paquetes independientes con sus propios `package-lock.json`** (no hay workspaces npm). Instalar y compilar cada uno por separado.
-- NO versionar jamás: `.env`, `generated/`, `dist/`, `node_modules/`, `*.tsbuildinfo`, `apps/*/release/`, `apps/web/.next/`.
-- Bóveda de documentación: `jcautoimport-obsidian` (`~/Documentos/Obsidian/JC-Autoimport`). Bóveda personal: `vault-personal` (`~/Documentos/Obsidian/Personal`). Detalle en el log de sesiones.
+- NO versionar jamás: `.env`, `generated/`, `dist/`, `node_modules/`, `*.tsbuildinfo`, `apps/*/release/`, `apps/web/.next/`, `.private/`.
+- **Documentación en `docs/`** (migrada desde la antigua bóveda Obsidian `jcautoimport-obsidian`, sin metadatos ni assets binarios). **Grafo de conocimiento** en `graphify-out/` (commiteado, `graphify update .` tras tocar código). La bóveda personal (ex-`vault-personal`) queda como copia privada en `.private/` (gitignored).
 
 ## Estado actual
 - Backend **completo, compilando y con runtime validado** (build + lint en verde), 9 módulos:
@@ -187,22 +187,9 @@ Backend + web **compilando y verificado en runtime**, más ahora la **config aut
 - **Regla de oro:** empezar con scope mínimo e iterar con reporte vivo.
 
 ## Reglas de continuidad
-- **Al inicio de sesión**: leer este `MEMORY.md` y dar continuidad al `Próximo paso`. Además cargar resumen comprimido del vault (`/tmp/opencode/vault-context-latest.md`) si existe.
-- **Al cierre**: actualizar este archivo (usar el subagente `memory-keeper`) con estado, próximo paso, blockers y una entrada en el log. **También** actualizar `Diario/YYYY-MM-DD.md` en `vault-personal` con el contexto de cierre (ver sección siguiente).
+- **Al inicio de sesión**: leer este `MEMORY.md` y dar continuidad al `Próximo paso`. Si existe `graphify-out/graph.json`, usar `graphify query` antes de buscar en código.
+- **Al cierre**: actualizar este archivo (usar el subagente `memory-keeper`) con estado, próximo paso, blockers y una entrada en el log. Verificar el diff antes de commitear. Si se tocó código: `graphify update .`.
 - Revisar los subagentes en `.opencode/agent/` (builders = implementan; consejo de planeación = diseñan; `memory-keeper` = archiva).
-
-## Contexto externo: Vault Obsidian (vault-personal)
-
-- **Repositorio:** `~/Documentos/Obsidian/Personal` (privado, `vault-personal`).
-- **Inicio (solo lectura):** `git pull --ff-only` **condicionado** a que `git status --short` esté vacío. Si hay cambios locales, **no** hacer pull. Leer ventana **últimos 2 días naturales** (hoy y ayer) en **orden cronológico ascendente** (más antiguo → más reciente).
-- **Reuse inteligente:** si `/tmp/opencode/vault-context-latest.md` existe con `generated_at` < 6h y misma fecha (`YYYY-MM-DD`), reutilizarlo antes de leer el vault.
-- **Durante la sesión (solo lectura):** nunca escribir en la bóveda. Trabajo con `Codex (obrero) + Opencode (supervisor) + Testers en paralelo`.
-- **Al cierre (lectura + escritura):** **únicamente** antes de terminar la sesión. Escribir **solo** en `Diario/YYYY-MM-DD.md` (orden cronológico). **Nunca** `git add/commit/push` desde opencode. Obsidian-git se encarga del sync.
-- **Fuentes prioritarias (lectura):** `Diario/YYYY-MM-DD.md`, `Proyectos/JC-Autoimport/Sessions.md`, `Proyectos/JC-Autoimport/Estado.md` (solo si modificado en ventana). `Inbox/` o `Tareas/` solo si contienen `#jcautoimport`, `#opencode` o keywords relacionadas (`jc autoimport`, `codex`, `test-coordinator`, `tests-live`, `build-verifier`, `nest-module-builder`, `2FA`, `emailVerified`, `SMTP`, `WEB_URL`, `vault-context`).
-- **Lectura dirigida:** extraer `Próximo paso`, `Decisiones`, `Blockers`, `Log`, `Hechos`, `Comandos clave` y **Archivos tocados** (`src/**`, `apps/**/src/**`, `apps/desktop/scripts/**`, `prisma/**`, `deploy/**`).
-- **Resumen activo:** `/tmp/opencode/vault-context-latest.md` (< **1.5 KB**), fijo. Incluir frontmatter con `generated_at`, `window`, `source`, `read_from`. Se regenera si cambia la fecha o supera 6h.
-- **Entrada de cierre:** append en `Diario/YYYY-MM-DD.md`. Estructura: `## Sesión - YYYY-MM-DD HH:MM` con `Hechos` (máx. 3), `Decisiones` (máx. 2), `Archivos tocados` (únicos, ordenados alfabéticamente), **`Próximo paso`** (accionable), `Blockers` (si procede), `Estado` (OK/En progreso/Con bloqueos). **Máx. 6–8 líneas**. Si ya existe entrada reciente del mismo día, actualizar **solo** lo necesario. Leer por cola (últimas 80–120 líneas) para buscar esa cabecera.
-- **Reglas:** nunca volcar el vault entero. Si un archivo > 1500 líneas → extracción por secciones + cola (últimas 80–120 líneas). Excluir adjuntos, imágenes, PDFs, `*.excalidraw`, `Assets/`, `.obsidian/`. **Fuente canónica:** `MEMORY.md`. El vault es **apoyo** para continuidad entre sesiones largas.
 
 ## Agentes de testing (2026-09-08)
 - **test-coordinator** (primary selectable): despacha 5 testers en paralelo contra la API corriendo (`localhost:3000`), consolida hallazgos en diagnóstico y lo entrega al plan-coordinator.

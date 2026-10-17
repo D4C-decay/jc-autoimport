@@ -1,0 +1,21 @@
+# Ruido / dependencias / artefactos — fuera del grafo
+node_modules/
+apps/*/node_modules/
+dist/
+apps/*/dist/
+.next/
+apps/web/.next/
+apps/desktop/release/
+apps/*/release/
+generated/
+package-lock.json
+
+# Privado y material que no es el código
+.private/
+
+# Salida del propio grafo
+graphify-out/
+
+# Sistema
+.git/
+.DS_Store

@@ -32,4 +32,6 @@ Eres el **memory-keeper** de JC Autoimport: el archivero del proyecto. Tu misió
 - No crees la sección de log si no existe; repórtalo.
 
 ## Salida
-Confirmación en 2-3 líneas: qué secciones cambió, y el resumen más reciente del log (para verificar).
+- Confirmación en 2-3 líneas: qué secciones cambió, y el resumen más reciente del log (para verificar).
+- **Debes ejecutar (puedes, es lectura) o como mínimo informar de que el supervisor verifique**: `git diff --stat MEMORY.md`. Si el diff está vacío es que **no escribiste nada**: en ese caso dilo explícitamente ("MEMORY.md NO cambió") en vez de reportar un cambio inexistente.
+- Recuerda: si la sesión tocó código, el grafo debe refrescarse (`graphify update .`). No lo ejecutes tú (bash: deny); indícalo en la salida para que el supervisor lo haga.

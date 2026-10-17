@@ -4,12 +4,11 @@ import { homedir } from "node:os"
 import { join } from "node:path"
 
 // Al primer evento de cada sesión: asegura /tmp/opencode, registra el arranque y
-// anota si el resumen del vault está fresco (<6h). Apoyo a las "Reglas de
-// continuidad" de AGENTS.md. Desactivable: JCA_SESSION_BOOT=0
+// anota si el grafo de conocimiento (graphify-out/graph.json) está fresco (<24h).
+// Apoyo a las "Reglas de continuidad" de AGENTS.md. Desactivable: JCA_SESSION_BOOT=0
 
 const DIR = join(homedir(), ".local", "state", "jcautoimport")
 const LOG = join(DIR, "session-boot.log")
-const VAULT = "/tmp/opencode/vault-context-latest.md"
 
 const seen = new Set<string>()
 
@@ -18,15 +17,16 @@ function boot(directory: string) {
     mkdirSync("/tmp/opencode", { recursive: true })
     mkdirSync(DIR, { recursive: true })
 
-    let vault = "no existe"
-    if (existsSync(VAULT)) {
-      const ageH = (Date.now() - statSync(VAULT).mtimeMs) / 3_600_000
-      vault = ageH < 6 ? `fresco (${ageH.toFixed(1)}h)` : `viejo (${ageH.toFixed(1)}h)`
+    const graph = join(directory, "graphify-out", "graph.json")
+    let graphState = "no existe"
+    if (existsSync(graph)) {
+      const ageH = (Date.now() - statSync(graph).mtimeMs) / 3_600_000
+      graphState = ageH < 24 ? `fresco (${ageH.toFixed(1)}h)` : `viejo (${ageH.toFixed(1)}h)`
     }
 
     appendFileSync(
       LOG,
-      `${new Date().toISOString()} cwd=${directory} vault-context=${vault}\n`,
+      `${new Date().toISOString()} cwd=${directory} graph=${graphState}\n`,
     )
   } catch {
     /* ignore */

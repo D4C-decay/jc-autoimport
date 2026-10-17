@@ -48,3 +48,5 @@ tmp/
 
 # Intermedios del generador de vídeo demo (el export final sí se versiona)
 scripts/demo-video/out/
+# Archivo privado local (ex-bóveda Personal de Obsidian) — nunca versionar
+.private/

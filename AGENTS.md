@@ -1,8 +1,8 @@
 # Convenciones del proyecto
 
 ## Memoria y continuidad
-- Al **inicio de cada sesión** en este proyecto: leer `MEMORY.md` (se carga automáticamente por `opencode.json`) y dar continuidad al "Próximo paso" que contenga. Si existe, cargar también el resumen del vault `/tmp/opencode/vault-context-latest.md`.
-- Al **cierre de cada sesión**, o tras decisiones importantes: actualizar `MEMORY.md` (estado, próximo paso, blockers, log) usando el subagente `memory-keeper`, y **añadir además** la entrada del día en `Diario/YYYY-MM-DD.md` de la bóveda `vault-personal` (ver "Contexto externo: Vault Obsidian"). Verificar siempre el diff de `MEMORY.md` antes de commitear (el `memory-keeper` ya lo corrompió una vez).
+- Al **inicio de cada sesión** en este proyecto: leer `MEMORY.md` (se carga automáticamente por `opencode.json`) y dar continuidad al "Próximo paso" que contenga. Si existe `graphify-out/graph.json`, usar `graphify query` antes de buscar en código (ver "knowledge graph").
+- Al **cierre de cada sesión**, o tras decisiones importantes: actualizar `MEMORY.md` (estado, próximo paso, blockers, log) usando el subagente `memory-keeper`. Verificar siempre el diff de `MEMORY.md` antes de commitear (el `memory-keeper` ya lo corrompió una vez). Si se tocó código, `graphify update .`.
 - Ante un objetivo nuevo de cierta envergadura, considerar el flujo del consejo de planeación: `plan-coordinator` (agente primary seleccionable) despacha a los expertos (`arquitecto-tecnico`, `experto-negocio`, `experto-usuario`, `experto-seguridad`, `experto-operaciones`), luego refuta con `abogado-del-diablo` y entrega el plan; se ejecuta tras aprobación.
 
 ## Flujo de tests (testing activo)
@@ -18,18 +18,15 @@
 - **Verificación obligada:** tras cada fix → `npm run build` + `npm run lint`; re-test solo de los testers que reportaron ese hallazgo.
 - **Regla de oro:** empezar con scope mínimo e iterar con reporte vivo; si hay ambigüedad → **parar y preguntar**. El detalle completo vive en `MEMORY.md`.
 
-## Contexto externo: Vault Obsidian (vault-personal)
-- **Repositorio:** `~/Documentos/Obsidian/Personal` (privado, `vault-personal`). El detalle completo (ventana, fuentes, formato de entrada) vive en `MEMORY.md`.
-- **Inicio (solo lectura):** `git pull --ff-only` **condicionado** a que `git status --short` esté vacío; leer la ventana de los **últimos 2 días naturales** en orden cronológico ascendente. Reutilizar `/tmp/opencode/vault-context-latest.md` si es de hoy y < 6 h.
-- **Durante la sesión:** **nunca** escribir en la bóveda.
-- **Al cierre:** escribir **solo** en `Diario/YYYY-MM-DD.md` (append; máx. 6–8 líneas). **Nunca** `git add/commit/push` desde opencode: Obsidian-git sincroniza.
-- **Fuente canónica:** `MEMORY.md`. El vault es apoyo para continuidad entre sesiones largas.
+## Documentación y knowledge graph
+- La documentación vive en **`docs/`** de este repo (migrada desde la antigua bóveda Obsidian `jcautoimport-obsidian`). No hay bóvedas externas: todo se versiona aquí.
+- **Grafo** en `graphify-out/` (commiteado): si existe `graphify-out/graph.json`, **antes** de un `grep`/búsqueda de código correr `graphify query "<pregunta>"` (y `graphify path` / `graphify explain`). Subagentes que exploren código: meter esta regla en su prompt. Tras modificar código: `graphify update .` (incremental, sin coste de API). `GRAPH_REPORT.md` solo para revisión amplia.
+- CLI: `uv tool install graphifyy` si falta.
 
 ## Repositorio
 - Hosted en **GitHub (privado)**: `https://github.com/D4C-decay/jc-autoimport`
 - Rama principal: `main`
 - Autenticación: `gh` (GitHub CLI) autenticada como `D4C-decay` en esta máquina.
-- Bóvedas Obsidian (repos privados aparte): `jcautoimport-obsidian` y `vault-personal` (ver "Contexto externo").
 
 ## Política de git (push directo aprobado)
 - El usuario **aprueba commits y `git push` directos** a `origin/main` como respaldo de seguridad, pero **`git commit` y `git push` SIEMPRE preguntan** (nunca automáticos).
@@ -37,7 +34,7 @@
 
 ## Autonomía y permisos (opencode.json)
 - Modo **autónomo con guardarraíles**: `edit` y `bash` en `allow` por defecto; `git commit/push`, `git reset --hard`, `git clean` en **ask**; `sudo`, `rm -rf /` y `rm -rf ~` en **deny**.
-- `external_directory` permite `/tmp/opencode`, `~/.local/state/jcautoimport`, `~/.cache/ms-playwright` y `~/Documentos/Obsidian/**`; el resto **pregunta**.
+- `external_directory` permite `/tmp/opencode`, `~/.local/state/jcautoimport` y `~/.cache/ms-playwright`; el resto **pregunta**.
 - **La config NO es hot-reload**: tras tocar `opencode.json`, agentes, skills, comandos o plugins → **reiniciar opencode**.
 - Escape hatch si algo rompe el arranque: `OPENCODE_DISABLE_PROJECT_CONFIG=1` (ignora el config del proyecto) o `OPENCODE_PURE=1` (sin plugins externos).
 
@@ -58,7 +55,7 @@
 - Verificación: `npm --prefix apps/web run lint` (typecheck) + `npm --prefix apps/web run build` + **reiniciar el server standalone** (si no, sirve sin CSS). No aprobar sin ambos en verde.
 
 ## Plugins y comandos de opencode
-- Plugins en `.opencode/plugin/`: `auto-verify` (al final del turno, condicional + timeout), `web-restart-guard`, `session-boot`, `notify`, `secret-guard`, `trap-guard`, `session-log`. Logs en `~/.local/state/jcautoimport/`. Desactivables por env (`JCA_AUTO_VERIFY=0`, `JCA_NOTIFY=0`, …).
+- Plugins en `.opencode/plugin/`: `auto-verify` (al final del turno, condicional + timeout), `web-restart-guard`, `session-boot`, `notify`, `secret-guard`, `trap-guard`, `session-log`, `graphify` (recuerda usar el grafo). Logs en `~/.local/state/jcautoimport/`. Desactivables por env (`JCA_AUTO_VERIFY=0`, `JCA_NOTIFY=0`, …).
 - Comandos: `/estado`, `/ui-review`, `/web-build`, `/deploy`.
 
 ## Reglas de seguridad (nunca commitear)

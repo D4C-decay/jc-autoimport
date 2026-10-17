@@ -1,6 +1,6 @@
 import type { Plugin } from "@opencode-ai/plugin"
 import { execFile } from "node:child_process"
-import { appendFileSync, mkdirSync } from "node:fs"
+import { appendFileSync, mkdirSync, writeFileSync } from "node:fs"
 import { homedir } from "node:os"
 import { join } from "node:path"
 
@@ -8,6 +8,7 @@ import { join } from "node:path"
 //   - cambios en backend (src/**)  -> `npm run build` + `npm run lint`
 //   - cambios en apps/web/**       -> `npm --prefix apps/web run lint` (typecheck)
 // Timeout duro por comando. Resultados en ~/.local/state/jcautoimport/verify.log
+// y resumen legible en <proyecto>/.opencode/last-verify.md (lo leen los builders)
 // Desactivable: JCA_AUTO_VERIFY=0
 
 const DIR = join(homedir(), ".local", "state", "jcautoimport")
@@ -87,7 +88,26 @@ export default (async ({ directory }) => {
         }
 
         running = false
-        log(chunks.join("\n"))
+        const body = chunks.join("\n")
+        log(body)
+        try {
+          const failed = /FAIL\s/.test(body)
+          const md = [
+            `# Última auto-verificación`,
+            ``,
+            `- ${new Date().toISOString()}`,
+            `- resultado: **${failed ? "ROJO (revisar antes de aprobar)" : "verde"}**`,
+            `- ficheros tocados: ${paths.join(", ")}`,
+            ``,
+            "```",
+            body,
+            "```",
+            "",
+          ].join("\n")
+          writeFileSync(join(directory, ".opencode", "last-verify.md"), md)
+        } catch {
+          /* ignore */
+        }
       } catch {
         running = false
       }
