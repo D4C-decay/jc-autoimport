@@ -1,5 +1,12 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Button, Eyebrow } from '@/components/ui';
+
+/** Sin esto el 404 hereda `index, follow` del layout raíz y sale con dos <meta robots> en conflicto. */
+export const metadata: Metadata = {
+  title: 'Página no encontrada',
+  robots: { index: false, follow: false },
+};
 
 export default function NotFound() {
   return (

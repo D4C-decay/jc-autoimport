@@ -18,7 +18,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       },
     };
   } catch {
-    return { title: 'Vehículo no encontrado' };
+    // Ojo: si generateMetadata resuelve con normalidad, Next ya compromete el 200
+    // y el notFound() posterior devuelve 200 con la UI de 404 (soft-404, malo para SEO).
+    notFound();
   }
 }
 
