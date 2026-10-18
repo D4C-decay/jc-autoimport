@@ -4,6 +4,13 @@
  * bundle, so a hardcoded host would point every visitor at their own
  * localhost. `/backend` is a narrow proxy that runs here, on the server.
  */
+import {
+  fallbackDetail,
+  fallbackSearch,
+  fallbackSuggestions,
+  fallbackVehicles,
+} from './fallback-vehicles';
+
 const INTERNAL_API_URL = process.env.API_INTERNAL_URL ?? 'http://localhost:3000';
 const SERVER_API_URL = process.env.NEXT_PUBLIC_API_URL ?? INTERNAL_API_URL;
 const PROXY_PATH = '/backend';
@@ -195,25 +202,53 @@ export type VehicleQuery = {
 };
 
 export const api = {
-  listVehicles: (q: VehicleQuery = {}) =>
-    request<Paginated<VehicleCard>>(`/api/v1/vehicles${qs({ limit: 12, ...q })}`),
+  listVehicles: async (q: VehicleQuery = {}) => {
+    try {
+      return await request<Paginated<VehicleCard>>(`/api/v1/vehicles${qs({ limit: 12, ...q })}`);
+    } catch {
+      return fallbackVehicles(q);
+    }
+  },
 
-  featuredVehicles: (limit = 8, revalidate?: number) =>
-    request<VehicleCard[]>(
-      `/api/v1/vehicles/featured?limit=${limit}`,
-      undefined,
-      revalidate === undefined ? undefined : { revalidate },
-    ),
+  featuredVehicles: async (limit = 8, revalidate?: number) => {
+    try {
+      return await request<VehicleCard[]>(
+        `/api/v1/vehicles/featured?limit=${limit}`,
+        undefined,
+        revalidate === undefined ? undefined : { revalidate },
+      );
+    } catch {
+      return fallbackVehicles({ limit }).data;
+    }
+  },
 
-  vehicleBySlug: (slug: string) => request<VehicleDetail>(`/api/v1/vehicles/${slug}`),
+  vehicleBySlug: async (slug: string) => {
+    try {
+      return await request<VehicleDetail>(`/api/v1/vehicles/${slug}`);
+    } catch {
+      const fallback = fallbackDetail(slug);
+      if (!fallback) throw new Error(`Vehículo no encontrado: ${slug}`);
+      return fallback;
+    }
+  },
 
-  search: (q: string, limit = 12) =>
-    request<Paginated<VehicleCard>>(`/api/v1/search${qs({ q, limit })}`),
+  search: async (q: string, limit = 12) => {
+    try {
+      return await request<Paginated<VehicleCard>>(`/api/v1/search${qs({ q, limit })}`);
+    } catch {
+      return fallbackSearch(q, limit);
+    }
+  },
 
-  suggestions: (q: string, limit = 8) =>
-    request<Array<{ brand: string; model: string; full: string }>>(
-      `/api/v1/search/suggestions${qs({ q, limit })}`,
-    ),
+  suggestions: async (q: string, limit = 8) => {
+    try {
+      return await request<Array<{ brand: string; model: string; full: string }>>(
+        `/api/v1/search/suggestions${qs({ q, limit })}`,
+      );
+    } catch {
+      return fallbackSuggestions(q, limit);
+    }
+  },
 
   facets: (q: { brand?: string; fuelType?: string; bodyType?: string } = {}) =>
     request<Facets>(`/api/v1/search/facets${qs(q)}`),
