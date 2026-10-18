@@ -10,7 +10,7 @@ import { existsSync, mkdirSync } from 'node:fs'
 import { dirname } from 'node:path'
 
 const INPUT = process.env.INPUT || 'scripts/demo-video/out/raw.mp4'
-const OUTPUT = process.env.OUTPUT || 'apps/web/public/media/demo/demo.mp4'
+const OUTPUT = process.env.OUTPUT || 'public/media/demo/demo.mp4'
 const W = Number(process.env.VIDEO_W || 1920)
 const H = Number(process.env.VIDEO_H || 1080)
 const FPS = Number(process.env.VIDEO_FPS || 25)

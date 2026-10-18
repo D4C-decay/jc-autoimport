@@ -5,9 +5,9 @@ import { join } from "node:path"
 
 // Al primer evento de cada sesión: asegura /tmp/opencode, registra el arranque y
 // anota si el grafo de conocimiento (graphify-out/graph.json) está fresco (<24h).
-// Apoyo a las "Reglas de continuidad" de AGENTS.md. Desactivable: JCA_SESSION_BOOT=0
+// Apoyo a las "Reglas de continuidad" de AGENTS.md. Desactivable: KIT_SESSION_BOOT=0
 
-const DIR = join(homedir(), ".local", "state", "jcautoimport")
+const DIR = join(homedir(), ".local", "state", "opencode-web-kit")
 const LOG = join(DIR, "session-boot.log")
 
 const seen = new Set<string>()
@@ -37,7 +37,7 @@ export default (async ({ directory }) => {
   return {
     event: async (input: unknown) => {
       try {
-        if (process.env.JCA_SESSION_BOOT === "0") return
+        if (process.env.KIT_SESSION_BOOT === "0") return
         const anyIn = input as { event?: { type?: string; properties?: { sessionID?: string } } }
         const ev = anyIn?.event ?? input
         const type = (ev as { type?: string })?.type

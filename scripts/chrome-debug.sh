@@ -6,12 +6,12 @@
 # defecto, así que SIEMPRE arrancamos con un --user-data-dir dedicado.
 #
 # Uso:  scripts/chrome-debug.sh          # arranca (o confirma) el navegador CDP
-#       CDP_PORT=9222 JCA_CHROME_PROFILE=... scripts/chrome-debug.sh
+#       CDP_PORT=9222 KIT_CHROME_PROFILE=... scripts/chrome-debug.sh
 set -euo pipefail
 
 PORT="${CDP_PORT:-9222}"
-PROFILE="${JCA_CHROME_PROFILE:-$HOME/.config/jca-chrome-debug}"
-LOG="${JCA_CHROME_LOG:-/tmp/opencode/chrome-debug.log}"
+PROFILE="${KIT_CHROME_PROFILE:-$HOME/.config/web-kit-chrome-debug}"
+LOG="${KIT_CHROME_LOG:-/tmp/opencode/chrome-debug.log}"
 mkdir -p "$PROFILE" "$(dirname "$LOG")"
 
 CANDIDATES=(

@@ -3,16 +3,16 @@
 # El servidor oficial ejecuta las consultas dentro de una transacción READ ONLY,
 # así que no puede escribir aunque las credenciales puedan.
 #
-# Usa JCA_RO_DATABASE_URL si existe (rol dedicado jcauto_ro, pendiente de crear);
+# Usa KIT_RO_DATABASE_URL si existe (rol dedicado kit_ro, pendiente de crear);
 # si no, cae a DATABASE_URL del .env.
 #
 # Pendiente (requiere superusuario): crear el rol de solo lectura con
-#   CREATE ROLE jcauto_ro LOGIN PASSWORD '...';
-#   GRANT CONNECT ON DATABASE jcautoimport TO jcauto_ro;
-#   GRANT USAGE ON SCHEMA public TO jcauto_ro;
-#   GRANT SELECT ON ALL TABLES IN SCHEMA public TO jcauto_ro;
-#   ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO jcauto_ro;
-# y añadir JCA_RO_DATABASE_URL=... al .env
+#   CREATE ROLE kit_ro LOGIN PASSWORD '...';
+#   GRANT CONNECT ON DATABASE <tu_base_de_datos> TO kit_ro;
+#   GRANT USAGE ON SCHEMA public TO kit_ro;
+#   GRANT SELECT ON ALL TABLES IN SCHEMA public TO kit_ro;
+#   ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO kit_ro;
+# y añadir KIT_RO_DATABASE_URL=... al .env
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -25,9 +25,9 @@ if [ -f .env ]; then
   set +a
 fi
 
-URL="${JCA_RO_DATABASE_URL:-${DATABASE_URL:-}}"
+URL="${KIT_RO_DATABASE_URL:-${DATABASE_URL:-}}"
 if [ -z "$URL" ]; then
-  echo "mcp-postgres: falta JCA_RO_DATABASE_URL y DATABASE_URL (.env)" >&2
+  echo "mcp-postgres: falta KIT_RO_DATABASE_URL y DATABASE_URL (.env)" >&2
   exit 1
 fi
 

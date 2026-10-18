@@ -1,17 +1,17 @@
 ---
-description: Compila apps/web y reinicia el server standalone (evita el bug de CSS roto)
+description: Compila . y reinicia el server standalone (evita el bug de CSS roto)
 agent: build
 model: opencode/glm-5.3-flash-free
 ---
 
 Compila la web pública y deja el servidor sirviendo el build nuevo.
 
-1. `npm --prefix apps/web run lint` (typecheck) — si falla, para y reporta.
-2. `npm --prefix apps/web run build`.
+1. `npm --prefix . run lint` (typecheck) — si falla, para y reporta.
+2. `npm --prefix . run build`.
 3. **Reinicia el server standalone** (obligatorio tras el build):
-   `systemctl --user restart jc-autoimport-web` (si no está gestionado, mata por puerto 4200 y relanza).
+   Reinicia el server (p. ej. `systemctl --user restart <unidad-web>`; si no está gestionado por systemd, mata por su puerto y relánzalo con `setsid nohup`).
 4. Verifica que los assets sirven 200: coge un hash de `/_next/static` del HTML de
-   http://localhost:4200 y comprueba con `curl -o /dev/null -w '%{http_code}'`.
+   la URL local del server y comprueba con `curl -o /dev/null -w '%{http_code}'`.
 
 $ARGUMENTS
 

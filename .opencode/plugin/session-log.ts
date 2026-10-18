@@ -5,9 +5,9 @@ import { join } from "node:path"
 
 // Registra cada evento del bus de opencode en un log persistente (no /tmp).
 // Sirve además para descubrir/afinar los nombres reales de los eventos.
-// Desactivable: JCA_SESSION_LOG=0
+// Desactivable: KIT_SESSION_LOG=0
 
-const DIR = join(homedir(), ".local", "state", "jcautoimport")
+const DIR = join(homedir(), ".local", "state", "opencode-web-kit")
 const LOG = join(DIR, "session.log")
 
 function shape(input: unknown): { type: string; raw: unknown } {
@@ -21,7 +21,7 @@ export default (async () => {
   return {
     event: async (input: unknown) => {
       try {
-        if (process.env.JCA_SESSION_LOG === "0") return
+        if (process.env.KIT_SESSION_LOG === "0") return
         const { type, raw } = shape(input)
         mkdirSync(DIR, { recursive: true })
         const line = `${new Date().toISOString()} ${type} ${JSON.stringify(raw)?.slice(0, 400) ?? ""}\n`

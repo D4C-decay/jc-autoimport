@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Graba un clip de la web JC Autoimport por CDP (Page.startScreencast), SIN dependencias npm:
+// Graba un clip del sitio web por CDP (Page.startScreencast), SIN dependencias npm:
 // usa el WebSocket nativo de Node (>=22) + ffmpeg para ensamblar los frames a MP4.
 //
 // Lanza su PROPIO Chromium en headless (no toca tu Brave ni tu escritorio), navega la web
@@ -12,7 +12,7 @@ import { mkdirSync, rmSync, writeFileSync, readdirSync, existsSync } from 'node:
 import { homedir } from 'node:os'
 import { join } from 'node:path'
 
-const SITE = process.env.SITE_URL || 'http://localhost:4200'
+const SITE = process.env.SITE_URL || 'http://localhost:3000'
 const PORT = Number(process.env.CDP_PORT || 9333)
 const W = Number(process.env.VIDEO_W || 1920)
 const H = Number(process.env.VIDEO_H || 1080)

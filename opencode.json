@@ -86,5 +86,8 @@
   },
   "experimental": {
     "mcp_timeout": 60000
-  }
+  },
+  "plugin": [
+    "@dietrichgebert/ponytail"
+  ]
 }

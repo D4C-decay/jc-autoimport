@@ -1,10 +1,10 @@
 ---
-description: Resumen del estado de JC Autoimport (memoria, git, servicios, ramas)
+description: Resumen del estado de proyecto web (memoria, git, servicios, ramas)
 agent: build
 model: opencode/big-pickle
 ---
 
-Genera un resumen breve del estado del proyecto JC Autoimport. En orden:
+Genera un resumen breve del estado del proyecto proyecto web. En orden:
 
 1. Lee `MEMORY.md` y resume "Estado actual" y "Próximo paso" en 3–5 líneas.
 2. `git status --short` y `git log --oneline -5`.
