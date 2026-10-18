@@ -34,6 +34,12 @@
     "description": "We import premium vehicles from the United States, Japan, South Korea and Europe. Inspection, verification and turnkey delivery. Updated catalog with real prices.",
     "ogDescription": "Catalog of imported vehicles with inspection and turnkey delivery."
   },
+  "Theme": {
+    "activateLight": "Enable light mode",
+    "activateDark": "Enable dark mode",
+    "titleLight": "Light mode",
+    "titleDark": "Dark mode"
+  },
   "NotFound": {
     "title": "Page not found",
     "message": "This unit is not in our inventory. It may have already been sold, or the address may be incorrect.",

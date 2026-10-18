@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { flushSync } from 'react-dom';
 import { useReducedMotion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';

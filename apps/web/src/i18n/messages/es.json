@@ -34,6 +34,12 @@
     "description": "Importamos vehículos premium desde Estados Unidos, Japón, Corea del Sur y Europa. Inspección, verificación y entrega llave en mano. Catálogo actualizado con precios reales.",
     "ogDescription": "Catálogo de vehículos importados con inspección y entrega llave en mano."
   },
+  "Theme": {
+    "activateLight": "Activar modo claro",
+    "activateDark": "Activar modo oscuro",
+    "titleLight": "Modo claro",
+    "titleDark": "Modo oscuro"
+  },
   "NotFound": {
     "title": "Página no encontrada",
     "message": "Esta unidad no está en nuestro inventario. Puede que ya haya sido vendida o que la dirección sea incorrecta.",

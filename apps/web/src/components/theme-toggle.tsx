@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Moon, Sun } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { THEME_STORAGE_KEY } from '@/lib/theme';
 
@@ -11,6 +12,7 @@ import { THEME_STORAGE_KEY } from '@/lib/theme';
  * para que no haya parpadeo.
  */
 export function ThemeToggle({ className }: { className?: string }) {
+  const t = useTranslations('Theme');
   const [light, setLight] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -36,8 +38,8 @@ export function ThemeToggle({ className }: { className?: string }) {
     <button
       type="button"
       onClick={toggle}
-      aria-label={light ? 'Activar modo oscuro' : 'Activar modo claro'}
-      title={light ? 'Modo oscuro' : 'Modo claro'}
+      aria-label={light ? t('activateDark') : t('activateLight')}
+      title={light ? t('titleDark') : t('titleLight')}
       className={cn(
         'flex size-10 items-center justify-center border border-line text-smoke transition-colors duration-300 hover:border-signal hover:text-signal active:scale-95',
         className,
