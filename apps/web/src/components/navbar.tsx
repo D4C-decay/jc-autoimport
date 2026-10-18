@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { Link, usePathname } from '@/i18n/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, Phone, UserRound, X } from 'lucide-react';
 import { CONTACT_PHONE_HREF } from '@/lib/site';
@@ -9,22 +10,22 @@ import { cn } from '@/lib/utils';
 import { ThemeToggle } from './theme-toggle';
 
 const links = [
-  { href: '/', label: 'Inicio' },
-  { href: '/catalogo', label: 'Catálogo' },
-  { href: '/proceso', label: 'Proceso' },
-  { href: '/contacto', label: 'Contacto' },
-];
+  { href: '/', key: 'inicio' },
+  { href: '/catalogo', key: 'catalogo' },
+  { href: '/proceso', key: 'proceso' },
+  { href: '/contacto', key: 'contacto' },
+] as const;
 
 export function Navbar() {
+  const t = useTranslations('Navigation');
+  const path = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [path, setPath] = useState('');
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
-    setPath(window.location.pathname);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
@@ -46,7 +47,7 @@ export function Navbar() {
         )}
       >
         <nav className="container-x flex h-18 items-center justify-between py-4">
-          <Link href="/" className="group flex items-center gap-3" data-cursor="Inicio">
+          <Link href="/" className="group flex items-center gap-3" data-cursor={t('inicio')}>
             <Wordmark className="h-6" />
             <span className="font-display text-sm leading-none tracking-[0.14em] text-smoke uppercase transition-colors duration-300 group-hover:text-signal">
               JC Autoimport
@@ -60,7 +61,7 @@ export function Navbar() {
                   href={l.href}
                   className="group relative text-[11px] font-medium tracking-[0.22em] uppercase transition-colors duration-300 hover:text-signal"
                 >
-                  <span className={cn(path === l.href && 'text-signal')}>{l.label}</span>
+                  <span className={cn(path === l.href && 'text-signal')}>{t(l.key)}</span>
                   <span
                     aria-hidden
                     className={cn(
@@ -76,8 +77,8 @@ export function Navbar() {
           <div className="flex items-center gap-3">
             <Link
               href="/cuenta"
-              aria-label="Área de cliente"
-              title="Área de cliente"
+              aria-label={t('areaCliente')}
+              title={t('areaCliente')}
               className="hidden size-10 items-center justify-center border border-line text-smoke transition-colors duration-300 hover:border-signal hover:text-signal sm:flex"
             >
               <UserRound className="size-4" strokeWidth={1.8} />
@@ -85,16 +86,16 @@ export function Navbar() {
             <ThemeToggle />
             <a
               href={CONTACT_PHONE_HREF}
-              data-cursor="Llamar"
+              data-cursor={t('llamar')}
               className="hidden items-center gap-2 border border-signal/35 px-4 py-2.5 text-[10px] font-semibold tracking-[0.2em] text-signal uppercase transition-colors duration-300 hover:bg-signal hover:text-ink md:inline-flex"
             >
               <Phone className="size-3" strokeWidth={1.8} />
-              Llamar
+              {t('llamar')}
             </a>
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
-              aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
+              aria-label={open ? t('cerrarMenu') : t('abrirMenu')}
               className="flex size-10 items-center justify-center border border-line text-smoke transition-colors hover:border-signal hover:text-signal lg:hidden"
             >
               {open ? <X className="size-4" /> : <Menu className="size-4" />}
@@ -128,7 +129,7 @@ export function Navbar() {
                     <span className="mr-3 align-super text-[10px] tracking-[0.2em] text-signal">
                       0{i + 1}
                     </span>
-                    {l.label}
+                    {t(l.key)}
                   </Link>
                 </motion.div>
               ))}
@@ -145,7 +146,7 @@ export function Navbar() {
                 className="mt-6 flex items-center gap-2 text-sm font-semibold tracking-[0.2em] text-signal uppercase"
               >
                 <UserRound className="size-4" />
-                Área de cliente
+                {t('areaCliente')}
               </Link>
             </div>
           </motion.div>
@@ -169,7 +170,7 @@ export function Wordmark({ className }: { className?: string }) {
         fill="currentColor"
       />
       <path d="M24 4h16v4.2H28.2v7.6H40v4.2H24V4Z" fill="currentColor" />
-      <path d="M35.6 15.8H40v4.2h-4.4V15.8Z" fill="#f02434" />
+      <path d="M35.6 15.8H40v4.2h-4.4V15.8Z" fill="var(--color-signal)" />
     </svg>
   );
 }

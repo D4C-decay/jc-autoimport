@@ -1,0 +1,43 @@
+{
+  "Navigation": {
+    "inicio": "Home",
+    "catalogo": "Catalog",
+    "proceso": "Process",
+    "contacto": "Contact",
+    "areaCliente": "Client area",
+    "llamar": "Call us",
+    "abrirMenu": "Open menu",
+    "cerrarMenu": "Close menu"
+  },
+  "Footer": {
+    "tagline": "Premium vehicle imports from the United States, Japan, South Korea and Europe. Inspection, verification and turnkey delivery.",
+    "whatsapp": "WhatsApp",
+    "accesoCliente": "Client login",
+    "navTitle": "Navigation",
+    "serviciosTitle": "Services",
+    "contactoTitle": "Contact",
+    "procesoImportacion": "Import process",
+    "electricos": "Electric vehicles",
+    "hibridos": "Hybrid and plug-in hybrids",
+    "suv": "SUVs and trucks",
+    "desde30": "From $30,000",
+    "derechos": "All rights reserved.",
+    "educativo": "Web development project for IPPJB, for educational purposes.",
+    "privacidad": "Privacy policy",
+    "terminos": "Terms and conditions",
+    "inicio": "Home",
+    "catalogo": "Catalog",
+    "contacto": "Contact"
+  },
+  "Metadata": {
+    "title": "Premium vehicle imports",
+    "description": "We import premium vehicles from the United States, Japan, South Korea and Europe. Inspection, verification and turnkey delivery. Updated catalog with real prices.",
+    "ogDescription": "Catalog of imported vehicles with inspection and turnkey delivery."
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "message": "This unit is not in our inventory. It may have already been sold, or the address may be incorrect.",
+    "irCatalogo": "Go to the catalog",
+    "buscarEncargo": "Request a search →"
+  }
+}

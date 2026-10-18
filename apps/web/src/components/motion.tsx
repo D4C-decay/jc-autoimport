@@ -57,7 +57,7 @@ export function CustomCursor() {
             className="rounded-full"
             style={{
               background:
-                'radial-gradient(circle, rgba(240,36,52,0.30) 0%, rgba(240,36,52,0.11) 42%, rgba(240,36,52,0) 72%)',
+                'radial-gradient(circle, rgba(232,0,13,0.30) 0%, rgba(232,0,13,0.11) 42%, rgba(232,0,13,0) 72%)',
               filter: 'blur(32px)',
             }}
           />
@@ -68,7 +68,7 @@ export function CustomCursor() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ type: 'spring', stiffness: 240, damping: 24 }}
                 className="block font-display text-[11px] tracking-[0.22em] text-smoke uppercase"
-                style={{ textShadow: '0 0 16px rgba(240,36,52,0.55)' }}
+                style={{ textShadow: '0 0 16px rgba(232,0,13,0.55)' }}
               >
                 {label}
               </motion.span>

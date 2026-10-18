@@ -59,7 +59,7 @@ export function VehicleCardItem({
                 : 'bg-gradient-to-t from-ink via-ink/10 to-transparent',
             )}
           />
-          <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: 'radial-gradient(120% 90% at 50% 100%, rgba(240,36,52,0.22), transparent 60%)' }} />
+          <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: 'radial-gradient(120% 90% at 50% 100%, rgba(232,0,13,0.22), transparent 60%)' }} />
 
           <div className="absolute top-3 left-3 flex flex-wrap gap-2">
             {vehicle.status !== 'AVAILABLE' ? (
