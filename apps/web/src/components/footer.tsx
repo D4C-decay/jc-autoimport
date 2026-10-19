@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server';
+import { FooterLogoLoop } from './footer-logo-loop';
 import { Link } from '@/i18n/navigation';
 import { CONTACT_ADDRESS, CONTACT_EMAIL, CONTACT_PHONE, CONTACT_WHATSAPP } from '@/lib/site';
 import { Wordmark } from './navbar';
@@ -92,6 +93,8 @@ export async function Footer() {
           </ul>
         </div>
       </div>
+
+      <FooterLogoLoop />
 
       <div className="border-t border-line">
         <div className="container-x flex flex-col gap-3 py-6 text-[10px] tracking-[0.18em] text-ash/60 uppercase sm:flex-row sm:items-center sm:justify-between">

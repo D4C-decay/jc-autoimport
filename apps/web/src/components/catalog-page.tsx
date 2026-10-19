@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, LayoutGrid, Rows3, SlidersHorizontal, X } from 'lucide-react';
 import {
@@ -82,6 +82,7 @@ type InitialCatalog = {
 export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
   const router = useRouter();
   const params = useSearchParams();
+  const { locale } = useParams<{ locale: string }>();
   const textQuery = params.get('q') ?? '';
 
   const [filters, setFilters] = useState<Filters>(() => fromParams(params));
@@ -202,7 +203,18 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
             mostrados son de venta final en destino.
           </p>
           <div className="mt-10">
-            <AccordionGallery />
+            <AccordionGallery
+              height={420}
+              accentColor="#e8000d"
+              overlayColor="#050507"
+              grayscale={false}
+              items={vehicles.slice(0, 5).map((v) => ({
+                image: v.primaryImageUrl ?? v.thumbnailUrl ?? v.media?.[0]?.url ?? '/media/vehicles/porsche-911.webp',
+                label: `${v.brand} ${v.model}`,
+                alt: `${v.brand} ${v.model} ${v.year}`,
+                link: `/${locale}/vehiculos/${v.slug}`,
+              }))}
+            />
           </div>
           <div className="mt-8 max-w-md">
             <SearchBar placeholder="Filtrar por marca o modelo…" />

@@ -50,3 +50,5 @@ tmp/
 scripts/demo-video/out/
 # Archivo privado local (ex-bóveda Personal de Obsidian) — nunca versionar
 .private/
+.vercel
+.env*

@@ -14,12 +14,10 @@ import SplitFlapText from '@/components/react-bits/SplitFlapText';
 import DepthCarousel from '@/components/react-bits/DepthCarousel';
 import Stepper, { Step } from '@/components/react-bits/Stepper';
 import GlassIcons from '@/components/react-bits/GlassIcons';
-import CometDial from '@/components/react-bits/CometDial';
 import ScrollStack from '@/components/react-bits/ScrollStack';
 import ScrollVelocity from '@/components/react-bits/ScrollVelocity';
+import MagicBento from '@/components/react-bits/MagicBento';
 import SpecularButton from '@/components/react-bits/SpecularButton';
-import ChromaGrid from '@/components/react-bits/ChromaGrid';
-import LogoLoop from '@/components/react-bits/LogoLoop';
 
 const BRANDS = [
   'Porsche', 'Mercedes-Benz', 'BMW', 'Audi', 'Tesla', 'Toyota',
@@ -271,16 +269,21 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
       </section>
 
       {/* ============================== STATS ============================== */}
-      <section className="border-b border-line">
-        <div className="container-x grid grid-cols-2 divide-line lg:grid-cols-4 lg:divide-x">
-          {STATS.map((s, i) => (
-            <Reveal
-              key={s.label}
-              delay={i * 0.08}
-              className="border-line py-10 odd:border-r lg:border-r lg:last:border-r-0 lg:py-14"
-            >
-              <div className="px-4 text-center lg:px-8 lg:text-left">
-                <div className="flex items-baseline justify-center gap-1 font-display text-3xl text-smoke sm:text-4xl lg:justify-start lg:text-5xl">
+      <section className="border-b border-line py-12 lg:py-16">
+        <div className="container-x">
+          <MagicBento
+            columns={4}
+            gap={10}
+            radius={16}
+            glowColor="#e8000d"
+            theme="dark"
+            enableSpotlight
+            enableBorderGlow
+            enableTilt
+            enableMagnetism
+            items={STATS.map((s) => ({
+              content: (
+                <div className="flex items-baseline gap-1 font-display text-4xl text-smoke lg:text-5xl">
                   <SplitFlapText
                     text={String(s.value)}
                     charset="numeric"
@@ -289,14 +292,16 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
                     fontSize="inherit"
                     tileColor="var(--color-ink-2)"
                     textColor="var(--color-smoke)"
-                    align="center"
+                    align="left"
                   />
                   <span className="text-signal">{s.suffix}</span>
                 </div>
-                <p className="mt-2 text-[10px] tracking-[0.22em] text-ash uppercase">{s.label}</p>
-              </div>
-            </Reveal>
-          ))}
+              ),
+              label: s.label,
+              description: s.label,
+              visual: 'analytics',
+            }))}
+          />
         </div>
       </section>
 
@@ -367,11 +372,21 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
             </div>
             </div>
 
-            <Stepper orientation="vertical" frame={false} className="mt-4">
-              {PROCESS.map((p, i) => (
-                <Step key={p.n} title={`${i+1}. ${p.title}`} description={p.text} />
-              ))}
-            </Stepper>
+            <div className="mt-2">
+              <ScrollStack>
+                {PROCESS.map((p, i) => (
+                  <div key={p.n} className="border border-line bg-ink p-6 lg:p-8">
+                    <div className="flex items-start gap-4">
+                      <span className="font-display text-2xl text-signal">{p.n}</span>
+                      <div>
+                        <h3 className="font-display text-xl text-smoke lg:text-2xl">{p.title}</h3>
+                        <p className="mt-2 text-sm leading-relaxed text-ash max-w-md">{p.text}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </ScrollStack>
+            </div>
           </div>
         </div>
       </section>
@@ -473,9 +488,10 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
         <div className="container-x mt-10">
           <ScrollStack>
             {featured.slice(0, 4).map((v) => (
-              <div key={v.id} className="border border-line bg-ink p-6">
-                <div className="font-display text-sm text-smoke">{v.brand} {v.model}</div>
+              <div key={v.id} className="h-72 border border-line bg-ink/95 p-6">
+                <div className="font-display text-base text-smoke">{v.brand} {v.model}</div>
                 <div className="mt-1 text-xs text-ash">{v.year}</div>
+                <div className="mt-3 text-xs text-ash line-clamp-3">{v.color} · {v.fuelType} · {v.transmission}</div>
               </div>
             ))}
           </ScrollStack>

@@ -6,7 +6,7 @@ import { ArrowRight, Check } from 'lucide-react';
 import { Button, Eyebrow } from './ui';
 import { Counter, Reveal, SectionLabel } from './motion';
 import { CONTACT_WHATSAPP } from '@/lib/site';
-import ChromaGrid from '@/components/react-bits/ChromaGrid';
+import InfiniteMenu from '@/components/react-bits/InfiniteMenu';
 import { useMemo } from 'react';
 
 const STEPS = [
@@ -53,7 +53,7 @@ const STEPS = [
     n: '04',
     title: 'Aduanas, taller y matrícula',
     lead: 'Trámites sin procesos paralelos.',
-    body: 'Despacho aduanal, cálculo y pago de aranceles, importación ante el organismo oficial, revisión técnica, corrección de cualquier detalle de transferredencia y tramitempty de placas.',
+    body: 'Despacho aduanal, cálculo y pago de aranceles, importación ante el organismo oficial, revisión técnica, corrección de cualquier detalle de transferencia y tramitación de placas.',
     points: [
       'Despacho aduanal gestionado',
       'Revisión técnica aprobada',
@@ -162,9 +162,6 @@ export function ProcessPage() {
               >
                 <Reveal className={flip ? 'lg:order-2' : undefined}>
                   <div className="relative aspect-4/3 overflow-hidden bg-ink-3">
-                    <ChromaGrid items={[
-                      { image: s.image ?? '/media/backgrounds/bg-photo-1503376780353-7e6692767b70.webp', title: s.title },
-                    ]} />
                     <span className="absolute top-5 left-5 font-display text-5xl text-signal/25 z-10">
                       {s.n}
                     </span>
