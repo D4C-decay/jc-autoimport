@@ -103,7 +103,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages}>
           <CustomCursor />
           <Navbar />
-          <main>{children}</main>
+          <main className="min-h-[100svh]">{children}</main>
           <Footer />
         </NextIntlClientProvider>
       </body>

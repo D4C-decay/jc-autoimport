@@ -2,12 +2,11 @@
 
 import { Link } from '@/i18n/navigation';
 import { motion } from 'framer-motion';
-import { ArrowRight, Check } from 'lucide-react';
+import { ArrowRight, Check, ShieldCheck, Ship, FileCheck2, Sparkles, Headset } from 'lucide-react';
 import { Button, Eyebrow } from './ui';
 import { Counter, Reveal, SectionLabel } from './motion';
+import MagicBento from '@/components/react-bits/MagicBento';
 import { CONTACT_WHATSAPP } from '@/lib/site';
-import InfiniteMenu from '@/components/react-bits/InfiniteMenu';
-import { useMemo, useState } from 'react';
 
 const STEPS = [
   {
@@ -77,6 +76,34 @@ const STEPS = [
   },
 ];
 
+const ADVANTAGES = [
+  {
+    icon: <ShieldCheck className="size-4" />,
+    title: 'Inspección 120 puntos',
+    description: 'Verificación física en origen antes de cualquier pago.',
+  },
+  {
+    icon: <Ship className="size-4" />,
+    title: 'Logística puerta a puerta',
+    description: 'Embarque asegurado y tracking en tiempo real.',
+  },
+  {
+    icon: <FileCheck2 className="size-4" />,
+    title: 'Aduanas y matrícula',
+    description: 'Nacionalización, placas y documentación gestionadas.',
+  },
+  {
+    icon: <Sparkles className="size-4" />,
+    title: 'Garantía mecánica',
+    description: '90 días o 5.000 km en motor y transmisión.',
+  },
+  {
+    icon: <Headset className="size-4" />,
+    title: 'Un solo interlocutor',
+    description: 'Un equipo coordina todo y te reporta en cada etapa.',
+  },
+];
+
 const ORIGINS = [
   { country: 'Estados Unidos', code: 'US', note: 'EE.UU. · subastas y concesionarios' },
   { country: 'Japón', code: 'JP', note: 'Japón · subastas y dealers' },
@@ -105,16 +132,6 @@ const FAQ = [
 ];
 
 export function ProcessPage() {
-  const [stage, setStage] = useState(0);
-  const menuItems = useMemo(
-    () =>
-      STEPS.map((s) => ({
-        image: s.image,
-        title: `${s.n} · ${s.title}`,
-        description: s.lead,
-      })),
-    []
-  );
   return (
     <>
       {/* ============================== HERO ============================== */}
@@ -172,6 +189,12 @@ export function ProcessPage() {
               >
                 <Reveal className={flip ? 'lg:order-2' : undefined}>
                   <div className="relative aspect-4/3 overflow-hidden bg-ink-3">
+                    <div
+                      className="absolute inset-0 bg-cover bg-center"
+                      style={{ backgroundImage: `url(${s.image})` }}
+                      aria-hidden="true"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent" />
                     <span className="absolute top-5 left-5 font-display text-5xl text-signal/25 z-10">
                       {s.n}
                     </span>
@@ -204,6 +227,35 @@ export function ProcessPage() {
               </div>
             );
           })}
+        </div>
+      </section>
+
+      {/* ============================== ADVANTAGES / MAGIC BENTO ============================== */}
+      <section className="border-t border-line py-20 lg:py-28">
+        <div className="container-x">
+          <SectionLabel index="Ventajas">Por qué este proceso</SectionLabel>
+          <h2 className="mt-5 max-w-[16ch] font-display text-[clamp(1.8rem,4vw,3.2rem)] leading-[0.95] text-smoke">
+            Cada etapa, <span className="text-signal">bajo control.</span>
+          </h2>
+          <div className="mt-12">
+            <MagicBento
+              columns={3}
+              gap={10}
+              radius={16}
+              rowHeight={180}
+              glowColor="#e8000d"
+              theme="dark"
+              enableSpotlight
+              enableBorderGlow
+              enableTilt
+              enableMagnetism
+              items={ADVANTAGES.map((a) => ({
+                icon: a.icon,
+                title: a.title,
+                description: a.description,
+              }))}
+            />
+          </div>
         </div>
       </section>
 

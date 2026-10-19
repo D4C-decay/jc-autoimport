@@ -544,7 +544,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
       {/* ============================== STACK+VELOCITY ============================== */}
       <section className="py-16 lg:py-24">
                 <div className="container-x ">
-          <ScrollStack>
+          <ScrollStack useWindowScroll smoothScroll={false} snap={false}>
             {featured.slice(0, 4).map((v) => (
               <div key={v.id} className="h-72 border border-line bg-ink/95 p-6">
                 <div className="font-display text-base text-smoke">{v.brand} {v.model}</div>
