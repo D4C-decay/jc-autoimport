@@ -1,8 +1,8 @@
 'use client';
 
 import { Link } from '@/i18n/navigation';
-import { useEffect, useState } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { motion, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
 import { ArrowDown, ArrowRight, ShieldCheck, Ship, Sparkles } from 'lucide-react';
 import { api, type VehicleCard } from '@/lib/api';
 import { Button, Eyebrow } from '@/components/ui';
@@ -17,6 +17,7 @@ import GlassIcons from '@/components/react-bits/GlassIcons';
 import ScrollStack from '@/components/react-bits/ScrollStack';
 import ScrollVelocity from '@/components/react-bits/ScrollVelocity';
 import MagicBento from '@/components/react-bits/MagicBento';
+import { ProcessExploded } from './process-exploded';
 import SpecularButton from '@/components/react-bits/SpecularButton';
 
 const BRANDS = [
@@ -128,6 +129,13 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
   const heroY = useTransform(scrollY, [0, 900], [0, 220]);
   const heroOpacity = useTransform(scrollY, [0, 620], [1, 0]);
   const heroScale = useTransform(scrollY, [0, 900], [1, 1.14]);
+  const listRef = useRef<HTMLOListElement>(null);
+  const [active, setActive] = useState(0);
+  const { scrollYProgress } = useScroll({ target: listRef, offset: ['start 70%', 'end 70%'] });
+  useMotionValueEvent(scrollYProgress, 'change', (v) => {
+    const idx = Math.min(PROCESS.length - 1, Math.max(0, Math.floor(v * PROCESS.length)));
+    setActive(idx);
+  });
 
   useEffect(() => {
     if (initialFeatured.length > 0) return;
@@ -365,27 +373,32 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
                 verificación, compra bancarizada, embarque, aduanas, taller, matrícula y entrega. Un
                 solo equipo coordina toda la operación.
               </p>
-            <div className="mt-8">
-              <SpecularButton href="/proceso" variant="outline" size="md">
-                El proceso completo
-              </SpecularButton>
-            </div>
+              <div className="mt-8">
+                <SpecularButton href="/proceso" variant="outline" size="md">
+                  El proceso completo
+                </SpecularButton>
+              </div>
             </div>
 
-            <div className="mt-2">
-              <ScrollStack>
+            <div className="mt-2 lg:mt-0">
+              <ProcessExploded progress={scrollYProgress as any} active={active} />
+              <ol ref={listRef} className="relative mt-8 space-y-6 border-l border-line pl-6">
                 {PROCESS.map((p, i) => (
-                  <div key={p.n} className="border border-line bg-ink p-6 lg:p-8">
-                    <div className="flex items-start gap-4">
-                      <span className="font-display text-2xl text-signal">{p.n}</span>
+                  <li
+                    key={p.n}
+                    data-active={i <= active}
+                    className="transition-colors data-[active=true]:border-signal"
+                  >
+                    <div className="flex items-start gap-3">
+                      <span className="font-display text-lg text-signal/70">{p.n}</span>
                       <div>
-                        <h3 className="font-display text-xl text-smoke lg:text-2xl">{p.title}</h3>
-                        <p className="mt-2 text-sm leading-relaxed text-ash max-w-md">{p.text}</p>
+                        <h3 className="font-display text-lg text-smoke">{p.title}</h3>
+                        <p className="mt-1 text-sm leading-relaxed text-ash max-w-md">{p.text}</p>
                       </div>
                     </div>
-                  </div>
+                  </li>
                 ))}
-              </ScrollStack>
+              </ol>
             </div>
           </div>
         </div>
