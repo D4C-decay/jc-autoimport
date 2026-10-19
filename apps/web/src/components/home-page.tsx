@@ -15,10 +15,10 @@ import DepthCarousel from '@/components/react-bits/DepthCarousel';
 import Stepper, { Step } from '@/components/react-bits/Stepper';
 import GlassIcons from '@/components/react-bits/GlassIcons';
 import ScrollStack from '@/components/react-bits/ScrollStack';
-import ScrollVelocity from '@/components/react-bits/ScrollVelocity';
 import MagicBento from '@/components/react-bits/MagicBento';
 import { ProcessExploded } from './process-exploded';
 import SpecularButton from '@/components/react-bits/SpecularButton';
+import CometDial from '@/components/react-bits/CometDial';
 
 const BRANDS = [
   'Porsche', 'Mercedes-Benz', 'BMW', 'Audi', 'Tesla', 'Toyota',
@@ -131,6 +131,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
   const heroScale = useTransform(scrollY, [0, 900], [1, 1.14]);
   const listRef = useRef<HTMLOListElement>(null);
   const [active, setActive] = useState(0);
+  const [tIdx, setTIdx] = useState(0);
   const { scrollYProgress } = useScroll({ target: listRef, offset: ['start 70%', 'end 70%'] });
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
     const idx = Math.min(PROCESS.length - 1, Math.max(0, Math.floor(v * PROCESS.length)));
@@ -222,7 +223,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center"
+            className=" flex flex-col gap-4 sm:flex-row sm:items-center"
           >
             <Magnetic>
               <SpecularButton href="/catalogo">
@@ -489,16 +490,51 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
       <section className="border-y border-line bg-ink-2 py-20 lg:py-28">
         <div className="container-x">
           <SectionLabel index="04">Lo que dicen nuestros clientes</SectionLabel>
-          <div className="mt-8">
-
+          <div className="mt-12 grid items-center gap-12 lg:grid-cols-[auto_1fr]">
+            <div className="relative">
+              <CometDial
+                value={tIdx}
+                onChange={setTIdx}
+                min={0}
+                max={TESTIMONIALS.length - 1}
+                step={1}
+                unit=""
+                label="Testimonio"
+                accent="#e8000d"
+                size={220}
+                sweep={270}
+                thickness={6}
+                speed={40}
+              />
+              <div className="pointer-events-none absolute inset-0 grid place-items-center">
+                <span className="font-display text-4xl text-smoke">0{tIdx + 1}</span>
+              </div>
+            </div>
+            <div>
+              <div className="flex gap-2">
+                {TESTIMONIALS.map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    aria-label={`Ver testimonio ${i + 1}`}
+                    onClick={() => setTIdx(i)}
+                    className={`size-2 rounded-full border border-signal/60 ${i === tIdx ? 'bg-signal' : 'bg-transparent'}`}
+                  />
+                ))}
+              </div>
+              <blockquote className="mt-6 max-w-2xl font-display text-2xl text-smoke lg:text-3xl">
+                “{TESTIMONIALS[tIdx].quote}”
+              </blockquote>
+              <p className="mt-4 text-sm text-signal">{TESTIMONIALS[tIdx].name}</p>
+              <p className="mt-1 text-xs text-ash uppercase tracking-[0.2em]">{TESTIMONIALS[tIdx].role}</p>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ============================== STACK+VELOCITY ============================== */}
-      <section className="border-t border-line bg-ink-2 py-16 lg:py-24">
-        <ScrollVelocity velocity={0.25} texts={['JC AUTOIMPORT', 'VEHICULOS PREMIUM IMPORTADOS', 'SELECCION VERIFICADA']} />
-        <div className="container-x mt-10">
+      <section className="py-16 lg:py-24">
+                <div className="container-x ">
           <ScrollStack>
             {featured.slice(0, 4).map((v) => (
               <div key={v.id} className="h-72 border border-line bg-ink/95 p-6">
@@ -531,7 +567,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
               Cuéntanos qué buscas y nuestro equipo encuentra la unidad perfecta en el mercado de
               origen. Presupuesto sin compromiso en 48 horas.
             </p>
-            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <div className=" flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Magnetic>
                 <SpecularButton href="/contacto">
                   Solicitar cotización

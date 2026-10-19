@@ -7,7 +7,7 @@ import { Button, Eyebrow } from './ui';
 import { Counter, Reveal, SectionLabel } from './motion';
 import { CONTACT_WHATSAPP } from '@/lib/site';
 import InfiniteMenu from '@/components/react-bits/InfiniteMenu';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 const STEPS = [
   {
@@ -105,6 +105,16 @@ const FAQ = [
 ];
 
 export function ProcessPage() {
+  const [stage, setStage] = useState(0);
+  const menuItems = useMemo(
+    () =>
+      STEPS.map((s) => ({
+        image: s.image,
+        title: `${s.n} · ${s.title}`,
+        description: s.lead,
+      })),
+    []
+  );
   return (
     <>
       {/* ============================== HERO ============================== */}
