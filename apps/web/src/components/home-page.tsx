@@ -6,10 +6,20 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowDown, ArrowRight, ShieldCheck, Ship, Sparkles } from 'lucide-react';
 import { api, type VehicleCard } from '@/lib/api';
 import { Button, Eyebrow } from '@/components/ui';
-import { Counter, Magnetic, Reveal, SectionLabel, SplitWords } from '@/components/motion';
+import { Magnetic, Reveal, SectionLabel, SplitWords } from '@/components/motion';
 import { SearchBar } from '@/components/search-bar';
-import { HeroVideo } from '@/components/hero-video';
-import { FeaturedRail } from '@/components/featured-rail';
+import RippleDistortion from '@/components/react-bits/RippleDistortion';
+import GlowCursor from '@/components/react-bits/GlowCursor';
+import SplitFlapText from '@/components/react-bits/SplitFlapText';
+import DepthCarousel from '@/components/react-bits/DepthCarousel';
+import Stepper, { Step } from '@/components/react-bits/Stepper';
+import GlassIcons from '@/components/react-bits/GlassIcons';
+import CometDial from '@/components/react-bits/CometDial';
+import ScrollStack from '@/components/react-bits/ScrollStack';
+import ScrollVelocity from '@/components/react-bits/ScrollVelocity';
+import SpecularButton from '@/components/react-bits/SpecularButton';
+import ChromaGrid from '@/components/react-bits/ChromaGrid';
+import LogoLoop from '@/components/react-bits/LogoLoop';
 
 const BRANDS = [
   'Porsche', 'Mercedes-Benz', 'BMW', 'Audi', 'Tesla', 'Toyota',
@@ -142,19 +152,34 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
           className="absolute inset-0 will-change-transform"
         >
           <div
-            className="absolute inset-0 bg-cover bg-center"
+            className="absolute inset-0 [transform-origin:center_center]"
             style={{
-              backgroundImage:
-                'url(/media/backgrounds/bg-photo-1503376780353-7e6692767b70.webp)',
+              willChange: 'transform',
+              animation: 'kenburns 28s ease-in-out infinite alternate',
             }}
-          />
-          <HeroVideo
-            src="/media/hero-loop.mp4"
-            poster="/media/hero-poster.jpg"
-            alt="Vehículo deportivo en movimiento"
-          />
+          >
+            <RippleDistortion
+              src="/media/backgrounds/bg-photo-1503376780353-7e6692767b70.webp"
+              className="absolute inset-0"
+              grayscale
+              tint="#e8000d"
+              tintAmount={0.12}
+              trigger="hover"
+              quality="medium"
+              strength={0.18}
+            />
+          </div>
           <div className="absolute inset-0 bg-gradient-to-b from-ink/45 via-ink/20 to-ink/95" />
           <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/20 to-ink/55" />
+          <style jsx global>{`
+            @keyframes kenburns {
+              0% { transform: scale(1) translate(0, 0); }
+              100% { transform: scale(1.08) translate(-8px, -4px); }
+            }
+            @media (prefers-reduced-motion: reduce) {
+              [style*='kenburns'] { animation: none !important; transform: none !important; }
+            }
+          `}</style>
         </motion.div>
 
         <motion.div
@@ -169,7 +194,8 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
             <Eyebrow index="EST. 2011">Importación premium de vehículos</Eyebrow>
           </motion.div>
 
-          <h1 className="mt-7 max-w-[16ch] font-display text-[clamp(2.6rem,9vw,8.5rem)] leading-[0.86] tracking-[-0.02em] text-smoke">
+          <h1 className="relative mt-7 max-w-[16ch] font-display text-[clamp(2.6rem,9vw,8.5rem)] leading-[0.86] tracking-[-0.02em] text-smoke">
+            <GlowCursor color="#e8000d" blendMode="screen" />
             <SplitWords text="El mundo," delay={0.3} />
             <br />
             <SplitWords text="a tu garaje." delay={0.45} className="text-signal" />
@@ -193,13 +219,13 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
             className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center"
           >
             <Magnetic>
-              <Button href="/catalogo" cursor="Abrir">
+              <SpecularButton href="/catalogo">
                 Explorar catálogo
-              </Button>
+              </SpecularButton>
             </Magnetic>
-            <Button href="/proceso" variant="outline" cursor="Cómo">
+            <SpecularButton href="/proceso" variant="outline">
               Cómo funciona
-            </Button>
+            </SpecularButton>
           </motion.div>
 
           <motion.div
@@ -254,8 +280,18 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
               className="border-line py-10 odd:border-r lg:border-r lg:last:border-r-0 lg:py-14"
             >
               <div className="px-4 text-center lg:px-8 lg:text-left">
-                <div className="font-display text-3xl text-smoke sm:text-4xl lg:text-5xl">
-                  <Counter to={s.value} suffix={s.suffix} />
+                <div className="flex items-baseline justify-center gap-1 font-display text-3xl text-smoke sm:text-4xl lg:justify-start lg:text-5xl">
+                  <SplitFlapText
+                    text={String(s.value)}
+                    charset="numeric"
+                    padTo={String(s.value).length}
+                    loop={false}
+                    fontSize="inherit"
+                    tileColor="var(--color-ink-2)"
+                    textColor="var(--color-smoke)"
+                    align="center"
+                  />
+                  <span className="text-signal">{s.suffix}</span>
                 </div>
                 <p className="mt-2 text-[10px] tracking-[0.22em] text-ash uppercase">{s.label}</p>
               </div>
@@ -298,7 +334,12 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
               ))}
             </div>
           ) : (
-            <FeaturedRail vehicles={featured} />
+            <DepthCarousel
+              items={featured.slice(0, 6).map((v) => ({
+                image: (v.primaryImageUrl || v.primaryImage || v.thumbnailUrl || v.media?.[0]?.url) ?? '/media/vehicles/default.webp',
+                alt: `${v.brand} ${v.model} ${v.year}`,
+              }))}
+            />
           )}
         </div>
       </section>
@@ -319,28 +360,18 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
                 verificación, compra bancarizada, embarque, aduanas, taller, matrícula y entrega. Un
                 solo equipo coordina toda la operación.
               </p>
-              <div className="mt-8">
-                <Button href="/proceso" variant="outline" cursor="Ver">
-                  El proceso completo
-                </Button>
-              </div>
+            <div className="mt-8">
+              <SpecularButton href="/proceso" variant="outline" size="md">
+                El proceso completo
+              </SpecularButton>
+            </div>
             </div>
 
-            <ol className="divide-y divide-line">
+            <Stepper orientation="vertical" frame={false} className="mt-4">
               {PROCESS.map((p, i) => (
-                <Reveal key={p.n} delay={i * 0.06}>
-                  <li className="group grid grid-cols-[auto_1fr] gap-6 py-7">
-                    <span className="font-display text-3xl text-signal/30 transition-colors duration-500 group-hover:text-signal sm:text-4xl">
-                      {p.n}
-                    </span>
-                    <div>
-                      <h3 className="font-display text-lg text-smoke">{p.title}</h3>
-                      <p className="mt-2 max-w-lg text-[13px] leading-relaxed text-ash">{p.text}</p>
-                    </div>
-                  </li>
-                </Reveal>
+                <Step key={p.n} title={`${i+1}. ${p.title}`} description={p.text} />
               ))}
-            </ol>
+            </Stepper>
           </div>
         </div>
       </section>
@@ -415,19 +446,13 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
             <h2 className="mt-5 max-w-[16ch] font-display text-[clamp(1.8rem,4vw,3.2rem)] leading-[0.95] text-smoke">
               Comprar importado, <span className="text-signal">sin sorpresas.</span>
             </h2>
-            <div className="mt-8 space-y-7">
-              {PILLARS.map((p, i) => (
-                <Reveal key={p.title} delay={i * 0.08}>
-                  <div className="flex gap-5">
-                    <p.icon className="mt-0.5 size-6 shrink-0 text-signal" strokeWidth={1.3} />
-                    <div>
-                      <h3 className="font-display text-lg text-smoke">{p.title}</h3>
-                      <p className="mt-2 text-[13px] leading-relaxed text-ash">{p.text}</p>
-                    </div>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
+            <div className="mt-8">
+            <GlassIcons items={[
+              { icon: <ShieldCheck className="size-6" strokeWidth={1.3} />, label: '120 pts', color: '#e8000d' },
+              { icon: <Ship className="size-6" strokeWidth={1.3} />, label: 'Logística', color: '#e8000d' },
+              { icon: <Sparkles className="size-6" strokeWidth={1.3} />, label: 'Garantía', color: '#e8000d' },
+            ]} />
+          </div>
           </div>
         </div>
       </section>
@@ -436,23 +461,24 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
       <section className="border-y border-line bg-ink-2 py-20 lg:py-28">
         <div className="container-x">
           <SectionLabel index="04">Lo que dicen nuestros clientes</SectionLabel>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {TESTIMONIALS.map((t, i) => (
-              <Reveal key={t.name} delay={i * 0.1}>
-                <figure className="flex h-full flex-col justify-between border border-line p-8">
-                  <blockquote className="text-sm leading-relaxed text-smoke/90">
-                    «{t.quote}»
-                  </blockquote>
-                  <figcaption className="mt-8 border-t border-line pt-5">
-                    <div className="font-display text-sm text-signal">{t.name}</div>
-                    <div className="mt-1 text-[10px] tracking-[0.2em] text-ash uppercase">
-                      {t.role}
-                    </div>
-                  </figcaption>
-                </figure>
-              </Reveal>
-            ))}
+          <div className="mt-8">
+
           </div>
+        </div>
+      </section>
+
+      {/* ============================== STACK+VELOCITY ============================== */}
+      <section className="border-t border-line bg-ink-2 py-16 lg:py-24">
+        <ScrollVelocity velocity={0.25} texts={['JC AUTOIMPORT', 'VEHICULOS PREMIUM IMPORTADOS', 'SELECCION VERIFICADA']} />
+        <div className="container-x mt-10">
+          <ScrollStack>
+            {featured.slice(0, 4).map((v) => (
+              <div key={v.id} className="border border-line bg-ink p-6">
+                <div className="font-display text-sm text-smoke">{v.brand} {v.model}</div>
+                <div className="mt-1 text-xs text-ash">{v.year}</div>
+              </div>
+            ))}
+          </ScrollStack>
         </div>
       </section>
 
@@ -478,13 +504,13 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
             </p>
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Magnetic>
-                <Button href="/contacto" cursor="Hablar">
+                <SpecularButton href="/contacto">
                   Solicitar cotización
-                </Button>
+                </SpecularButton>
               </Magnetic>
-              <Button href="/catalogo" variant="outline" cursor="Ver">
+              <SpecularButton href="/catalogo" variant="outline">
                 Ver catálogo
-              </Button>
+              </SpecularButton>
             </div>
           </Reveal>
         </div>

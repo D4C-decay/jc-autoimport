@@ -8,6 +8,9 @@ import { Menu, Phone, UserRound, X } from 'lucide-react';
 import { CONTACT_PHONE_HREF } from '@/lib/site';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from './theme-toggle';
+import GlassSurface from '@/components/react-bits/GlassSurface';
+import GradualBlur from '@/components/react-bits/GradualBlur';
+import WarmTooltip from '@/components/react-bits/WarmTooltip';
 
 const links = [
   { href: '/', key: 'inicio' },
@@ -46,6 +49,14 @@ export function Navbar() {
             : 'border-b border-transparent',
         )}
       >
+        <GradualBlur target="page" height="4rem" strength={8} layers={6} opacity={0.35} />
+        <GlassSurface
+          opacity={scrolled ? 0.12 : 0}
+          blur={8}
+          borderRadius={0}
+          borderWidth={0}
+          className="pointer-events-none absolute inset-0"
+        />
         <nav className="container-x flex h-18 items-center justify-between py-4">
           <Link href="/" className="group flex items-center gap-3" data-cursor={t('inicio')}>
             <Wordmark className="h-6" />
@@ -83,15 +94,19 @@ export function Navbar() {
             >
               <UserRound className="size-4" strokeWidth={1.8} />
             </Link>
-            <ThemeToggle />
-            <a
-              href={CONTACT_PHONE_HREF}
-              data-cursor={t('llamar')}
-              className="hidden items-center gap-2 border border-signal/35 px-4 py-2.5 text-[10px] font-semibold tracking-[0.2em] text-signal uppercase transition-colors duration-300 hover:bg-signal hover:text-ink md:inline-flex"
-            >
-              <Phone className="size-3" strokeWidth={1.8} />
-              {t('llamar')}
-            </a>
+            <WarmTooltip content={t("abrirMenu")}>
+              <ThemeToggle />
+            </WarmTooltip>
+            <WarmTooltip content={t("llamar")}>
+              <a
+                href={CONTACT_PHONE_HREF}
+                data-cursor={t('llamar')}
+                className="hidden items-center gap-2 border border-signal/35 px-4 py-2.5 text-[10px] font-semibold tracking-[0.2em] text-signal uppercase transition-colors duration-300 hover:bg-signal hover:text-ink md:inline-flex"
+              >
+                <Phone className="size-3" strokeWidth={1.8} />
+                {t('llamar')}
+              </a>
+            </WarmTooltip>
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}

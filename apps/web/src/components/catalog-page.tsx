@@ -22,6 +22,10 @@ import {
 } from './vehicle-card';
 import { Button, Eyebrow } from './ui';
 import { SearchBar } from './search-bar';
+import AnimatedList from '@/components/react-bits/AnimatedList';
+import AccordionGallery from '@/components/react-bits/AccordionGallery';
+import SquishSwitch from '@/components/react-bits/SquishSwitch';
+import JellyRadio from '@/components/react-bits/JellyRadio';
 
 type ViewMode = 'grid' | 'list';
 
@@ -197,6 +201,9 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
             Cada vehículo pasa inspección de 120 puntos en origen antes de ser listado. Precios
             mostrados son de venta final en destino.
           </p>
+          <div className="mt-10">
+            <AccordionGallery />
+          </div>
           <div className="mt-8 max-w-md">
             <SearchBar placeholder="Filtrar por marca o modelo…" />
           </div>
@@ -243,26 +250,13 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
           </div>
 
           <div className="flex items-center gap-2">
-            <div
-              role="group"
-              aria-label="Modo de visualización"
-              className="hidden items-center border border-line sm:flex"
-            >
-              <ViewButton
-                active={view === 'grid'}
-                label="Mosaico"
-                onClick={() => setView('grid')}
-              >
-                <LayoutGrid className="size-3.5" strokeWidth={1.7} />
-              </ViewButton>
-              <ViewButton
-                active={view === 'list'}
-                label="Lista"
-                onClick={() => setView('list')}
-              >
-                <Rows3 className="size-3.5" strokeWidth={1.7} />
-              </ViewButton>
-            </div>
+            <SquishSwitch
+              checked={view === 'list'}
+              onChange={(v) => setView(v ? 'list' : 'grid')}
+              label="Modo de visualización"
+              width={64}
+              height={30}
+            />
             <div className="relative">
               <select
                 value={filters.sort}
@@ -357,8 +351,6 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
             ) : (
               <>
                 {view === 'grid' ? (
-                  /* Editorial rhythm: on a 6-col grid every 4th tile is a full-width
-                     banner (i0, i3) and the rest pair up. Same rule at every size. */
                   <div className="grid grid-cols-1 gap-x-6 gap-y-14 sm:grid-cols-6">
                     {vehicles.map((v, i) => (
                       <VehicleCardItem
@@ -371,11 +363,21 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
                     ))}
                   </div>
                 ) : (
-                  <div className="border-t border-line">
-                    {vehicles.map((v, i) => (
-                      <VehicleRow key={v.id} vehicle={v} index={i % 12} />
-                    ))}
-                  </div>
+                  <AnimatedList
+                    bare
+                    width="100%"
+                    items={vehicles.map((v) => ({ id: v.id, title: `${v.brand} ${v.model}` }))}
+                    renderItem={(_, i) => <VehicleRow vehicle={vehicles[i]} index={i % 12} />}
+                    animation="slide"
+                    stagger={0.05}
+                    selectOnHover={false}
+                    enableArrowNavigation={false}
+                    showGradients={false}
+                    displayScrollbar={false}
+                    maxHeight="none"
+                    className="border-t border-line"
+                    itemClassName="border-b border-line"
+                  />
                 )}
 
                 {hasMore ? (

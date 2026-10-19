@@ -6,6 +6,8 @@ import { ArrowRight, Check } from 'lucide-react';
 import { Button, Eyebrow } from './ui';
 import { Counter, Reveal, SectionLabel } from './motion';
 import { CONTACT_WHATSAPP } from '@/lib/site';
+import ChromaGrid from '@/components/react-bits/ChromaGrid';
+import { useMemo } from 'react';
 
 const STEPS = [
   {
@@ -160,12 +162,10 @@ export function ProcessPage() {
               >
                 <Reveal className={flip ? 'lg:order-2' : undefined}>
                   <div className="relative aspect-4/3 overflow-hidden bg-ink-3">
-                    <div
-                      className="absolute inset-0 bg-cover bg-center transition-transform duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-105"
-                      style={{ backgroundImage: `url(${s.image})` }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-ink/60 to-transparent" />
-                    <span className="absolute top-5 left-5 font-display text-5xl text-signal/25">
+                    <ChromaGrid items={[
+                      { image: s.image ?? '/media/backgrounds/bg-photo-1503376780353-7e6692767b70.webp', title: s.title },
+                    ]} />
+                    <span className="absolute top-5 left-5 font-display text-5xl text-signal/25 z-10">
                       {s.n}
                     </span>
                   </div>

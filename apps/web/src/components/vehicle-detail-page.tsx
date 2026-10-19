@@ -25,6 +25,7 @@ import { Button, Eyebrow, StatusBadge } from './ui';
 import { Reveal, SplitWords } from './motion';
 import { LeadForm } from './lead-form';
 import { VehiclePhoto } from './vehicle-photo';
+import DecryptedText from '@/components/react-bits/DecryptedText';
 
 const FUEL_ICON: Record<string, typeof Fuel> = {
   ELECTRIC: Zap,
@@ -165,7 +166,7 @@ export function VehicleDetailPage({ vehicle }: { vehicle: VehicleDetail }) {
             </h1>
             <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-ash">
               <span className="flex items-center gap-2">
-                <Hash className="size-3.5 text-signal" strokeWidth={1.7} /> VIN {vehicle.vin}
+                <Hash className="size-3.5 text-signal" strokeWidth={1.7} /> VIN <DecryptedText text={vehicle.vin} speed={70} />
               </span>
               {vehicle.portOfEntry ? (
                 <span className="flex items-center gap-2">

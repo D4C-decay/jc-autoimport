@@ -3,6 +3,8 @@ import { LeadForm } from '@/components/lead-form';
 import { Reveal } from '@/components/motion';
 import { Eyebrow } from '@/components/ui';
 import { CONTACT_ADDRESS, CONTACT_EMAIL, CONTACT_PHONE, CONTACT_WHATSAPP } from '@/lib/site';
+import Antigravity from '@/components/react-bits/Antigravity';
+import TechText from '@/components/react-bits/TechText';
 
 export const metadata: Metadata = {
   title: 'Contacto',
@@ -13,6 +15,10 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <section className="relative overflow-hidden pt-32 pb-20 lg:pt-40 lg:pb-28">
+      <Antigravity
+        className="absolute inset-0 opacity-30"
+        count={200}
+      />
       <div
         className="absolute inset-0 opacity-12"
         style={{
@@ -27,9 +33,18 @@ export default function Page() {
       <div className="container-x relative grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
         <div>
           <Eyebrow index="01">Hablemos</Eyebrow>
-          <h1 className="mt-5 font-display text-[clamp(2.2rem,6vw,5rem)] leading-[0.9] text-smoke">
-            Cuéntanos qué <span className="text-signal">buscas.</span>
-          </h1>
+          <div className="mt-5">
+            <h1 className="sr-only">Cuéntanos qué buscas.</h1>
+            <div className="h-24 w-full md:h-32" aria-hidden="true">
+              <TechText
+                text="Cuéntanos qué buscas."
+                fontSize={72}
+                labels={false}
+                guides={false}
+                className="text-smoke"
+              />
+            </div>
+          </div>
           <p className="mt-6 max-w-md text-sm leading-relaxed text-ash">
             Completa el formulario o escríbenos directamente. Un asesor te contacta en menos de 24
             horas con un presupuesto detallado y sin compromiso.
