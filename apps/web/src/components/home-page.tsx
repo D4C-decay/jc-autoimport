@@ -2,7 +2,7 @@
 
 import { Link } from '@/i18n/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { motion, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
+import { motion, useMotionValueEvent, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { ArrowDown, ArrowRight, ShieldCheck, Ship, Sparkles } from 'lucide-react';
 import { api, type VehicleCard } from '@/lib/api';
 import { Button, Eyebrow } from '@/components/ui';
@@ -522,9 +522,18 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
                   />
                 ))}
               </div>
-              <blockquote className="mt-6 max-w-2xl font-display text-2xl text-smoke lg:text-3xl">
-                “{TESTIMONIALS[tIdx].quote}”
-              </blockquote>
+              <AnimatePresence mode="wait">
+                <motion.blockquote
+                  key={tIdx}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.25 }}
+                  className="mt-6 max-w-2xl font-display text-2xl text-smoke lg:text-3xl"
+                >
+                  “{TESTIMONIALS[tIdx].quote}”
+                </motion.blockquote>
+              </AnimatePresence>
               <p className="mt-4 text-sm text-signal">{TESTIMONIALS[tIdx].name}</p>
               <p className="mt-1 text-xs text-ash uppercase tracking-[0.2em]">{TESTIMONIALS[tIdx].role}</p>
             </div>
