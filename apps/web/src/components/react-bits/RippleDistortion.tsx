@@ -4,7 +4,7 @@
  */
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { Renderer, Program, Mesh, Geometry, Triangle, Texture, RenderTarget } from 'ogl';
 
@@ -222,6 +222,16 @@ const hexToRGB = (hex: string): [number, number, number] => {
   return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
 };
 
+const useStaticFallback = () => {
+  const [fallback, setFallback] = useState(false);
+  useEffect(() => {
+    const coarse = window.matchMedia('(pointer: coarse)').matches;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setFallback(coarse || reduce);
+  }, []);
+  return fallback;
+};
+
 const RippleDistortion = ({
   src = 'https://images.unsplash.com/photo-1782977389500-dd7adad33ebe?q=80&w=3416&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   brushSize = 150,
@@ -247,12 +257,13 @@ const RippleDistortion = ({
   const mountRef = useRef<HTMLDivElement | null>(null);
   const configRef = useRef<WaveConfig>({} as WaveConfig);
   const uniformsRef = useRef<RippleUniforms | null>(null);
+  const staticFallback = useStaticFallback();
 
   configRef.current = { brushSize, spread, fade, spacing, clickStrength, trigger, enabled };
 
   useEffect(() => {
     const mount = mountRef.current;
-    if (!mount) return;
+    if (!mount || staticFallback) return;
 
     const reduceMotion =
       typeof window !== 'undefined' &&
@@ -490,7 +501,7 @@ const RippleDistortion = ({
       if (ext) ext.loseContext();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [src, quality]);
+  }, [src, quality, staticFallback]);
 
   useEffect(() => {
     const u = uniformsRef.current;
@@ -511,7 +522,20 @@ const RippleDistortion = ({
       ref={mountRef}
       className={`relative w-full h-full overflow-hidden bg-black [&>canvas]:block [&>canvas]:w-full [&>canvas]:h-full ${className}`.trim()}
       style={style}
-    />
+    >
+      {staticFallback ? (
+        <img
+          src={src}
+          alt=""
+          aria-hidden
+          className="block h-full w-full object-cover"
+          style={{
+            filter: `${grayscale ? 'grayscale(1) ' : ''}saturate(1.05)`.trim(),
+            opacity: 0.92
+          }}
+        />
+      ) : null}
+    </div>
   );
 };
 

@@ -403,7 +403,7 @@ const CometDial: React.FC<CometDialProps> = ({
     >
       <svg
         ref={svgRef}
-        className="absolute inset-0 block h-full w-full cursor-grab touch-none rounded-full outline-none group-data-[dragging]:cursor-grabbing group-data-[disabled]:pointer-events-none group-data-[disabled]:cursor-default"
+        className="absolute inset-0 block h-full w-full cursor-grab touch-pan-y rounded-full outline-none group-data-[dragging]:cursor-grabbing group-data-[disabled]:pointer-events-none group-data-[disabled]:cursor-default"
         viewBox="0 0 200 200"
         role="slider"
         tabIndex={disabled ? -1 : 0}

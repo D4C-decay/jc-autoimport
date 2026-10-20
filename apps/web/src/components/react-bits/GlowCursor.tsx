@@ -411,6 +411,12 @@ const GlowCursor = ({
   useEffect(() => {
     const container = containerRef.current;
     const canvas = canvasRef.current;
+    if (
+      !enabled ||
+      window.matchMedia('(pointer: coarse)').matches ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    )
+      return undefined;
     const gl = canvas?.getContext('webgl2', {
       alpha: true,
       premultipliedAlpha: true,

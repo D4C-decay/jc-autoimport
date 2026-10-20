@@ -41,13 +41,13 @@ export async function Footer() {
               href={CONTACT_WHATSAPP}
               target="_blank"
               rel="noreferrer"
-              className="border border-line px-4 py-2 text-[10px] tracking-[0.2em] text-ash uppercase transition-colors hover:border-signal hover:text-signal"
+              className="border border-line px-4 py-3 text-[10px] sm:py-2 tracking-[0.2em] text-ash uppercase transition-colors hover:border-signal hover:text-signal"
             >
               {t('whatsapp')}
             </a>
             <Link
               href="/login"
-              className="border border-line px-4 py-2 text-[10px] tracking-[0.2em] text-ash uppercase transition-colors hover:border-signal hover:text-signal"
+              className="border border-line px-4 py-3 text-[10px] sm:py-2 tracking-[0.2em] text-ash uppercase transition-colors hover:border-signal hover:text-signal"
             >
               {t('accesoCliente')}
             </Link>
@@ -100,7 +100,7 @@ export async function Footer() {
         <div className="container-x flex flex-col gap-3 py-6 text-[10px] tracking-[0.18em] text-ash/60 uppercase sm:flex-row sm:items-center sm:justify-between">
           <span>
             © {new Date().getFullYear()} JC Autoimport. {t('derechos')}
-            <span className="mt-1 block text-[9px] tracking-[0.14em] normal-case">
+            <span className="mt-1 block text-[10px] tracking-[0.14em] normal-case">
               {t('educativo')}
             </span>
           </span>

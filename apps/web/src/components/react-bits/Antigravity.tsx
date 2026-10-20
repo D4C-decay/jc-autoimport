@@ -416,6 +416,11 @@ const Antigravity = ({
     const container = containerRef.current;
     const canvas = canvasRef.current;
     if (!container || !canvas) return;
+    if (
+      window.matchMedia('(pointer: coarse)').matches ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    )
+      return;
 
     const gl = canvas.getContext('webgl2', {
       alpha: true,

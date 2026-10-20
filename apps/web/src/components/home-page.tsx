@@ -12,7 +12,6 @@ import RippleDistortion from '@/components/react-bits/RippleDistortion';
 import GlowCursor from '@/components/react-bits/GlowCursor';
 import SplitFlapText from '@/components/react-bits/SplitFlapText';
 import DepthCarousel from '@/components/react-bits/DepthCarousel';
-import Stepper, { Step } from '@/components/react-bits/Stepper';
 import GlassIcons from '@/components/react-bits/GlassIcons';
 import ScrollStack from '@/components/react-bits/ScrollStack';
 import MagicBento from '@/components/react-bits/MagicBento';
@@ -292,7 +291,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
             enableMagnetism
             items={STATS.map((s) => ({
               content: (
-                <div className="flex items-baseline gap-1 font-display text-4xl text-smoke lg:text-5xl">
+                <div className="flex items-baseline gap-1 font-display text-3xl text-smoke sm:text-4xl lg:text-5xl">
                   <SplitFlapText
                     text={String(s.value)}
                     charset="numeric"
@@ -315,7 +314,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
       </section>
 
       {/* ============================== DESTACADOS ============================== */}
-      <section className="relative py-20 lg:py-28">
+      <section className="relative overflow-hidden py-20 lg:py-28">
         <div className="container-x">
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
@@ -476,7 +475,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
               Comprar importado, <span className="text-signal">sin sorpresas.</span>
             </h2>
             <div className="mt-8">
-            <GlassIcons items={[
+            <GlassIcons labels="always" items={[
               { icon: <ShieldCheck className="size-6" strokeWidth={1.3} />, label: '120 pts', color: '#e8000d' },
               { icon: <Ship className="size-6" strokeWidth={1.3} />, label: 'Logística', color: '#e8000d' },
               { icon: <Sparkles className="size-6" strokeWidth={1.3} />, label: 'Garantía', color: '#e8000d' },
@@ -511,15 +510,19 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
               </div>
             </div>
             <div>
-              <div className="flex gap-2">
+              <div className="flex gap-1">
                 {TESTIMONIALS.map((_, i) => (
                   <button
                     key={i}
                     type="button"
                     aria-label={`Ver testimonio ${i + 1}`}
                     onClick={() => setTIdx(i)}
-                    className={`size-2 rounded-full border border-signal/60 ${i === tIdx ? 'bg-signal' : 'bg-transparent'}`}
-                  />
+                    className="grid size-11 place-items-center"
+                  >
+                    <span
+                      className={`size-2 rounded-full border border-signal/60 ${i === tIdx ? 'bg-signal' : 'bg-transparent'}`}
+                    />
+                  </button>
                 ))}
               </div>
               <AnimatePresence mode="wait">
@@ -546,7 +549,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
                 <div className="container-x ">
           <ScrollStack useWindowScroll smoothScroll={false} snap={false}>
             {featured.slice(0, 4).map((v) => (
-              <div key={v.id} className="h-72 border border-line bg-ink/95 p-6">
+              <div key={v.id} className="h-56 border border-line bg-ink/95 p-6 sm:h-72">
                 <div className="font-display text-base text-smoke">{v.brand} {v.model}</div>
                 <div className="mt-1 text-xs text-ash">{v.year}</div>
                 <div className="mt-3 text-xs text-ash line-clamp-3">{v.color} · {v.fuelType} · {v.transmission}</div>

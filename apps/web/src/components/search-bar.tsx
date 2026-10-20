@@ -62,11 +62,16 @@ export function SearchBar({
           onBlur={() => setTimeout(() => setOpen(false), 160)}
           placeholder={placeholder}
           autoFocus={autoFocus}
-          className="w-full bg-transparent text-sm text-smoke outline-none placeholder:text-ash/60"
+          className="w-full bg-transparent text-base text-smoke outline-none placeholder:text-ash/60 sm:text-sm"
         />
         {loading ? <Loader2 className="size-4 shrink-0 animate-spin text-ash" /> : null}
         {q ? (
-          <button type="button" onClick={() => setQ('')} aria-label="Limpiar">
+          <button
+            type="button"
+            onClick={() => setQ('')}
+            aria-label="Limpiar"
+            className="grid size-11 shrink-0 place-items-center"
+          >
             <X className="size-4 shrink-0 text-ash hover:text-signal" />
           </button>
         ) : null}

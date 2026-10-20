@@ -95,7 +95,7 @@ export function LeadForm({
               type="button"
               onClick={() => setType(t.value)}
               className={cn(
-                'border px-3 py-2 text-[10px] font-medium tracking-[0.14em] uppercase transition-colors duration-300',
+                'border px-3 py-3 text-[10px] font-medium tracking-[0.14em] uppercase transition-colors duration-300 sm:py-2',
                 type === t.value
                   ? 'border-signal bg-signal/12 text-signal'
                   : 'border-line text-ash hover:border-signal/50 hover:text-smoke',
@@ -148,7 +148,7 @@ export function LeadForm({
               ? 'Me interesa este vehículo. Quisiera saber disponibilidad y opciones de financiamiento…'
               : 'Cuéntanos qué vehículo buscas, presupuesto y prazo.'
           }
-          className="mt-2.5 w-full resize-none border border-line bg-ink px-4 py-3 text-sm text-smoke outline-none transition-colors placeholder:text-ash/50 focus:border-signal"
+          className="mt-2.5 w-full resize-none border border-line bg-ink px-4 py-3 text-base text-smoke sm:text-sm outline-none transition-colors placeholder:text-ash/50 focus:border-signal"
         />
       </label>
 
@@ -214,7 +214,7 @@ function Field({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        className="mt-2.5 w-full border border-line bg-ink px-4 py-3 text-sm text-smoke outline-none transition-colors placeholder:text-ash/50 focus:border-signal"
+        className="mt-2.5 w-full border border-line bg-ink px-4 py-3 text-base text-smoke sm:text-sm outline-none transition-colors placeholder:text-ash/50 focus:border-signal"
       />
     </label>
   );

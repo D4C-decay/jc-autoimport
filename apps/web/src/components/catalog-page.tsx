@@ -25,7 +25,6 @@ import { SearchBar } from './search-bar';
 import AnimatedList from '@/components/react-bits/AnimatedList';
 import AccordionGallery from '@/components/react-bits/AccordionGallery';
 import SquishSwitch from '@/components/react-bits/SquishSwitch';
-import JellyRadio from '@/components/react-bits/JellyRadio';
 
 type ViewMode = 'grid' | 'list';
 
@@ -212,7 +211,7 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
                 image: v.primaryImageUrl ?? v.thumbnailUrl ?? v.media?.[0]?.url ?? '/media/vehicles/porsche-911.webp',
                 label: `${v.brand} ${v.model}`,
                 alt: `${v.brand} ${v.model} ${v.year}`,
-                link: `/${locale}/vehiculos/${v.slug}`,
+                link: `/${locale}/vehiculo/${v.slug}`,
               }))}
             />
           </div>
@@ -226,7 +225,7 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
       {/* Slim bar: count + view toggle + sort. The filter rail lives in the aside
           below, permanently visible from lg up (no accordion needed there). */}
       <section className="sticky top-18 z-[150] border-b border-line bg-ink/88 backdrop-blur-xl">
-        <div className="container-x flex items-center justify-between gap-4 py-4">
+        <div className="container-x flex flex-wrap items-center justify-between gap-x-4 gap-y-3 py-3 sm:py-4">
           <div className="flex items-center gap-3">
             <button
               type="button"
@@ -261,20 +260,20 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex w-full shrink-0 items-center justify-between gap-2 sm:w-auto sm:justify-end">
             <SquishSwitch
               checked={view === 'list'}
               onChange={(v) => setView(v ? 'list' : 'grid')}
-              label="Modo de visualización"
+              ariaLabel="Modo de visualización"
               width={64}
               height={30}
             />
-            <div className="relative">
+            <div className="relative min-w-0 flex-1 sm:flex-none">
               <select
                 value={filters.sort}
                 onChange={(e) => set('sort', e.target.value)}
                 aria-label="Ordenar"
-                className="appearance-none border border-line bg-ink-2 py-2.5 pr-9 pl-4 text-[10px] font-medium tracking-[0.16em] text-smoke uppercase outline-none transition-colors hover:border-signal focus:border-signal"
+                className="w-full appearance-none truncate border border-line bg-ink-2 py-2.5 pr-9 pl-4 text-[16px] font-medium tracking-[0.16em] text-smoke uppercase sm:text-[10px] outline-none transition-colors hover:border-signal focus:border-signal sm:w-auto"
               >
                 {SORT_OPTIONS.map((o) => (
                   <option key={o.value} value={o.value}>
@@ -438,7 +437,7 @@ function SelectField({
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full appearance-none border border-line bg-ink py-3 pr-9 pl-4 text-sm text-smoke outline-none transition-colors hover:border-signal/50 focus:border-signal"
+          className="w-full appearance-none border border-line bg-ink py-3 pr-9 pl-4 text-base text-smoke sm:text-sm outline-none transition-colors hover:border-signal/50 focus:border-signal"
         >
           <option value="">{placeholder}</option>
           {options.map((o) => (
@@ -480,7 +479,7 @@ function RangeField({
           onChange={(e) => onMin(e.target.value.replace(/\D/g, ''))}
           placeholder={placeholder}
           inputMode="numeric"
-          className="w-full border border-line bg-ink px-3 py-3 text-sm text-smoke outline-none transition-colors placeholder:text-ash/50 focus:border-signal"
+          className="w-full border border-line bg-ink px-3 py-3 text-base text-smoke sm:text-sm outline-none transition-colors placeholder:text-ash/50 focus:border-signal"
         />
         <span className="text-ash">—</span>
         <input
@@ -488,7 +487,7 @@ function RangeField({
           onChange={(e) => onMax(e.target.value.replace(/\D/g, ''))}
           placeholder={placeholder}
           inputMode="numeric"
-          className="w-full border border-line bg-ink px-3 py-3 text-sm text-smoke outline-none transition-colors placeholder:text-ash/50 focus:border-signal"
+          className="w-full border border-line bg-ink px-3 py-3 text-base text-smoke sm:text-sm outline-none transition-colors placeholder:text-ash/50 focus:border-signal"
         />
       </div>
     </div>

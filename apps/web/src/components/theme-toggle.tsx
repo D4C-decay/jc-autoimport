@@ -41,7 +41,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       aria-label={light ? t('activateDark') : t('activateLight')}
       title={light ? t('titleDark') : t('titleLight')}
       className={cn(
-        'flex size-10 items-center justify-center border border-line text-smoke transition-colors duration-300 hover:border-signal hover:text-signal active:scale-95',
+        'flex size-11 items-center justify-center border border-line text-smoke transition-colors duration-300 hover:border-signal hover:text-signal active:scale-95',
         className,
       )}
     >

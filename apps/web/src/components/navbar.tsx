@@ -111,7 +111,7 @@ export function Navbar() {
               type="button"
               onClick={() => setOpen((v) => !v)}
               aria-label={open ? t('cerrarMenu') : t('abrirMenu')}
-              className="flex size-10 items-center justify-center border border-line text-smoke transition-colors hover:border-signal hover:text-signal lg:hidden"
+              className="flex size-11 items-center justify-center border border-line text-smoke transition-colors hover:border-signal hover:text-signal lg:hidden"
             >
               {open ? <X className="size-4" /> : <Menu className="size-4" />}
             </button>

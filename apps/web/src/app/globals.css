@@ -45,6 +45,7 @@ html[data-theme='light'] {
     scroll-behavior: smooth;
     background: var(--color-ink);
     color-scheme: dark;
+    overflow-x: hidden;
   }
 
   html[data-theme='light'] {
@@ -59,6 +60,15 @@ html[data-theme='light'] {
     transition:
       background-color 400ms ease,
       color 400ms ease;
+  }
+
+  /* iOS: keep form controls at >=16px to prevent auto-zoom on focus */
+  @media (max-width: 640px) {
+    input,
+    select,
+    textarea {
+      font-size: 16px;
+    }
   }
 
   :focus-visible {
