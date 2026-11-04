@@ -96,8 +96,13 @@ enum MediaType {
 
 model User {
   id           String        @id @default(cuid())
+  /// Supabase Auth user id (auth.users.id). Nullable only while legacy rows are
+  /// being linked; new signups get it from the handle_new_user trigger.
+  authId       String?       @unique @map("auth_id") @db.Uuid
   email        String        @unique
-  passwordHash String        @map("password_hash")
+  /// Legacy local password. Supabase Auth owns credentials now; kept nullable
+  /// for imported users so the Argon2 hash can be handed to Supabase.
+  passwordHash String?       @map("password_hash")
   firstName    String        @map("first_name")
   lastName     String        @map("last_name")
   phone        String?
@@ -109,32 +114,15 @@ model User {
 
   contactPreference String?  @map("contact_preference")
 
-  twoFactorSecret  String?   @map("two_factor_secret")
-  twoFactorEnabled Boolean   @default(false) @map("two_factor_enabled")
-
   emailVerified Boolean @default(false) @map("email_verified")
 
   assignedLeads Lead[]       @relation("AssignedLeads")
   reservations  Reservation[]
   reviews       Review[]
-  refreshTokens RefreshToken[]
 
   @@index([email])
   @@index([role])
   @@map("users")
-}
-
-model RefreshToken {
-  id        String   @id @default(cuid())
-  token     String   @unique
-  userId    String   @map("user_id")
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  expiresAt DateTime @map("expires_at")
-  createdAt DateTime @default(now()) @map("created_at")
-
-  @@index([userId])
-  @@index([token])
-  @@map("refresh_tokens")
 }
 
 model Vehicle {
