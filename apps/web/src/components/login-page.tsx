@@ -4,23 +4,48 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ArrowRight, Loader2, Lock, Mail, ShieldCheck } from 'lucide-react';
-import { api } from '@/lib/api';
+import type { AuthError, Factor } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/client';
 import { Eyebrow } from './ui';
 import { Reveal } from './motion';
 
-export function LoginPage() {
+function safeNext(value: string | undefined): string {
+  if (!value || !value.startsWith('/') || value.startsWith('//')) return '/cuenta';
+  return value;
+}
+
+function authMessage(error: AuthError): string {
+  const msg = error.message.toLowerCase();
+  if (msg.includes('invalid login credentials')) return 'Correo o contraseña incorrectos.';
+  if (msg.includes('email not confirmed')) {
+    return 'Tu correo aún no está confirmado. Revisa tu bandeja de entrada o reenvía el enlace.';
+  }
+  if (msg.includes('too many requests') || msg.includes('rate limit')) {
+    return 'Demasiados intentos. Espera unos minutos e inténtalo de nuevo.';
+  }
+  return error.message;
+}
+
+export function LoginPage({
+  next = '/cuenta',
+  initialError = '',
+}: {
+  next?: string;
+  initialError?: string;
+}) {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [code, setCode] = useState('');
-  const [tempToken, setTempToken] = useState('');
+  const [factorId, setFactorId] = useState('');
   const [step, setStep] = useState<'credentials' | '2fa'>('credentials');
-  const [state, setState] = useState<'idle' | 'loading' | 'error'>('idle');
-  const [error, setError] = useState('');
+  const [state, setState] = useState<'idle' | 'loading' | 'error'>(initialError ? 'error' : 'idle');
+  const [error, setError] = useState(initialError);
+  const [unconfirmed, setUnconfirmed] = useState(false);
 
-  // El backend deja la sesión en cookies httpOnly; aqui no se guarda nada.
-  function goHome() {
-    router.push('/cuenta');
+  // La sesión vive en cookies gestionadas por Supabase; aquí no se guarda nada.
+  function goNext() {
+    router.push(safeNext(next));
     router.refresh();
   }
 
@@ -28,17 +53,35 @@ export function LoginPage() {
     e.preventDefault();
     setState('loading');
     setError('');
+    setUnconfirmed(false);
     try {
-      const res = await api.login({ email, password });
-      if (res.requires2FA && res.tempToken) {
-        setTempToken(res.tempToken);
-        setStep('2fa');
-        setState('idle');
-        return;
+      const supabase = createClient();
+      const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+      if (signInError) throw signInError;
+
+      // Si la cuenta tiene TOTP verificado, la sesión queda en aal1 hasta que
+      // se introduce el código: se exige el segundo factor antes de continuar.
+      const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+      if (aal?.nextLevel === 'aal2' && aal.currentLevel !== 'aal2') {
+        const { data: factors, error: factorsError } = await supabase.auth.mfa.listFactors();
+        if (factorsError) throw factorsError;
+        const totp = factors.totp.find((factor: Factor) => factor.status === 'verified');
+        if (totp) {
+          setFactorId(totp.id);
+          setStep('2fa');
+          setState('idle');
+          return;
+        }
       }
-      goHome();
+
+      goNext();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Credenciales inválidas.');
+      const message =
+        err && typeof err === 'object' && 'message' in err
+          ? authMessage(err as AuthError)
+          : 'No se pudo iniciar sesión.';
+      setError(message);
+      setUnconfirmed(message.includes('no está confirmado'));
       setState('error');
     }
   }
@@ -48,8 +91,14 @@ export function LoginPage() {
     setState('loading');
     setError('');
     try {
-      await api.verify2fa({ tempToken, code });
-      goHome();
+      if (!factorId) throw new Error('No se encontró tu autenticador.');
+      const supabase = createClient();
+      const { error: verifyError } = await supabase.auth.mfa.challengeAndVerify({
+        factorId,
+        code,
+      });
+      if (verifyError) throw verifyError;
+      goNext();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Código incorrecto.');
       setState('error');
@@ -139,7 +188,18 @@ export function LoginPage() {
                 </div>
               </label>
 
-              {state === 'error' ? <ErrorNote error={error} /> : null}
+              {state === 'error' ? (
+                <ErrorNote error={error}>
+                  {unconfirmed ? (
+                    <a
+                      href={`/verificar?email=${encodeURIComponent(email)}`}
+                      className="mt-1 inline-block text-signal hover:underline"
+                    >
+                      Reenviar correo de confirmación
+                    </a>
+                  ) : null}
+                </ErrorNote>
+              ) : null}
 
               <button
                 type="submit"
@@ -155,6 +215,15 @@ export function LoginPage() {
                   {state === 'loading' ? 'Entrando…' : 'Entrar'}
                 </span>
               </button>
+
+              <div className="mt-5 flex items-center justify-between text-[11px] text-ash">
+                <a href="/recuperar" className="text-signal hover:underline">
+                  ¿Olvidaste tu contraseña?
+                </a>
+                <a href="/verificar" className="hover:text-smoke">
+                  Confirmar correo
+                </a>
+              </div>
 
               <p className="mt-6 text-center text-[11px] text-ash">
                 ¿Aún no tienes cuenta?{' '}
@@ -231,10 +300,11 @@ export function LoginPage() {
   );
 }
 
-function ErrorNote({ error }: { error: string }) {
+function ErrorNote({ error, children }: { error: string; children?: React.ReactNode }) {
   return (
-    <p className="mt-5 border border-red-500/35 bg-red-500/8 px-4 py-2.5 text-[12px] text-red-300">
-      {error}
-    </p>
+    <div className="mt-5 border border-red-500/35 bg-red-500/8 px-4 py-2.5 text-[12px] text-red-300">
+      <p>{error}</p>
+      {children}
+    </div>
   );
 }

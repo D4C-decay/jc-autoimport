@@ -11,8 +11,8 @@ export const dynamic = 'force-dynamic';
 export default async function Page({
   searchParams,
 }: {
-  searchParams: Promise<{ token?: string }>;
+  searchParams: Promise<{ email?: string }>;
 }) {
-  const { token } = await searchParams;
-  return <VerifyEmail token={token ?? ''} />;
+  const { email } = await searchParams;
+  return <VerifyEmail email={email ?? ''} />;
 }

@@ -8,6 +8,16 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 const isDev = process.env.NODE_ENV === 'development';
 
+/**
+ * Supabase Auth is called directly from the browser (sign-in, MFA, email
+ * links). The anon key is public by design and RLS is deny-all, so this only
+ * opens the auth endpoint, never the database.
+ */
+const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL ?? '').replace(/\/+$/, '');
+const supabaseConnect = supabaseUrl
+  ? ` ${supabaseUrl} ${supabaseUrl.replace(/^https:/, 'wss:')}`
+  : '';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
@@ -53,7 +63,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: blob:",
               "font-src 'self' data:",
-              "connect-src 'self'",
+              "connect-src 'self'" + supabaseConnect,
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",

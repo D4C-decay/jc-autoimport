@@ -1,29 +1,56 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Check, KeyRound, Loader2, Lock, ShieldCheck } from 'lucide-react';
-import { api } from '@/lib/api';
+import { createClient } from '@/lib/supabase/client';
+import type { Factor } from '@supabase/supabase-js';
+
+type Enrollment = { factorId: string; secret: string; qr: string };
+
+function qrSrc(raw: string): string {
+  return raw.startsWith('data:') ? raw : `data:image/svg+xml;utf-8,${raw}`;
+}
 
 export function TwoFactorSettings() {
   const [enabled, setEnabled] = useState<boolean | null>(null);
+  const [factorId, setFactorId] = useState('');
   const [state, setState] = useState<'idle' | 'loading' | 'error'>('idle');
   const [error, setError] = useState('');
-  const [setup, setSetup] = useState<{ secret: string; qrDataUrl: string } | null>(null);
+  const [setup, setSetup] = useState<Enrollment | null>(null);
   const [code, setCode] = useState('');
 
-  useEffect(() => {
-    api
-      .twoFactorStatus()
-      .then((s) => setEnabled(s.enabled))
-      .catch(() => setEnabled(false));
+  const loadFactors = useCallback(async () => {
+    try {
+      const supabase = createClient();
+      const { data, error: listError } = await supabase.auth.mfa.listFactors();
+      if (listError) throw listError;
+      const verified = data.totp.find((factor: Factor) => factor.status === 'verified');
+      setFactorId(verified?.id ?? '');
+      setEnabled(Boolean(verified));
+    } catch {
+      setEnabled(false);
+    }
   }, []);
+
+  useEffect(() => {
+    void loadFactors();
+  }, [loadFactors]);
 
   async function startSetup() {
     setState('loading');
     setError('');
     try {
-      const { secret, qrDataUrl } = await api.twoFactorSetup();
-      setSetup({ secret, qrDataUrl });
+      const supabase = createClient();
+      const { data, error: enrollError } = await supabase.auth.mfa.enroll({
+        factorType: 'totp',
+        friendlyName: 'JC Autoimport',
+      });
+      if (enrollError) throw enrollError;
+      setSetup({
+        factorId: data.id,
+        secret: data.totp.secret,
+        qr: qrSrc(data.totp.qr_code),
+      });
       setState('idle');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'No se pudo iniciar la configuración.');
@@ -32,12 +59,17 @@ export function TwoFactorSettings() {
   }
 
   async function confirmSetup() {
-    if (code.length < 6) return;
+    if (!setup || code.length < 6) return;
     setState('loading');
     setError('');
     try {
-      await api.twoFactorEnable(code);
-      setEnabled(true);
+      const supabase = createClient();
+      const { error: verifyError } = await supabase.auth.mfa.challengeAndVerify({
+        factorId: setup.factorId,
+        code,
+      });
+      if (verifyError) throw verifyError;
+      await loadFactors();
       setSetup(null);
       setCode('');
       setState('idle');
@@ -47,13 +79,42 @@ export function TwoFactorSettings() {
     }
   }
 
+  async function cancelSetup() {
+    const pending = setup;
+    setSetup(null);
+    setCode('');
+    setError('');
+    setState('idle');
+    if (!pending) return;
+    try {
+      const supabase = createClient();
+      // An unverified factor is useless; remove it so it does not pile up.
+      await supabase.auth.mfa.unenroll({ factorId: pending.factorId });
+    } catch {
+      /* best effort */
+    }
+  }
+
   async function confirmDisable() {
     if (code.length < 6) return;
     setState('loading');
     setError('');
     try {
-      await api.twoFactorDisable(code);
+      const supabase = createClient();
+      if (!factorId) throw new Error('No se encontró tu autenticador.');
+
+      // Supabase requires a fresh aal2 session to remove a factor.
+      const { error: verifyError } = await supabase.auth.mfa.challengeAndVerify({
+        factorId,
+        code,
+      });
+      if (verifyError) throw verifyError;
+
+      const { error: unenrollError } = await supabase.auth.mfa.unenroll({ factorId });
+      if (unenrollError) throw unenrollError;
+
       setEnabled(false);
+      setFactorId('');
       setCode('');
       setState('idle');
     } catch (err) {
@@ -104,7 +165,7 @@ export function TwoFactorSettings() {
           <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-start">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={setup.qrDataUrl}
+              src={setup.qr}
               alt="Código QR para el autenticador"
               width={240}
               height={240}
@@ -155,12 +216,7 @@ export function TwoFactorSettings() {
             </button>
             <button
               type="button"
-              onClick={() => {
-                setSetup(null);
-                setCode('');
-                setError('');
-                setState('idle');
-              }}
+              onClick={cancelSetup}
               disabled={state === 'loading'}
               className="inline-flex items-center gap-2 border border-line px-6 py-3.5 text-[10px] font-semibold tracking-[0.22em] text-ash uppercase transition-colors duration-300 hover:border-signal hover:text-signal disabled:opacity-60"
             >

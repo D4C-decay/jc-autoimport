@@ -122,27 +122,21 @@ type RequestOptions = {
   revalidate?: number;
 };
 
-async function doFetch(url: string, init?: RequestInit): Promise<Response> {
-  let res = await fetch(url, init);
-
-  // Sesión expirada: una sola llamada de renovación (`/backend` inyecta el
-  // refresh cookie) y reintento. Nunca en login/2fa para no enmascarar 401.
-  if (
-    res.status === 401 &&
-    typeof window !== 'undefined' &&
-    !url.includes('/auth/login') &&
-    !url.includes('/auth/2fa/verify') &&
-    !url.endsWith('/auth/refresh')
-  ) {
-    await fetch(`${baseUrl()}/api/v1/auth/refresh`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: '{}',
-      cache: 'no-store',
-    }).catch(() => null);
-    res = await fetch(url, init);
+/**
+ * The `/backend` proxy forwards `Authorization` untouched. Public endpoints
+ * work without it; authenticated ones need the Supabase access token, which
+ * only exists in the browser (server code uses `serverMe` with an explicit
+ * token instead). A missing session is not an error here: the API answers 401.
+ */
+async function authHeader(): Promise<Record<string, string>> {
+  if (typeof window === 'undefined') return {};
+  try {
+    const { createClient } = await import('./supabase/client');
+    const { data } = await createClient().auth.getSession();
+    return data.session ? { authorization: `Bearer ${data.session.access_token}` } : {};
+  } catch {
+    return {};
   }
-  return res;
 }
 
 async function request<T>(
@@ -151,10 +145,11 @@ async function request<T>(
   options?: RequestOptions,
 ): Promise<T> {
   const url = `${baseUrl()}${path}`;
-  const res = await doFetch(url, {
+  const res = await fetch(url, {
     ...init,
     headers: {
       'Content-Type': 'application/json',
+      ...(await authHeader()),
       ...(init?.headers ?? {}),
     },
     ...(options?.revalidate === undefined
@@ -263,64 +258,6 @@ export const api = {
     source?: string;
   }) => request<{ id: string }>('/api/v1/leads', { method: 'POST', body: JSON.stringify(body) }),
 
-  login: (body: { email: string; password: string }) =>
-    request<{
-      user?: { id: string; email: string; role: string; firstName: string | null; lastName: string | null; emailVerified: boolean };
-      tokens?: { accessToken: string; refreshToken: string; expiresIn: number };
-      requires2FA?: boolean;
-      tempToken?: string;
-    }>('/api/v1/auth/login', { method: 'POST', body: JSON.stringify(body) }),
-
-  register: (body: { email: string; password: string; firstName: string; lastName: string; phone?: string }) =>
-    request<{
-      user: { id: string; email: string; role: string; firstName: string | null; lastName: string | null; emailVerified: boolean };
-      tokens: { accessToken: string; refreshToken: string; expiresIn: number };
-    }>('/api/v1/auth/register', { method: 'POST', body: JSON.stringify(body) }),
-
-  verifyEmail: (token: string) =>
-    request<{ success: boolean }>('/api/v1/auth/verify-email', {
-      method: 'POST',
-      body: JSON.stringify({ token }),
-    }),
-
-  resendVerification: (email: string) =>
-    request<{ success: boolean }>('/api/v1/auth/resend-verification', {
-      method: 'POST',
-      body: JSON.stringify({ email }),
-    }),
-
-  verify2fa: (body: { tempToken: string; code: string }) =>
-    request<{
-      user: { id: string; email: string; role: string; firstName: string | null; lastName: string | null; emailVerified: boolean };
-      tokens: { accessToken: string; refreshToken: string; expiresIn: number };
-    }>('/api/v1/auth/2fa/verify', { method: 'POST', body: JSON.stringify(body) }),
-
-  logout: () => request<{ success: boolean }>('/api/v1/auth/logout', { method: 'POST', body: '{}' }),
-
-  me: () =>
-    request<{ id: string; email: string; role: string; firstName: string | null; lastName: string | null; emailVerified: boolean }>(
-      '/api/v1/auth/me',
-    ),
-
-  twoFactorStatus: () => request<{ enabled: boolean }>('/api/v1/auth/2fa/status'),
-
-  twoFactorSetup: () =>
-    request<{ secret: string; otpauthUrl: string; qrDataUrl: string }>(
-      '/api/v1/auth/2fa/setup',
-      { method: 'POST', body: '{}' },
-    ),
-
-  twoFactorEnable: (code: string) =>
-    request<{ enabled: boolean }>('/api/v1/auth/2fa/enable', {
-      method: 'POST',
-      body: JSON.stringify({ code }),
-    }),
-
-  twoFactorDisable: (code: string) =>
-    request<{ enabled: boolean }>('/api/v1/auth/2fa/disable', {
-      method: 'POST',
-      body: JSON.stringify({ code }),
-    }),
 };
 
 export type { VehicleDetail as Vehicle };
@@ -335,15 +272,16 @@ export type SessionUser = {
 };
 
 /**
- * Server-side session lookup. Runs during SSR/route handlers and forwards the
- * browser's httpOnly cookie to the API. Returns null when there is no valid
- * session, so callers can redirect without ever touching a token in JS.
+ * Server-side profile lookup. The caller resolves the Supabase session and
+ * passes its access token; the API verifies it and returns the linked local
+ * user (with role and verification state). Returns null when there is no
+ * valid session, so callers can redirect without ever exposing the token.
  */
-export async function serverMe(cookieHeader: string | undefined): Promise<SessionUser | null> {
-  if (!cookieHeader) return null;
+export async function serverMe(accessToken: string | undefined): Promise<SessionUser | null> {
+  if (!accessToken) return null;
   try {
     const res = await fetch(`${SERVER_API_URL}/api/v1/auth/me`, {
-      headers: { cookie: cookieHeader },
+      headers: { authorization: `Bearer ${accessToken}` },
       cache: 'no-store',
     });
     if (!res.ok) return null;

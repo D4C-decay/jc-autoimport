@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Loader2, Lock, Mail, MailCheck, Phone, UserRound } from 'lucide-react';
-import { api } from '@/lib/api';
+import { createClient } from '@/lib/supabase/client';
+import { authRedirect } from '@/lib/supabase/config';
 import { Eyebrow } from './ui';
 import { Reveal } from './motion';
 
@@ -21,13 +22,29 @@ export function RegisterPage() {
     setState('loading');
     setError('');
     try {
-      await api.register({
+      const supabase = createClient();
+      const { data, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
-        firstName,
-        lastName,
-        ...(phone ? { phone } : {}),
+        options: {
+          // The handle_new_user trigger copies this metadata into public.users.
+          data: {
+            firstName,
+            lastName,
+            ...(phone ? { phone } : {}),
+          },
+          emailRedirectTo: authRedirect('/cuenta'),
+        },
       });
+
+      if (signUpError) throw signUpError;
+
+      // If email confirmation is disabled the session is already active.
+      if (data.session) {
+        window.location.assign('/cuenta');
+        return;
+      }
+
       setState('sent');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'No se pudo crear la cuenta.');

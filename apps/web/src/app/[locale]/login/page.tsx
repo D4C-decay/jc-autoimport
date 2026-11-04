@@ -6,6 +6,13 @@ export const metadata: Metadata = {
   description: 'Inicia sesión para dar seguimiento a tu importación y ver tus vehículos reservados.',
 };
 
-export default function Page() {
-  return <LoginPage />;
+export const dynamic = 'force-dynamic';
+
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string; auth_error?: string }>;
+}) {
+  const { next, auth_error } = await searchParams;
+  return <LoginPage next={next} initialError={auth_error} />;
 }

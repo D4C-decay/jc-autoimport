@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Loader2, LogOut } from 'lucide-react';
-import { api } from '@/lib/api';
+import { createClient } from '@/lib/supabase/client';
 
 export function LogoutButton() {
   const router = useRouter();
@@ -12,9 +12,10 @@ export function LogoutButton() {
   async function logout() {
     setLoading(true);
     try {
-      await api.logout();
+      const supabase = createClient();
+      await supabase.auth.signOut();
     } catch {
-      /* la cookie se limpia igual en el proxy */
+      /* aunque falle, la UI vuelve al inicio */
     }
     router.push('/');
     router.refresh();

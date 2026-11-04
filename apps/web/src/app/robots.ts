@@ -10,7 +10,17 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
       userAgent: '*',
       allow: '/',
       // Private areas: no value in the index and they need authentication.
-      disallow: ['/login', '/api/', '/backend/'],
+      disallow: [
+        '/login',
+        '/registro',
+        '/recuperar',
+        '/restablecer',
+        '/verificar',
+        '/cuenta',
+        '/auth/',
+        '/api/',
+        '/backend/',
+      ],
     },
     sitemap: `${site}/sitemap.xml`,
   };

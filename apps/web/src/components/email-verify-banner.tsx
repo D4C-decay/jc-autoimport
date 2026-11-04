@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { AlertTriangle, Loader2, MailCheck } from 'lucide-react';
-import { api } from '@/lib/api';
+import { createClient } from '@/lib/supabase/client';
+import { authRedirect } from '@/lib/supabase/config';
 
 export function EmailVerifyBanner({ email }: { email: string }) {
   const [state, setState] = useState<'idle' | 'loading' | 'sent' | 'error'>('idle');
@@ -10,8 +11,13 @@ export function EmailVerifyBanner({ email }: { email: string }) {
   async function resend() {
     setState('loading');
     try {
-      await api.resendVerification(email);
-      setState('sent');
+      const supabase = createClient();
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email,
+        options: { emailRedirectTo: authRedirect('/cuenta') },
+      });
+      setState(error ? 'error' : 'sent');
     } catch {
       setState('error');
     }

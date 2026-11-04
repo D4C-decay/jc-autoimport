@@ -1,8 +1,9 @@
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import type { Metadata } from 'next';
 import { BadgeCheck, Mail, ShieldCheck, UserRound } from 'lucide-react';
 import { serverMe } from '@/lib/api';
+import { hasSupabaseConfig } from '@/lib/supabase/config';
+import { createClient } from '@/lib/supabase/server';
 import { LogoutButton } from '@/components/logout-button';
 import { TwoFactorSettings } from '@/components/two-factor-settings';
 import { EmailVerifyBanner } from '@/components/email-verify-banner';
@@ -16,14 +17,25 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function AccountPage() {
-  const cookieStore = await cookies();
-  const cookieHeader = cookieStore.toString();
-  const user = await serverMe(cookieHeader);
+  // La sesión la valida Supabase en el servidor; el perfil local (rol,
+  // verificación) lo devuelve la API al verificar el access token.
+  if (!hasSupabaseConfig()) redirect('/login?next=/cuenta');
 
-  // La sesión se valida en el servidor: sin cookie válida no se renderiza nada.
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   if (!user) redirect('/login?next=/cuenta');
 
-  const name = [user.firstName, user.lastName].filter(Boolean).join(' ') || 'Cliente';
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  const profile = await serverMe(session?.access_token);
+
+  if (!profile) redirect('/login?next=/cuenta');
+
+  const name = [profile.firstName, profile.lastName].filter(Boolean).join(' ') || 'Cliente';
 
   return (
     <section className="relative min-h-[100svh] overflow-hidden pt-30 pb-24">
@@ -38,9 +50,9 @@ export default async function AccountPage() {
           Aquí puedes revisar tu sesión y la seguridad de tu cuenta.
         </p>
 
-        {user.emailVerified === false ? (
+        {profile.emailVerified === false ? (
           <div className="mt-10">
-            <EmailVerifyBanner email={user.email} />
+            <EmailVerifyBanner email={profile.email} />
           </div>
         ) : null}
 
@@ -64,14 +76,14 @@ export default async function AccountPage() {
                 <Mail className="size-4 text-ash" strokeWidth={1.7} />
                 <div>
                   <dt className="text-[10px] tracking-[0.2em] text-ash uppercase">Correo</dt>
-                  <dd className="text-smoke">{user.email}</dd>
+                  <dd className="text-smoke">{profile.email}</dd>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <ShieldCheck className="size-4 text-ash" strokeWidth={1.7} />
                 <div>
                   <dt className="text-[10px] tracking-[0.2em] text-ash uppercase">Rol</dt>
-                  <dd className="text-smoke">{user.role}</dd>
+                  <dd className="text-smoke">{profile.role}</dd>
                 </div>
               </div>
             </dl>
