@@ -42,7 +42,6 @@ export class PrismaService
         this.vehicleSpecification.deleteMany(),
         this.specification.deleteMany(),
         this.vehicle.deleteMany(),
-        this.refreshToken.deleteMany(),
         this.auditLog.deleteMany(),
         this.user.deleteMany(),
       ]);

@@ -11,6 +11,7 @@ import type {
   StripeConfig,
   RateLimitConfig,
   EncryptionConfig,
+  SupabaseConfig,
 } from './app-config.types.js';
 
 @Injectable()
@@ -94,6 +95,19 @@ export class AppConfigService {
   get encryption(): EncryptionConfig {
     return {
       key: this.config.get<string>('DATA_ENCRYPTION_KEY', ''),
+    };
+  }
+
+  get supabase(): SupabaseConfig {
+    const url = this.config.get<string>('SUPABASE_URL', '').replace(/\/+$/, '');
+    return {
+      url,
+      jwksUrl: this.config.get<string>(
+        'SUPABASE_JWKS_URL',
+        url ? `${url}/auth/v1/.well-known/jwks.json` : '',
+      ),
+      serviceRoleKey: this.config.get<string>('SUPABASE_SERVICE_ROLE_KEY', ''),
+      jwtSecret: this.config.get<string>('SUPABASE_JWT_SECRET') || undefined,
     };
   }
 }

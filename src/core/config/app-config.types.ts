@@ -47,6 +47,17 @@ export interface EncryptionConfig {
   key: string;
 }
 
+export interface SupabaseConfig {
+  /** Project URL, e.g. https://abcdefgh.supabase.co */
+  url: string;
+  /** JWKS endpoint used to verify access tokens signed with asymmetric keys. */
+  jwksUrl: string;
+  /** Server-side only: create users and perform admin operations. */
+  serviceRoleKey: string;
+  /** Optional legacy HS256 secret (projects without asymmetric signing keys). */
+  jwtSecret?: string;
+}
+
 export interface AppConfig {
   nodeEnv: string;
   port: number;
