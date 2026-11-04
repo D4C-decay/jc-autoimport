@@ -1,25 +1,25 @@
-# Graph Report - jc-autoimport  (2026-10-18)
+# Graph Report - jc-autoimport  (2026-11-02)
 
 ## Corpus Check
-- 291 files · ~822,226 words
+- 323 files · ~892,510 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 54 file(s) not represented in the graph (top: .csv 37, (none) 9, .service 3)
+- Unclassified: 55 file(s) not represented in the graph (top: .csv 37, (none) 9, .service 3)
 
 ## Summary
-- 2413 nodes · 4742 edges · 176 communities (124 shown, 52 thin omitted)
-- Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 219 edges (avg confidence: 0.88)
+- 2819 nodes · 5241 edges · 185 communities (141 shown, 44 thin omitted)
+- Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 192 edges (avg confidence: 0.88)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `56f11639`
+- Built from commit: `10e7ea54`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- PaymentsService
+- CurrentUser
 - VehiclesController
 - MediaService
-- totp.ts
+- GlassSurface.tsx
 - package.json
 - api.ts
 - AppConfigService
@@ -30,19 +30,19 @@
 - home-page.tsx
 - scripts
 - layout.tsx
-- audit.module.ts
+- reflect-metadata
 - PrismaService
 - desktop/package.json
 - ref_node_fs
 - vehicle-detail-page.tsx
 - devDependencies
 - core.py
-- leads.service.ts
+- MagicBento.tsx
 - compilerOptions
-- lucide-react
+- createClient
 - compilerOptions
-- @nestjs/swagger
-- reflect-metadata
+- @nestjs/common
+- WarmTooltip.tsx
 - UsersController
 - route.ts
 - seed.ts
@@ -51,22 +51,22 @@
 - compilerOptions
 - LoggerService
 - smoke.mjs
-- design_system.py
+- test_data_contracts.py
 - record.mjs
 - Public
-- RegisterDto
-- next
-- test_design_system_mode.py
-- auth-extra.dto.ts
+- GlassIcons.tsx
+- api
+- design_system.py
+- LogoLoop.tsx
 - media.service.ts
-- vehicles.repository.ts
-- @nestjs/common
-- CurrentUser
+- search.service.ts
+- next
+- auth.service.ts
 - VehiclesRepository
 - VehicleFilterDto
 - ref_node_path
 - setup-debian.sh
-- TokenService
+- api.ts
 - Memoria del proyecto JC Autoimport
 - CreateUserDto
 - LoginPage
@@ -81,8 +81,8 @@
 - qwen2.5:7b
 - oxlint.json
 - tsconfig.build.json
-- test_catalog_summary_line_endings.py
-- format_ascii_box
+- csv
+- SplitFlapText.tsx
 - verify.sh
 - nest-cli.json
 - opencode.json
@@ -99,14 +99,14 @@
 - AuditInterceptor
 - global.d.ts
 - CreateLeadDto
-- Throttle
+- Antigravity.tsx
 - launch-smoke.sh
 - globals.d.ts
 - postcss.config.mjs
 - Convenciones del proyecto
-- DESIGN.md — Contrato visual de JC Autoimport (web) · v2
-- prisma
-- prisma
+- InfiniteMenu.tsx
+- TechText.tsx
+- DecryptedText.tsx
 - chrome-debug.sh
 - mcp-postgres.sh
 - _palette_is_dark
@@ -116,32 +116,34 @@
 - read_rows
 - Pre-Delivery Checklist (canonical — the only one)
 - Quick Reference
-- UsersService
+- SupabaseAdminService
 - VehiclesService
 - .generate
 - Checklist de contratos
 - security-pentester.md
-- AuthService
+- AnimatedList.tsx
 - LeadsService
 - dependencies
 - Diario — 2026-09-08
-- persist_design_system
-- TestReasoningContract
+- RippleDistortion.tsx
+- Stepper.tsx
 - AuditController
 - Roadmap — JC Autoimport
 - auto-verify.ts
 - devDependencies
 - data-integrity-tester.md
 - Checklist de edge cases
-- lead-form.tsx
+- CreateReservationDto
+- CometDial.tsx
+- Home.md
 - 🏠 JC Autoimport — Dashboard
 - Decisión {{001}} — Título
-- TwoFactorCodeDto
+- GlowCursor.tsx
 - plan-coordinator.md
 - resilience-tester.md
-- test-coordinator.md
+- SpecularButton.tsx
 - scripts
-- Confirmación de correo al registrarse (2026-10-10)
+- jwt-auth.guard.spec.ts
 - Agentes y flujo de trabajo opencode
 - Decisión 001 — ESM obligatorio (imports relativos con sufijo `.js`)
 - Diario — {{date}}
@@ -149,21 +151,21 @@
 - split_values
 - DESIGN.md - Contrato visual
 - Stack tecnológico
-- Estado del backend — JC Autoimport
+- PaymentsService
 - Backlog
 - Despliegue
 - JC Autoimport — Documentación del proyecto
 - data-ops.md
 - web-builder.md
 - TestStackFlagWithDesignSystem
-- TestTextLayoutDataContracts
+- GradualBlur.tsx
 - Navegar la web con CDP
 - Vídeo demo del sitio
 - Design system del proyecto
 - Trampas caras en proyectos web (no volver a tropezar)
 - maquina-check.sh
 - Creditos de media (hero)
-- Índice de decisiones (ADR)
+- Decisión 002 — Supabase Auth como proveedor de identidad
 - abogado-del-diablo.md
 - build-verifier.md
 - db-ops.md
@@ -182,151 +184,160 @@
 - ui-reviewer.md
 - new-web.sh
 - vehicles/CREDITS.md
+- JellyRadio.tsx
+- ScrollVelocity.tsx
+- DepthCarousel.tsx
+- ScrollStack.tsx
+- MagicBento
+- ChromaGrid.tsx
+- _select_palette_for_mode
+- TestThresholdGate
+- pagination.dto.ts
 
 ## God Nodes (most connected - your core abstractions)
 1. `reflect-metadata` - 64 edges
-2. `@nestjs/common` - 63 edges
-3. `search()` - 43 edges
-4. `AppConfigService` - 42 edges
-5. `PrismaService` - 41 edges
+2. `@nestjs/common` - 62 edges
+3. `react` - 45 edges
+4. `search()` - 43 edges
+5. `PrismaService` - 40 edges
 6. `DesignSystemGenerator` - 38 edges
-7. `RedisService` - 36 edges
+7. `AppConfigService` - 37 edges
 8. `search_stack()` - 35 edges
 9. `scripts` - 32 edges
-10. `cn()` - 27 edges
+10. `RedisService` - 30 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Carrusel continuo (N+1) y paleta de marca (2026-09-28)` --references--> `FeaturedRail()`  [INFERRED]
   MEMORY.md → apps/web/src/components/featured-rail.tsx
 - `Interaction (App)` --references--> `Button()`  [INFERRED]
   .opencode/skills/ui-ux-pro-max/references/pro-rules.md → apps/web/src/components/ui.tsx
-- `La URL cambia en cada reinicio` --references--> `resolveSiteUrl()`  [INFERRED]
-  deploy/README.md → apps/web/src/lib/site.ts
-- `Despliegue reproducible en portatil Debian (2026-09-28)` --references--> `resolveSiteUrl()`  [INFERRED]
-  MEMORY.md → apps/web/src/lib/site.ts
-- `Áreas a cubrir` --references--> `robots()`  [INFERRED]
-  .opencode/agent/test-coordinator.md → apps/web/src/app/robots.ts
+- `Rediseño visual del home y catálogo (2026-09-28, commit `e4bba16`)` --references--> `FilterFields()`  [INFERRED]
+  MEMORY.md → apps/web/src/components/catalog-page.tsx
+- `Seguridad` --references--> `logout()`  [INFERRED]
+  deploy/README.md → apps/web/src/components/logout-button.tsx
+- `Hero 1080p y rediseño del cuerpo de la home (2026-10-10, commit `1fc09e4`)` --references--> `Reveal()`  [INFERRED]
+  MEMORY.md → apps/web/src/components/motion.tsx
 
 ## Import Cycles
 - None detected.
 
-## Communities (176 total, 52 thin omitted)
-
-### Community 0 - "PaymentsService"
-Cohesion: 0.09
-Nodes (7): PaymentsService, CancelReservationDto, CreateCheckoutDto, CreatePaymentDto, CreateReservationDto, StripeWebhookDto, PaymentsController
+## Communities (185 total, 44 thin omitted)
 
 ### Community 2 - "MediaService"
-Cohesion: 0.08
-Nodes (10): multer, @nestjs/platform-express, MediaService, UploadedFile, PresignedUploadDto, ReorderMediaDto, UpdateMediaDto, MediaController (+2 more)
+Cohesion: 0.11
+Nodes (4): MediaService, UploadedFile, MediaController, StorageService
 
-### Community 3 - "totp.ts"
-Cohesion: 0.16
-Nodes (9): RFC-4226, RFC-6238, base32Decode(), base32Encode(), generateTotp(), generateTotpSecret(), hotp(), totpUri() (+1 more)
+### Community 3 - "GlassSurface.tsx"
+Cohesion: 0.10
+Nodes (31): bendShape(), blurGrid(), blurLine(), CachedTrace, CHANNELS, compileGlass(), contentBox(), distanceGrid() (+23 more)
 
 ### Community 4 - "package.json"
 Cohesion: 0.04
-Nodes (46): author, description, @types/node, typescript, license, name, private, type (+38 more)
+Nodes (49): author, description, @supabase/supabase-js, @types/node, typescript, license, name, prisma (+41 more)
 
 ### Community 5 - "api.ts"
-Cohesion: 0.08
-Nodes (36): CatalogSkeleton(), metadata, Page(), revalidate, CatalogPage(), EMPTY, FilterFields(), Filters (+28 more)
+Cohesion: 0.07
+Nodes (34): CatalogSkeleton(), metadata, Page(), revalidate, CatalogPage(), EMPTY, FilterFields(), Filters (+26 more)
 
 ### Community 6 - "AppConfigService"
 Cohesion: 0.08
-Nodes (21): Blockers, Checkboxes de seguimiento, Decisiones clave, @nestjs/jwt, AppConfigService, AppConfig, Argon2Config, AwsConfig (+13 more)
+Nodes (21): Decisiones clave, ioredis, @nestjs/config, @nestjs/event-emitter, stripe, AppConfigService, AppConfig, Argon2Config (+13 more)
 
 ### Community 7 - "validate_data.py"
 Cohesion: 0.06
-Nodes (46): read_rows(), TestAccessibilityGuidance, TestChartsTypographyAndIcons, TestCurrentReactGuidance, TestSemanticColors, resolve(), shipped_invocations(), SkillScriptPathsTest (+38 more)
+Nodes (44): read_rows(), TestAccessibilityGuidance, TestChartsTypographyAndIcons, TestCurrentReactGuidance, TestSemanticColors, TestGeneratedCatalogContract, _catalog_date(), _check_app_interface_contract() (+36 more)
 
 ### Community 8 - "app.module.ts"
-Cohesion: 0.07
-Nodes (14): @nestjs/core, @nestjs/testing, rxjs, supertest, AppModule, globalProviders, RolesGuard, TransformInterceptor (+6 more)
+Cohesion: 0.06
+Nodes (16): compression, helmet, @nestjs/core, @nestjs/testing, pino, rxjs, supertest, AppModule (+8 more)
 
 ### Community 9 - "web/package.json"
 Cohesion: 0.12
-Nodes (15): @types/node, typescript, name, private, type, version, clsx, postcss (+7 more)
+Nodes (16): @supabase/supabase-js, @types/node, typescript, name, private, type, version, clsx (+8 more)
 
 ### Community 10 - "dependencies"
 Cohesion: 0.05
-Nodes (39): dependencies, argon2, @aws-sdk/client-s3, @aws-sdk/s3-request-presigner, cache-manager, class-transformer, class-validator, compression (+31 more)
+Nodes (41): dependencies, argon2, @aws-sdk/client-s3, @aws-sdk/s3-request-presigner, cache-manager, class-transformer, class-validator, compression (+33 more)
 
 ### Community 11 - "home-page.tsx"
 Cohesion: 0.09
-Nodes (35): Page(), Page(), revalidate, metadata, Page(), metadata, Page(), dynamic (+27 more)
+Nodes (35): Page(), Page(), revalidate, metadata, Page(), dynamic, metadata, Page() (+27 more)
 
 ### Community 12 - "scripts"
 Cohesion: 0.06
 Nodes (32): scripts, build, deploy, deploy:setup, deploy:update, deploy:verify, desktop:build, desktop:dev (+24 more)
 
 ### Community 13 - "layout.tsx"
-Cohesion: 0.07
-Nodes (36): metadata, archivoBlack, inter, LocaleLayout(), viewport, columns, Footer(), CustomCursor() (+28 more)
+Cohesion: 0.10
+Nodes (25): metadata, archivoBlack, inter, viewport, columns, Footer(), links, Wordmark() (+17 more)
 
-### Community 14 - "audit.module.ts"
-Cohesion: 0.27
-Nodes (4): AuditInterceptorProvider, AuditModule, AuditQuery, AuditService
+### Community 14 - "reflect-metadata"
+Cohesion: 0.06
+Nodes (16): reflect-metadata, PrismaService, AuditInterceptorProvider, AuditModule, AuditQuery, AuditService, LeadAssignmentService, LeadAssignedEvent (+8 more)
 
 ### Community 15 - "PrismaService"
-Cohesion: 0.07
-Nodes (5): JwtAuthGuard, RateLimitGuard, PrismaService, RedisService, HealthController
+Cohesion: 0.09
+Nodes (6): CACHE_KEY, CacheConfig, RateLimitGuard, RedisCacheInterceptor, RedisService, HealthController
 
 ### Community 16 - "desktop/package.json"
-Cohesion: 0.06
-Nodes (30): author, email, name, description, devDependencies, electron, electron-builder, @types/node (+22 more)
+Cohesion: 0.07
+Nodes (27): author, email, name, description, devDependencies, electron, electron-builder, @types/node (+19 more)
 
 ### Community 17 - "ref_node_fs"
-Cohesion: 0.10
-Nodes (14): dependencies, @opencode-ai/plugin, DIR, LOG, DIR, LOG, seen, DIR (+6 more)
+Cohesion: 0.09
+Nodes (15): dependencies, @opencode-ai/plugin, DIR, LOG, DIR, LOG, seen, DIR (+7 more)
 
 ### Community 18 - "vehicle-detail-page.tsx"
-Cohesion: 0.19
-Nodes (24): 7. Internacionalización (es/en, `next-intl`), Rutas congeladas (Oleada 0 — no renombrar/mover sin actualizar este listado), NotFound(), FeaturedRail(), RailCard(), SplitWords(), Button(), ButtonVariant (+16 more)
+Cohesion: 0.12
+Nodes (31): NotFound(), Page(), Props, FeaturedRail(), RailCard(), Field(), LeadForm(), State (+23 more)
 
 ### Community 19 - "devDependencies"
 Cohesion: 0.08
 Nodes (24): devDependencies, @nestjs/cli, @nestjs/mau, @nestjs/schematics, @nestjs/testing, oxlint, prettier, prisma (+16 more)
 
 ### Community 20 - "core.py"
+Cohesion: 0.08
+Nodes (22): _contains_phrase(), _domain_keywords(), _exact_match_diagnostic(), _exact_row_identity(), _file_signature(), _get_bm25(), _legacy_successor_guidance(), _load_csv() (+14 more)
+
+### Community 21 - "MagicBento.tsx"
 Cohesion: 0.07
-Nodes (23): _contains_phrase(), _domain_keywords(), _exact_match_diagnostic(), _exact_row_identity(), _file_signature(), _legacy_successor_guidance(), _load_csv(), _load_csv_snapshot() (+15 more)
+Nodes (22): APPS, BARS, BORDER_STYLE, CardState, CHART, DEFAULT_ITEMS, FALLOFF, FLOW (+14 more)
 
 ### Community 22 - "compilerOptions"
 Cohesion: 0.10
 Nodes (19): compilerOptions, allowSyntheticDefaultImports, declaration, emitDecoratorMetadata, esModuleInterop, experimentalDecorators, incremental, isolatedModules (+11 more)
 
-### Community 23 - "lucide-react"
-Cohesion: 0.19
-Nodes (11): AccountPage(), dynamic, metadata, EmailVerifyBanner(), LogoutButton(), logout(), ErrorNote(), Skeleton() (+3 more)
+### Community 23 - "createClient"
+Cohesion: 0.09
+Nodes (38): AccountPage(), dynamic, metadata, metadata, Page(), metadata, Page(), dynamic (+30 more)
 
 ### Community 24 - "compilerOptions"
 Cohesion: 0.11
 Nodes (18): compilerOptions, allowJs, esModuleInterop, incremental, isolatedModules, jsx, lib, module (+10 more)
 
-### Community 25 - "@nestjs/swagger"
-Cohesion: 0.10
-Nodes (12): class-transformer, class-validator, @nestjs/swagger, ROLES_KEY, ApiResponse, PageMeta, PaginatedResponse, AuthenticatedUser (+4 more)
+### Community 25 - "@nestjs/common"
+Cohesion: 0.08
+Nodes (20): class-validator, express, @nestjs/common, @nestjs/swagger, IS_PUBLIC_KEY, Public(), ROLES_KEY, Throttle() (+12 more)
 
-### Community 26 - "reflect-metadata"
-Cohesion: 0.19
-Nodes (7): @nestjs/event-emitter, reflect-metadata, stripe, CreateCheckoutParams, CreatePaymentIntentParams, StripeService, PaymentsModule
+### Community 26 - "WarmTooltip.tsx"
+Cohesion: 0.09
+Nodes (29): anchorOf(), clamp(), EASE_OUT, GroupApi, GroupContext, GroupState, horizontal(), LAYER (+21 more)
 
 ### Community 28 - "route.ts"
 Cohesion: 0.15
-Nodes (16): ALLOWED, clearCookie(), cookie(), Ctx, DELETE, DROP_REQUEST, DROP_RESPONSE, dynamic (+8 more)
+Nodes (11): ALLOWED, Ctx, DELETE, DROP_REQUEST, DROP_RESPONSE, dynamic, GET, PATCH (+3 more)
 
 ### Community 29 - "seed.ts"
-Cohesion: 0.15
-Nodes (13): 10. Datos y medios, SeedVehicle, SPEC_CATALOG, SPEC_VALUE_BY_NAME, VEHICLES, Y, main(), prisma (+5 more)
+Cohesion: 0.06
+Nodes (37): 0. Dirección y referencias, 10. Datos y medios, 11. Checklist antes de dar por bueno un cambio visual, 1. Identidad, 2. Color (tokens reales, `globals.css`), 3. Tipografía, 4.1 Hero Koenigsegg (home), 4.2 Card Bugatti (catálogo y ficha) (+29 more)
 
 ### Community 30 - "make-icon.mjs"
 Cohesion: 0.14
 Nodes (11): chunk(), crc32(), crcTable, encodePng(), INK, INK_SOFT, out, OUT_DIR (+3 more)
 
 ### Community 31 - "main/main.ts"
-Cohesion: 0.26
-Nodes (8): createWindow(), __dirname, isPortOpen(), resolveAppUrl(), resourcePath(), SERVER_PORT, startBundledServer(), waitForPort()
+Cohesion: 0.17
+Nodes (11): createWindow(), __dirname, isPortOpen(), resolveAppUrl(), resourcePath(), SERVER_PORT, startBundledServer(), waitForPort() (+3 more)
 
 ### Community 32 - "compilerOptions"
 Cohesion: 0.12
@@ -336,57 +347,69 @@ Nodes (15): compilerOptions, declaration, esModuleInterop, lib, module, moduleRe
 Cohesion: 0.15
 Nodes (10): checks, child, data, electron, entry, evaluate(), pending, root (+2 more)
 
-### Community 35 - "design_system.py"
-Cohesion: 0.10
-Nodes (5): _write_persisted_file(), apply_decision_rules(), format_output(), read_rows(), read_rows()
+### Community 35 - "test_data_contracts.py"
+Cohesion: 0.22
+Nodes (4): apply_decision_rules(), _object_without_duplicates(), parse_decision_rules(), _validate_action()
 
 ### Community 36 - "record.mjs"
 Cohesion: 0.20
 Nodes (10): CDP, findChromium(), FPS, H, main(), PORT, RAW, SECONDS (+2 more)
 
 ### Community 37 - "Public"
-Cohesion: 0.19
-Nodes (3): CacheTTL(), Public(), SearchController
+Cohesion: 0.18
+Nodes (3): CacheTTL(), SearchService, SearchController
 
-### Community 39 - "next"
-Cohesion: 0.19
-Nodes (8): Page(), Props, dynamic, robots(), dynamic, sitemap(), resolveSiteUrl(), next
+### Community 38 - "GlassIcons.tsx"
+Cohesion: 0.10
+Nodes (28): buildMaps(), clamp(), compile(), drive(), ease(), Engine, fade(), GlassIcons() (+20 more)
 
-### Community 40 - "test_design_system_mode.py"
-Cohesion: 0.08
-Nodes (12): _button_outline_text_color(), _contrast_ratio(), _derive_dark_palette(), _filter_anti_patterns_for_mode(), format_master_md(), _query_wants_dark(), _resolve_color_mode(), _select_palette_for_mode() (+4 more)
+### Community 39 - "api"
+Cohesion: 0.13
+Nodes (14): dynamic, robots(), dynamic, sitemap(), api, resolveSiteUrl(), La URL cambia en cada reinicio, Despliegue reproducible en portatil Debian (2026-09-28) (+6 more)
 
-### Community 41 - "auth-extra.dto.ts"
-Cohesion: 0.26
-Nodes (6): ForgotPasswordDto, LogoutDto, RefreshTokenDto, ResendVerificationDto, ResetPasswordDto, VerifyEmailDto
+### Community 40 - "design_system.py"
+Cohesion: 0.04
+Nodes (28): ansi_ljust(), _button_outline_text_color(), _contrast_ratio(), _derive_dark_palette(), _detect_page_type(), _filter_anti_patterns_for_mode(), format_ascii_box(), add_wrapped() (+20 more)
+
+### Community 41 - "LogoLoop.tsx"
+Cohesion: 0.12
+Nodes (25): FooterLogoLoop(), slug(), clamp(), createEngine(), cx(), Drag, easeInOut(), easeOut() (+17 more)
 
 ### Community 42 - "media.service.ts"
-Cohesion: 0.06
-Nodes (17): sharp, LeadAssignedEvent, LeadCreatedEvent, LeadNotificationsListener, ALLOWED_3D_MIMES, ALLOWED_IMAGE_MIMES, ALLOWED_VIDEO_MIMES, MediaUploadResult (+9 more)
-
-### Community 43 - "vehicles.repository.ts"
-Cohesion: 0.16
-Nodes (11): vite-tsconfig-paths, vitest, CursorPaginationResult, SORT_CONFIG, SortKey, summarySelect, VehicleSummary, CursorData (+3 more)
-
-### Community 44 - "@nestjs/common"
 Cohesion: 0.09
-Nodes (18): express, @nestjs/common, @nestjs/config, CACHE_KEY, CacheConfig, IS_PUBLIC_KEY, THROTTLE_KEY, ThrottleOptions (+10 more)
+Nodes (15): multer, @nestjs/platform-express, sharp, ALLOWED_3D_MIMES, ALLOWED_IMAGE_MIMES, ALLOWED_VIDEO_MIMES, MediaUploadResult, PresignedUploadDto (+7 more)
+
+### Community 43 - "search.service.ts"
+Cohesion: 0.09
+Nodes (17): class-transformer, FacetsResponse, SearchResponse, SearchResult, SearchRow, SuggestionItem, SearchModule, CursorPaginationResult (+9 more)
+
+### Community 44 - "next"
+Cohesion: 0.14
+Nodes (19): GET(), OTP_TYPES, PendingCookie, safeNext(), BrowserClient, SUPABASE_ANON_KEY, SUPABASE_URL, copyCookies() (+11 more)
+
+### Community 45 - "auth.service.ts"
+Cohesion: 0.16
+Nodes (4): AuthModule, AuthService, Profile, AuthController
 
 ### Community 48 - "ref_node_path"
-Cohesion: 0.15
-Nodes (7): __dirname, nextConfig, withNextIntl, child, root, server, standaloneDir
+Cohesion: 0.14
+Nodes (8): __dirname, nextConfig, supabaseUrl, withNextIntl, child, root, server, standaloneDir
 
 ### Community 49 - "setup-debian.sh"
 Cohesion: 0.44
 Nodes (7): die(), info(), install_pkgs(), need_sudo(), say(), setup-debian.sh script, warn()
 
+### Community 50 - "api.ts"
+Cohesion: 0.11
+Nodes (23): authHeader(), baseUrl(), DriveType, Envelope, Facet, MediaItem, Paginated, request() (+15 more)
+
 ### Community 51 - "Memoria del proyecto JC Autoimport"
-Cohesion: 0.06
-Nodes (30): Comandos utiles, Credenciales iniciales del seed, Despliegue en un portatil Debian, La URL cambia en cada reinicio, Para probarlo desde la red local, Puesta en marcha (5-10 minutos), Que queda expuesto, Requisitos (+22 more)
+Cohesion: 0.05
+Nodes (36): LocaleLayout(), CustomCursor(), Comandos utiles, Credenciales iniciales del seed, Despliegue en un portatil Debian, Para probarlo desde la red local, Puesta en marcha (5-10 minutos), Que queda expuesto (+28 more)
 
 ### Community 53 - "LoginPage"
-Cohesion: 0.36
-Nodes (7): metadata, Page(), ErrorNote(), LoginPage(), goHome(), onSubmit(), onSubmit2fa()
+Cohesion: 0.24
+Nodes (10): dynamic, metadata, Page(), authMessage(), ErrorNote(), LoginPage(), goNext(), onSubmit() (+2 more)
 
 ### Community 54 - "mcp"
 Cohesion: 0.22
@@ -397,8 +420,8 @@ Cohesion: 0.25
 Nodes (8): ~/.cache/ms-playwright/**, ~/.local/state/jcautoimport/**, /tmp/opencode/**, permission, edit, external_directory, webfetch, websearch
 
 ### Community 56 - "search"
-Cohesion: 0.09
-Nodes (6): search(), _style_search_destination(), TestDiagnosticsContracts, TestSearchDomains, TestStyleTaxonomy, TestTextLayoutRetrieval
+Cohesion: 0.10
+Nodes (6): _project_row(), search(), _style_search_destination(), TestSearchDomains, TestStyleTaxonomy, TestTextLayoutRetrieval
 
 ### Community 57 - "SearchQueryDto"
 Cohesion: 0.39
@@ -409,8 +432,8 @@ Cohesion: 0.25
 Nodes (7): args, fadeOutStart, FPS, H, SECONDS, vf, W
 
 ### Community 60 - "search_stack"
-Cohesion: 0.11
-Nodes (6): _exact_stack_identifier(), search_stack(), _rows(), TestNativeDesktopStackFreshness, _rows(), TestWebStackFreshness
+Cohesion: 0.09
+Nodes (7): _exact_stack_identifier(), search_stack(), _valid_max_results(), _rows(), TestNativeDesktopStackFreshness, _rows(), TestWebStackFreshness
 
 ### Community 61 - "bash"
 Cohesion: 0.29
@@ -428,13 +451,13 @@ Nodes (6): env, node, rules, @typescript-eslint/no-explicit-any, @typescript-esl
 Cohesion: 0.29
 Nodes (6): ./tsconfig.json, compilerOptions, rootDir, exclude, extends, include
 
-### Community 65 - "test_catalog_summary_line_endings.py"
-Cohesion: 0.08
-Nodes (5): CatalogSummaryLineEndingsTest, _load_generator(), TestFixtureValidation, TestMetricMath, TestThresholdGate
+### Community 65 - "csv"
+Cohesion: 0.06
+Nodes (10): CatalogSummaryLineEndingsTest, _load_generator(), TestFixtureValidation, TestMetricMath, resolve(), shipped_invocations(), SkillScriptPathsTest, read_rows() (+2 more)
 
-### Community 66 - "format_ascii_box"
-Cohesion: 0.10
-Nodes (11): ansi_ljust(), format_ascii_box(), add_wrapped(), wrap_text(), format_markdown(), generate_design_system(), hex_to_ansi(), _mode_support_labels() (+3 more)
+### Community 66 - "SplitFlapText.tsx"
+Cohesion: 0.12
+Nodes (23): AnimationPlan, buildSequence(), cascadeStep(), CHARSETS, clampUnit(), createTiles(), DEFAULT_WORDS, getReducedMotion() (+15 more)
 
 ### Community 67 - "verify.sh"
 Cohesion: 0.60
@@ -454,7 +477,7 @@ Nodes (3): afterPack(), exists(), require
 
 ### Community 72 - "BM25"
 Cohesion: 0.14
-Nodes (5): BM25, _get_bm25(), _suggest_identities(), TestBm25CoreBehavior, TestTokenizer
+Nodes (4): BM25, _suggest_identities(), TestBm25CoreBehavior, TestTokenizer
 
 ### Community 73 - "allowScripts"
 Cohesion: 0.40
@@ -486,27 +509,43 @@ Nodes (3): CreateVehicleDto, MediaItemDto, SpecificationItemDto
 
 ### Community 80 - "AuditInterceptor"
 Cohesion: 0.13
-Nodes (7): Formato de salida, Qué revisar (checklist), Arquitectura obligatoria (replicar el patrón existente), Patrones a seguir, Proceso, HttpExceptionFilter, AuditInterceptor
+Nodes (8): VehicleStatus, Formato de salida, Qué revisar (checklist), Arquitectura obligatoria (replicar el patrón existente), Patrones a seguir, Proceso, HttpExceptionFilter, AuditInterceptor
 
 ### Community 82 - "CreateLeadDto"
 Cohesion: 0.19
 Nodes (4): AssignLeadDto, CreateLeadDto, LeadQueryDto, UpdateLeadDto
 
+### Community 83 - "Antigravity.tsx"
+Cohesion: 0.16
+Nodes (20): Antigravity(), AntigravityProps, buildPalette(), clamp(), COLOR_MODES, ColorMode, compile(), DEFAULT_COLORS (+12 more)
+
 ### Community 87 - "Convenciones del proyecto"
 Cohesion: 0.12
 Nodes (15): Autonomía y permisos (opencode.json), Capacidades web (navegador por CDP), Convenciones del código, Convenciones del proyecto, Documentación y knowledge graph, Estado conocido, Flujo de tests (testing activo), Flujo frontend (web, `apps/web`) (+7 more)
 
-### Community 88 - "DESIGN.md — Contrato visual de JC Autoimport (web) · v2"
-Cohesion: 0.13
-Nodes (14): 0. Dirección y referencias, 11. Checklist antes de dar por bueno un cambio visual, 1. Identidad, 2. Color (tokens reales, `globals.css`), 3. Tipografía, 4.1 Hero Koenigsegg (home), 4.2 Card Bugatti (catálogo y ficha), 4.3 Footer Lamborghini (global) (+6 more)
+### Community 88 - "InfiniteMenu.tsx"
+Cohesion: 0.20
+Nodes (17): ArrowIcon(), clamp(), compile(), cross(), dot(), Engine, FRONT, InfiniteMenu() (+9 more)
+
+### Community 89 - "TechText.tsx"
+Cohesion: 0.15
+Nodes (17): approach(), Art, Band, Box, Cell, clamp01(), Glyph, Kick (+9 more)
+
+### Community 90 - "DecryptedText.tsx"
+Cohesion: 0.17
+Nodes (15): advance(), DecryptedText(), DecryptedTextProps, Engine, flipFrames(), FontMetrics, Frame, glyphWidths (+7 more)
 
 ### Community 93 - "_palette_is_dark"
 Cohesion: 0.18
 Nodes (4): _palette_is_dark(), _relative_luminance(), TestEndToEndCoherence, TestLuminance
 
+### Community 95 - "detect_domain"
+Cohesion: 0.17
+Nodes (3): detect_domain(), TestDiagnosticsContracts, TestDomainDetection
+
 ### Community 97 - "read_rows"
-Cohesion: 0.21
-Nodes (3): read_rows(), TestGeneratedCatalogContract, TestLandingAndStackContract
+Cohesion: 0.19
+Nodes (3): read_rows(), TestLandingAndStackContract, TestReasoningContract
 
 ### Community 98 - "Pre-Delivery Checklist (canonical — the only one)"
 Cohesion: 0.15
@@ -528,21 +567,25 @@ Nodes (10): 1. Rutas principales, 2. Headers, 3. Contrato HTML, 4. Assets y recu
 Cohesion: 0.18
 Nodes (10): 1. XSS reflejado (P0 si se refleja sin escapar), 2. Inyección en querystrings de listados/búsqueda, 3. Open redirect, 4. Path traversal en assets, 5. Cabeceras de seguridad, 6. Cookies (si existen `Set-Cookie`), 7. Métodos HTTP, 8. Fuga de información (+2 more)
 
+### Community 105 - "AnimatedList.tsx"
+Cohesion: 0.15
+Nodes (13): AnimatedList(), AnimatedListEntry, AnimatedListItem, AnimatedListProps, Animation, DEFAULT_ITEMS, Engine, FADE_MASK (+5 more)
+
 ### Community 107 - "dependencies"
-Cohesion: 0.20
-Nodes (10): dependencies, clsx, framer-motion, lucide-react, next, next-intl, react, react-dom (+2 more)
+Cohesion: 0.12
+Nodes (16): dependencies, clsx, framer-motion, gsap, @hugeicons/core-free-icons, @hugeicons/react, lucide-react, next (+8 more)
 
 ### Community 108 - "Diario — 2026-09-08"
 Cohesion: 0.20
 Nodes (8): ⚠️ Blockers encontrados, Diario — 2026-09-08, 💡 Ideas / Notas rápidas, 🔥 Lo que hice hoy, 🎯 Mañana / Siguiente paso, 2026-09-08 — Bóvedas Obsidian con sync Git, Bitácora de sesiones, Ver también
 
-### Community 109 - "persist_design_system"
-Cohesion: 0.20
-Nodes (5): _detect_page_type(), format_page_override_md(), _generate_intelligent_overrides(), persist_design_system(), safe_slug()
+### Community 109 - "RippleDistortion.tsx"
+Cohesion: 0.15
+Nodes (14): CompositeUniforms, hexToRGB(), LIFE_CONSTANT, QUALITY_SCALE, RippleDistortion(), RippleDistortionProps, RippleQuality, RippleTrigger (+6 more)
 
-### Community 110 - "TestReasoningContract"
-Cohesion: 0.24
-Nodes (4): _object_without_duplicates(), parse_decision_rules(), _validate_action(), TestReasoningContract
+### Community 110 - "Stepper.tsx"
+Cohesion: 0.18
+Nodes (13): Check(), clamp(), ease(), readableOn(), size(), StepIndicatorProps, Stepper(), StepperProps (+5 more)
 
 ### Community 112 - "Roadmap — JC Autoimport"
 Cohesion: 0.22
@@ -564,9 +607,13 @@ Nodes (7): 1. Coherencia entre vistas, 2. Persistencia de estado, 3. Duplicados,
 Cohesion: 0.25
 Nodes (7): 1. Formularios, 2. Buscador y filtros, 3. Rutas y paths, 4. Criterio de errores, Checklist de edge cases, Contexto, Salida
 
-### Community 118 - "lead-form.tsx"
-Cohesion: 0.33
-Nodes (5): Field(), LeadForm(), State, TYPES, LeadType
+### Community 117 - "CreateReservationDto"
+Cohesion: 0.27
+Nodes (5): CancelReservationDto, CreateCheckoutDto, CreatePaymentDto, CreateReservationDto, StripeWebhookDto
+
+### Community 118 - "CometDial.tsx"
+Cohesion: 0.23
+Nodes (12): arcPath(), clamp(), CometDial(), CometDialChangeDetail, CometDialProps, decimalsOf(), Grip, Live (+4 more)
 
 ### Community 120 - "🏠 JC Autoimport — Dashboard"
 Cohesion: 0.29
@@ -576,6 +623,10 @@ Nodes (7): ⚠️ Blockers abiertos, 📌 Enlaces útiles, 🔴 Estado actual, �
 Cohesion: 0.29
 Nodes (6): Consecuencias, Contexto, Decisión, Decisión {{001}} — Título, Opciones, Referencia
 
+### Community 122 - "GlowCursor.tsx"
+Cohesion: 0.21
+Nodes (12): clamp(), compile(), fromHsv(), GlowCursor(), GlowCursorProps, Pair, Pass, Quality (+4 more)
+
 ### Community 123 - "plan-coordinator.md"
 Cohesion: 0.29
 Nodes (6): Fase de diagnóstico de tests (para hallazgos del test-coordinator), Mapa de responsables en esta fase, Miembros del consejo (subagentes disponibles), Protocolo de planeación, Protocolo de verificación post-fix, Reglas de estilo
@@ -584,17 +635,17 @@ Nodes (6): Fase de diagnóstico de tests (para hallazgos del test-coordinator), 
 Cohesion: 0.29
 Nodes (6): 1. Caché y compresión, 2. Paginación profunda, 3. Concurrencia, 4. Latencia, 5. Fallos del backend (si el sitio consume una API/BD), Salida
 
-### Community 125 - "test-coordinator.md"
-Cohesion: 0.29
-Nodes (6): Formato del diagnóstico consolidado, Protocolo, Reglas, Sitio bajo prueba, Testers disponibles (subagentes), Áreas a cubrir
+### Community 125 - "SpecularButton.tsx"
+Cohesion: 0.26
+Nodes (12): clamp(), compile(), link(), loopPosition(), rimPoint(), Settings, SIZES, SpecularButton() (+4 more)
 
 ### Community 126 - "scripts"
 Cohesion: 0.33
 Nodes (6): scripts, build, dev, lint, start, typecheck
 
-### Community 127 - "Confirmación de correo al registrarse (2026-10-10)"
-Cohesion: 0.40
-Nodes (4): resend(), SessionUser, Confirmación de correo al registrarse (2026-10-10), TwoFactorUser
+### Community 127 - "jwt-auth.guard.spec.ts"
+Cohesion: 0.21
+Nodes (4): jose, JwtAuthGuard, boot(), localUser
 
 ### Community 128 - "Agentes y flujo de trabajo opencode"
 Cohesion: 0.33
@@ -624,10 +675,6 @@ Nodes (4): Componentes mínimos, DESIGN.md - Contrato visual, Identidad, Reglas
 Cohesion: 0.40
 Nodes (5): Backend, Convenciones de código (resumen), Detalles de cada decisión, Infra local, Stack tecnológico
 
-### Community 135 - "Estado del backend — JC Autoimport"
-Cohesion: 0.40
-Nodes (5): Estado: COMPLETO + RUNTIME VALIDADO (2026-09-08), Estado del backend — JC Autoimport, Objetivo, Próximo paso, Stack
-
 ### Community 136 - "Backlog"
 Cohesion: 0.40
 Nodes (5): Backlog, Notas sueltas (Inbox pendiente), P0 — Benchmark a escala, P1 — Preparar despliegue, P2 — Frontend
@@ -647,6 +694,10 @@ Nodes (4): Proceso, Salida, Según lo que haya en el proyecto, Trampas conocidas
 ### Community 140 - "web-builder.md"
 Cohesion: 0.40
 Nodes (4): Antes de escribir una línea, Scope, Trampas conocidas (no tropezar), Verificación antes de terminar
+
+### Community 142 - "GradualBlur.tsx"
+Cohesion: 0.25
+Nodes (10): clamp01(), CURVES, DIRECTIONS, findScroller(), GradualBlur(), GradualBlurCurve, GradualBlurPosition, GradualBlurProps (+2 more)
 
 ### Community 143 - "Navegar la web con CDP"
 Cohesion: 0.40
@@ -672,9 +723,9 @@ Nodes (4): bad(), ok(), maquina-check.sh script, warn()
 Cohesion: 0.50
 Nodes (3): Creditos de media (hero), Fondos, Video del hero
 
-### Community 149 - "Índice de decisiones (ADR)"
-Cohesion: 0.50
-Nodes (3): Convenio, Registro, Índice de decisiones (ADR)
+### Community 149 - "Decisión 002 — Supabase Auth como proveedor de identidad"
+Cohesion: 0.18
+Nodes (9): Consecuencias, Contexto, Decisión, Decisión 002 — Supabase Auth como proveedor de identidad, Opciones, Referencia, Convenio, Registro (+1 more)
 
 ### Community 150 - "abogado-del-diablo.md"
 Cohesion: 0.50
@@ -708,25 +759,53 @@ Nodes (3): Checklist de auditoría, Estado del proyecto (contexto), Formato de s
 Cohesion: 0.50
 Nodes (4): playwright, command, enabled, type
 
+### Community 176 - "JellyRadio.tsx"
+Cohesion: 0.22
+Nodes (10): Chip, ChipProps, ChipValues, Config, DEFAULT_ITEMS, JellyRadio(), JellyRadioItem, JellyRadioProps (+2 more)
+
+### Community 177 - "ScrollVelocity.tsx"
+Cohesion: 0.24
+Nodes (9): FADE_STEPS, OUTLINE_STYLE, ScrollVelocity(), ScrollVelocityProps, useElementWidth(), VelocityMapping, VelocityText(), VelocityTextProps (+1 more)
+
+### Community 178 - "DepthCarousel.tsx"
+Cohesion: 0.24
+Nodes (9): CarouselConfig, clamp(), DEFAULT_ITEMS, DepthCarousel(), DepthCarouselItem, DepthCarouselProps, DragState, normalizeItem() (+1 more)
+
+### Community 179 - "ScrollStack.tsx"
+Cohesion: 0.27
+Nodes (8): CARD_SHADOW, resolveOffset(), scrollsInside(), ScrollStack(), ScrollStackItemProps, ScrollStackProps, StackSettings, toLength()
+
+### Community 180 - "MagicBento"
+Cohesion: 0.28
+Nodes (9): AnalyticsVisual(), clamp(), curve(), finite(), inkFor(), MagicBento(), nameOf(), parseRgb() (+1 more)
+
+### Community 181 - "ChromaGrid.tsx"
+Cohesion: 0.36
+Nodes (7): ChromaGrid(), ChromaGridProps, ChromaItem, clamp(), DEFAULT_ITEMS, falloffStops(), THEMES
+
+### Community 184 - "pagination.dto.ts"
+Cohesion: 0.33
+Nodes (3): ApiResponse, PageMeta, PaginatedResponse
+
 ## Knowledge Gaps
-- **45 isolated node(s):** `@types/node`, `electron-builder`, `typescript`, `@tanstack/react-query`, `@tailwindcss/postcss` (+40 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 1101 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **52 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **47 isolated node(s):** `@types/node`, `electron-builder`, `typescript`, `@supabase/supabase-js`, `@tanstack/react-query` (+42 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 1335 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **44 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Seguridad y UX (2026-10-10, commit `2553f94`)` connect `layout.tsx` to `AppConfigService`, `PrismaService`, `vehicle-detail-page.tsx`, `Memoria del proyecto JC Autoimport`, `lucide-react`?**
-  _High betweenness centrality (0.072) - this node is a cross-community bridge._
+- **Why does `react` connect `home-page.tsx` to `GlassSurface.tsx`, `api.ts`, `web/package.json`, `layout.tsx`, `GradualBlur.tsx`, `vehicle-detail-page.tsx`, `MagicBento.tsx`, `createClient`, `WarmTooltip.tsx`, `GlassIcons.tsx`, `LogoLoop.tsx`, `JellyRadio.tsx`, `ScrollVelocity.tsx`, `DepthCarousel.tsx`, `ScrollStack.tsx`, `ChromaGrid.tsx`, `SplitFlapText.tsx`, `Antigravity.tsx`, `InfiniteMenu.tsx`, `TechText.tsx`, `DecryptedText.tsx`, `AnimatedList.tsx`, `RippleDistortion.tsx`, `Stepper.tsx`, `CometDial.tsx`, `GlowCursor.tsx`, `SpecularButton.tsx`?**
+  _High betweenness centrality (0.156) - this node is a cross-community bridge._
 - **What connects `@types/node`, `electron-builder`, `typescript` to the rest of the system?**
-  _45 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `PaymentsService` be split into smaller, more focused modules?**
-  _Cohesion score 0.08773784355179703 - nodes in this community are weakly interconnected._
-- **Why does `next-intl` connect `layout.tsx` to `ref_node_path`, `web/package.json`, `vehicle-detail-page.tsx`?**
-  _High betweenness centrality (0.060) - this node is a cross-community bridge._
+  _47 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `MediaService` be split into smaller, more focused modules?**
-  _Cohesion score 0.08418079096045197 - nodes in this community are weakly interconnected._
-- **Why does `reflect-metadata` connect `reflect-metadata` to `MediaService`, `package.json`, `AppConfigService`, `app.module.ts`, `media.service.ts`, `vehicles.repository.ts`, `@nestjs/common`, `audit.module.ts`, `PrismaService`, `leads.service.ts`, `@nestjs/swagger`, `seed.ts`?**
-  _High betweenness centrality (0.043) - this node is a cross-community bridge._
+  _Cohesion score 0.10884353741496598 - nodes in this community are weakly interconnected._
+- **Why does `reflect-metadata` connect `reflect-metadata` to `package.json`, `AppConfigService`, `app.module.ts`, `media.service.ts`, `search.service.ts`, `auth.service.ts`, `PrismaService`, `@nestjs/common`, `seed.ts`, `jwt-auth.guard.spec.ts`?**
+  _High betweenness centrality (0.088) - this node is a cross-community bridge._
+- **Should `GlassSurface.tsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.09879032258064516 - nodes in this community are weakly interconnected._
+- **Why does `dependencies` connect `dependencies` to `package.json`?**
+  _High betweenness centrality (0.036) - this node is a cross-community bridge._
 - **Should `package.json` be split into smaller, more focused modules?**
-  _Cohesion score 0.0425531914893617 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.03991291727140784 - nodes in this community are weakly interconnected._

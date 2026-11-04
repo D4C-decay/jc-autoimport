@@ -12,7 +12,7 @@
 | Web pública (`apps/web`) | ✅ En producción local | Next 15, 13 rutas, túnel de Cloudflare |
 | App escritorio (`apps/desktop`) | ✅ Empaquetada | `.exe`, `.AppImage`, `.deb` (sin firmar) |
 | Datos | ✅ | 75 vehículos, migraciones aplicadas |
-| Seguridad | 🟡 Parcial | 2FA, PII cifrada y cookies hechas; faltan secretos reales |
+| Seguridad | 🟡 Parcial | Supabase Auth (MFA TOTP), PII cifrada; faltan secretos reales |
 | SEO / analítica | 🔴 Pendiente | sin JSON-LD, sin OG, sin analítica |
 | Correo transaccional | 🔴 Sin credenciales | cae a log en dev |
 | Pagos / media (S3-Cloudinary) | 🔴 Placeholder | integración escrita, claves sin poner |
@@ -30,8 +30,8 @@
 - [ ] **SMTP de Gmail**: `SMTP_HOST=smtp.gmail.com`, `SMTP_USER`, `SMTP_PASS` (contraseña de
   aplicación, cuenta con 2FA) en `.env` local y en el portátil. *Criterio:* un registro real
   recibe correo de verificación fuera de la sesión.
-- [ ] **`DATA_ENCRYPTION_KEY` real** (64 hex) en todos los entornos + rotar `JWT_ACCESS_SECRET`
-  y `JWT_REFRESH_SECRET`. Hoy en dev se deriva con warning.
+- [ ] **`DATA_ENCRYPTION_KEY` real** (64 hex) en todos los entornos + rotar `JWT_ACCESS_SECRET`.
+  Hoy en dev se deriva con warning. `JWT_REFRESH_SECRET` ya no lo usa Supabase Auth.
 - [ ] **Claves reales de Stripe / S3 / Cloudinary**: reservas y subida de media funcionando de verdad.
 - [ ] **Backups**: `pg_dump` programado + copia de `apps/web/public/media` y `.env`.
 - [ ] **`ufw`**: si se quiere acceso LAN, abrir 4200/3000 (hoy cerrados). El túnel es saliente

@@ -25,7 +25,7 @@ NestJS 12 · TypeScript (ESM) · Prisma 7.10 · PostgreSQL 16 · Redis 7 · Stri
 
 | Módulo | Funcionalidad |
 |---|---|
-| `auth` | JWT access/refresh, blacklist Redis, Argon2, RBAC |
+| `auth` | Supabase Auth (email/contraseña, confirmación, recuperación, MFA TOTP) + RBAC local |
 | `users` | CRUD, roles, `/me` |
 | `vehicles` | CRUD, filtros, cursor pagination cifrado, caché Redis, slug |
 | `search` | full-text `to_tsvector` en español, suggestions, facets |

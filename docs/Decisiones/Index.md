@@ -16,6 +16,7 @@ status: vivo
 | # | Decisión | Estado | Fecha |
 |---|---|---|---|
 | [[Decisiones/001-esm-imports\|001]] | ESM obligatorio — imports relativos con sufijo `.js` | ✅ Aprobada | 2026-09-08 |
+| [[Decisiones/002-supabase-auth\|002]] | Supabase Auth como proveedor de identidad | ✅ Aprobada | 2026-11-02 |
 
 ## Convenio
 
