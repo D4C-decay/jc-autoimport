@@ -43,10 +43,14 @@ cp .env.example .env.local     # NEXT_PUBLIC_SUPABASE_URL / ANON_KEY
 npm install && npm run dev     # http://localhost:4200
 ```
 
-En el panel de Supabase configura SMTP (Gmail con contrasena de aplicacion) y
-apunta las plantillas de correo a
+Correo en Supabase: para desarrollo/demo activa **Confirm email = off**
+(`mailer_autoconfirm`), asi el registro entra directo a `/cuenta` sin SMTP.
+Para produccion configura SMTP (Gmail con contrasena de aplicacion o Resend) y
+apunta las plantillas a
 `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/cuenta`
 (o deja el flujo por defecto: `/auth/confirm` tambien canjea `?code=`).
+Sin SMTP propio el plan free **no permite editar plantillas** y la recuperacion
+de contrasena no envia correo.
 
 Credenciales del seed: `admin@jcautoimport.com` / `Admin123!` (cambiar en
 produccion).
