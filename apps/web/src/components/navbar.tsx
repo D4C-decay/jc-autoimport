@@ -60,7 +60,7 @@ export function Navbar() {
         <nav className="container-x flex h-18 items-center justify-between py-4">
           <Link href="/" className="group flex items-center gap-3" data-cursor={t('inicio')}>
             <Wordmark className="h-6" />
-            <span className="font-display text-sm leading-none tracking-[0.14em] text-smoke uppercase transition-colors duration-300 group-hover:text-signal">
+            <span className="font-display text-sm leading-none tracking-[0.14em] text-smoke uppercase transition-colors duration-300 group-hover:text-signal-text">
               JC Autoimport
             </span>
           </Link>
@@ -70,9 +70,9 @@ export function Navbar() {
               <li key={l.href}>
                 <Link
                   href={l.href}
-                  className="group relative text-[11px] font-medium tracking-[0.22em] uppercase transition-colors duration-300 hover:text-signal"
+                  className="group relative text-[11px] font-medium tracking-[0.22em] uppercase transition-colors duration-300 hover:text-signal-text"
                 >
-                  <span className={cn(path === l.href && 'text-signal')}>{t(l.key)}</span>
+                  <span className={cn(path === l.href && 'text-signal-text')}>{t(l.key)}</span>
                   <span
                     aria-hidden
                     className={cn(
@@ -90,7 +90,7 @@ export function Navbar() {
               href="/cuenta"
               aria-label={t('areaCliente')}
               title={t('areaCliente')}
-              className="hidden size-10 items-center justify-center border border-line text-smoke transition-colors duration-300 hover:border-signal hover:text-signal sm:flex"
+              className="hidden size-10 items-center justify-center border border-line text-smoke transition-colors duration-300 hover:border-signal hover:text-signal-text sm:flex"
             >
               <UserRound className="size-4" strokeWidth={1.8} />
             </Link>
@@ -101,7 +101,7 @@ export function Navbar() {
               <a
                 href={CONTACT_PHONE_HREF}
                 data-cursor={t('llamar')}
-                className="hidden items-center gap-2 border border-signal/35 px-4 py-2.5 text-[10px] font-semibold tracking-[0.2em] text-signal uppercase transition-colors duration-300 hover:bg-signal hover:text-ink md:inline-flex"
+                className="hidden items-center gap-2 border border-signal/35 px-4 py-2.5 text-[10px] font-semibold tracking-[0.2em] text-signal-text uppercase transition-colors duration-300 hover:bg-signal hover:text-white md:inline-flex"
               >
                 <Phone className="size-3" strokeWidth={1.8} />
                 {t('llamar')}
@@ -111,7 +111,7 @@ export function Navbar() {
               type="button"
               onClick={() => setOpen((v) => !v)}
               aria-label={open ? t('cerrarMenu') : t('abrirMenu')}
-              className="flex size-11 items-center justify-center border border-line text-smoke transition-colors hover:border-signal hover:text-signal lg:hidden"
+              className="flex size-11 items-center justify-center border border-line text-smoke transition-colors hover:border-signal hover:text-signal-text lg:hidden"
             >
               {open ? <X className="size-4" /> : <Menu className="size-4" />}
             </button>
@@ -139,9 +139,9 @@ export function Navbar() {
                   <Link
                     href={l.href}
                     onClick={() => setOpen(false)}
-                    className="block border-b border-line py-5 font-display text-4xl text-smoke transition-colors hover:text-signal"
+                    className="block border-b border-line py-5 font-display text-4xl text-smoke transition-colors hover:text-signal-text"
                   >
-                    <span className="mr-3 align-super text-[10px] tracking-[0.2em] text-signal">
+                    <span className="mr-3 align-super text-[10px] tracking-[0.2em] text-signal-text">
                       0{i + 1}
                     </span>
                     {t(l.key)}
@@ -152,13 +152,13 @@ export function Navbar() {
                 href={CONTACT_PHONE_HREF}
                 className="mt-10 flex items-center gap-2 text-smoke"
               >
-                <Phone className="size-4 text-signal" />
+                <Phone className="size-4 text-signal-text" />
                 {CONTACT_PHONE_HREF}
               </a>
               <Link
                 href="/cuenta"
                 onClick={() => setOpen(false)}
-                className="mt-6 flex items-center gap-2 text-sm font-semibold tracking-[0.2em] text-signal uppercase"
+                className="mt-6 flex items-center gap-2 text-sm font-semibold tracking-[0.2em] text-signal-text uppercase"
               >
                 <UserRound className="size-4" />
                 {t('areaCliente')}

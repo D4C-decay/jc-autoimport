@@ -204,7 +204,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
             <GlowCursor color="#e8000d" blendMode="screen" />
             <SplitWords text="El mundo," delay={0.3} />
             <br />
-            <SplitWords text="a tu garaje." delay={0.45} className="text-signal" />
+            <SplitWords text="a tu garaje." delay={0.45} className="text-signal-text" />
           </h1>
 
           <motion.p
@@ -267,7 +267,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
             {[...BRANDS, ...BRANDS].map((b, i) => (
               <span
                 key={`${b}-${i}`}
-                className="whitespace-nowrap font-display text-lg tracking-tight text-ash/45 uppercase transition-colors duration-500 hover:text-signal sm:text-2xl"
+                className="whitespace-nowrap font-display text-lg tracking-tight text-ash/45 uppercase transition-colors duration-500 hover:text-signal-text sm:text-2xl"
               >
                 {b}
               </span>
@@ -302,7 +302,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
                     textColor="var(--color-smoke)"
                     align="left"
                   />
-                  <span className="text-signal">{s.suffix}</span>
+                  <span className="text-signal-text">{s.suffix}</span>
                 </div>
               ),
               label: s.label,
@@ -320,13 +320,13 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
             <div>
               <SectionLabel index="01">Selección de la casa</SectionLabel>
               <h2 className="mt-5 max-w-[14ch] font-display text-[clamp(2rem,5vw,4.2rem)] leading-[0.9] text-smoke">
-                Vehículos <span className="text-signal">destacados</span>
+                Vehículos <span className="text-signal-text">destacados</span>
               </h2>
             </div>
             <Reveal delay={0.15}>
               <Link
                 href="/catalogo"
-                className="group inline-flex items-center gap-2.5 text-[11px] font-semibold tracking-[0.24em] text-smoke uppercase transition-colors hover:text-signal"
+                className="group inline-flex items-center gap-2.5 text-[11px] font-semibold tracking-[0.24em] text-smoke uppercase transition-colors hover:text-signal-text"
               >
                 Ver todo el catálogo
                 <ArrowRight
@@ -366,7 +366,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
               <h2 className="mt-5 font-display text-[clamp(2rem,5vw,4.2rem)] leading-[0.9] text-smoke">
                 No importamos autos.
                 <br />
-                <span className="text-signal">Eliminamos fronteras.</span>
+                <span className="text-signal-text">Eliminamos fronteras.</span>
               </h2>
               <p className="mt-6 max-w-md text-sm leading-relaxed text-ash">
                 Convertimos una compra internacional compleja en una ruta clara: selección,
@@ -419,7 +419,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
             <div>
               <SectionLabel index="03">Mercados de origen</SectionLabel>
               <h2 className="mt-5 max-w-[16ch] font-display text-[clamp(2rem,5vw,4.2rem)] leading-[0.9] text-smoke">
-                Cuatro mercados, <span className="text-signal">un estándar.</span>
+                Cuatro mercados, <span className="text-signal-text">un estándar.</span>
               </h2>
             </div>
             <p className="max-w-sm text-sm leading-relaxed text-ash">
@@ -434,7 +434,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
                 <div className="group h-full bg-ink p-6 transition-colors duration-500 hover:bg-ink-2 lg:p-8">
                   <div className="font-display text-xl text-smoke sm:text-2xl">{o.country}</div>
                   <p className="mt-3 text-[13px] leading-relaxed text-ash">{o.note}</p>
-                  <div className="mt-6 flex items-center gap-2 text-[10px] tracking-[0.22em] text-signal uppercase">
+                  <div className="mt-6 flex items-center gap-2 text-[10px] tracking-[0.22em] text-signal-text uppercase">
                     <span className="h-px w-6 bg-signal/50" />
                     {o.days}
                   </div>
@@ -460,7 +460,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
               <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/35 to-transparent" />
               <div className="absolute bottom-0 left-0 p-8">
                 <div className="font-display text-4xl text-smoke lg:text-5xl">
-                  120<span className="text-signal">.</span>
+                  120<span className="text-signal-text">.</span>
                 </div>
                 <div className="mt-1 text-[10px] tracking-[0.24em] text-ash uppercase">
                   Puntos de inspección por unidad
@@ -472,7 +472,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
           <div>
             <SectionLabel>Por qué JC Autoimport</SectionLabel>
             <h2 className="mt-5 max-w-[16ch] font-display text-[clamp(1.8rem,4vw,3.2rem)] leading-[0.95] text-smoke">
-              Comprar importado, <span className="text-signal">sin sorpresas.</span>
+              Comprar importado, <span className="text-signal-text">sin sorpresas.</span>
             </h2>
             <div className="mt-8">
             <GlassIcons labels="always" items={[
@@ -537,7 +537,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
                   “{TESTIMONIALS[tIdx].quote}”
                 </motion.blockquote>
               </AnimatePresence>
-              <p className="mt-4 text-sm text-signal">{TESTIMONIALS[tIdx].name}</p>
+              <p className="mt-4 text-sm text-signal-text">{TESTIMONIALS[tIdx].name}</p>
               <p className="mt-1 text-xs text-ash uppercase tracking-[0.2em]">{TESTIMONIALS[tIdx].role}</p>
             </div>
           </div>
@@ -573,7 +573,7 @@ export function HomePage({ initialFeatured }: { initialFeatured: VehicleCard[] }
           <Reveal>
             <Eyebrow className="justify-center">¿Listo para tu próximo auto?</Eyebrow>
             <h2 className="mx-auto mt-6 max-w-[18ch] font-display text-[clamp(2rem,6vw,5rem)] leading-[0.9] text-smoke">
-              Tu vehículo <span className="text-signal">listo para ti.</span>
+              Tu vehículo <span className="text-signal-text">listo para ti.</span>
             </h2>
             <p className="mx-auto mt-6 max-w-lg text-sm leading-relaxed text-ash">
               Cuéntanos qué buscas y nuestro equipo encuentra la unidad perfecta en el mercado de

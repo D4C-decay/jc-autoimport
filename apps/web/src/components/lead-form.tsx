@@ -64,7 +64,7 @@ export function LeadForm({
         animate={{ opacity: 1, scale: 1 }}
         className="border border-signal/35 bg-signal/8 p-7 text-center"
       >
-        <span className="mx-auto flex size-11 items-center justify-center rounded-full border border-signal text-signal">
+        <span className="mx-auto flex size-11 items-center justify-center rounded-full border border-signal text-signal-text">
           <Check className="size-5" strokeWidth={2.2} />
         </span>
         <h3 className="mt-4 font-display text-lg text-smoke">Solicitud recibida</h3>
@@ -73,7 +73,7 @@ export function LeadForm({
           {vehicleName ? (
             <>
               {' '}
-              sobre <span className="text-signal">{vehicleName}</span>
+              sobre <span className="text-signal-text">{vehicleName}</span>
             </>
           ) : null}
           . También te escribiremos por WhatsApp.
@@ -85,7 +85,7 @@ export function LeadForm({
   return (
     <form onSubmit={onSubmit} className={cn('space-y-4', compact && 'text-sm')}>
       <div>
-        <span className="text-[10px] font-semibold tracking-[0.2em] text-signal uppercase">
+        <span className="text-[10px] font-semibold tracking-[0.2em] text-signal-text uppercase">
           Motivo de contacto
         </span>
         <div className="mt-2.5 flex flex-wrap gap-2">
@@ -97,7 +97,7 @@ export function LeadForm({
               className={cn(
                 'border px-3 py-3 text-[10px] font-medium tracking-[0.14em] uppercase transition-colors duration-300 sm:py-2',
                 type === t.value
-                  ? 'border-signal bg-signal/12 text-signal'
+                  ? 'border-signal bg-signal/12 text-signal-text'
                   : 'border-line text-ash hover:border-signal/50 hover:text-smoke',
               )}
             >
@@ -136,7 +136,7 @@ export function LeadForm({
       />
 
       <label className="block">
-        <span className="text-[10px] font-semibold tracking-[0.2em] text-signal uppercase">
+        <span className="text-[10px] font-semibold tracking-[0.2em] text-signal-text uppercase">
           Mensaje {vehicleName ? <span className="text-ash/60 normal-case">(opcional)</span> : null}
         </span>
         <textarea
@@ -158,7 +158,9 @@ export function LeadForm({
             initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="border border-red-500/35 bg-red-500/8 px-4 py-2.5 text-[12px] text-red-300"
+            role="alert"
+            aria-live="assertive"
+            className="border border-danger/35 bg-danger/10 px-4 py-3 text-[13px] text-danger"
           >
             {error}
           </motion.p>
@@ -168,7 +170,7 @@ export function LeadForm({
       <button
         type="submit"
         disabled={state === 'sending'}
-        className="btn-shine group relative flex w-full items-center justify-center gap-2.5 overflow-hidden bg-signal px-8 py-4 text-[11px] font-semibold tracking-[0.24em] text-ink uppercase transition-all duration-300 active:scale-[0.98] hover:bg-signal-light disabled:opacity-60 [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
+        className="btn-shine group relative flex w-full items-center justify-center gap-2.5 overflow-hidden bg-signal px-8 py-4 text-[11px] font-semibold tracking-[0.24em] text-white uppercase transition-all duration-300 active:scale-[0.98] hover:bg-signal-dark disabled:opacity-60 [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
       >
         <span className="relative z-10 flex items-center gap-2.5">
           {state === 'sending' ? <Loader2 className="size-3.5 animate-spin" /> : <Send className="size-3.5" strokeWidth={1.8} />}
@@ -203,7 +205,7 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="text-[10px] font-semibold tracking-[0.2em] text-signal uppercase">
+      <span className="text-[10px] font-semibold tracking-[0.2em] text-signal-text uppercase">
         {label}
         {required ? <span className="ml-1 text-signal/60">*</span> : null}
       </span>

@@ -41,13 +41,13 @@ export async function Footer() {
               href={CONTACT_WHATSAPP}
               target="_blank"
               rel="noreferrer"
-              className="border border-line px-4 py-3 text-[10px] sm:py-2 tracking-[0.2em] text-ash uppercase transition-colors hover:border-signal hover:text-signal"
+              className="border border-line px-4 py-3 text-[10px] sm:py-2 tracking-[0.2em] text-ash uppercase transition-colors hover:border-signal hover:text-signal-text"
             >
               {t('whatsapp')}
             </a>
             <Link
               href="/login"
-              className="border border-line px-4 py-3 text-[10px] sm:py-2 tracking-[0.2em] text-ash uppercase transition-colors hover:border-signal hover:text-signal"
+              className="border border-line px-4 py-3 text-[10px] sm:py-2 tracking-[0.2em] text-ash uppercase transition-colors hover:border-signal hover:text-signal-text"
             >
               {t('accesoCliente')}
             </Link>
@@ -56,7 +56,7 @@ export async function Footer() {
 
         {columns.map((col) => (
           <div key={col.titleKey}>
-            <h4 className="text-[10px] font-semibold tracking-[0.28em] text-signal uppercase">
+            <h4 className="text-[10px] font-semibold tracking-[0.28em] text-signal-text uppercase">
               {t(col.titleKey)}
             </h4>
             <ul className="mt-5 space-y-3">
@@ -75,7 +75,7 @@ export async function Footer() {
         ))}
 
         <div>
-          <h4 className="text-[10px] font-semibold tracking-[0.28em] text-signal uppercase">
+          <h4 className="text-[10px] font-semibold tracking-[0.28em] text-signal-text uppercase">
             {t('contactoTitle')}
           </h4>
           <ul className="mt-5 space-y-3 text-sm text-ash">

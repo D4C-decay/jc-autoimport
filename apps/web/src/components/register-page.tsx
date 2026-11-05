@@ -1,14 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Loader2, Lock, Mail, MailCheck, Phone, UserRound } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { authRedirect } from '@/lib/supabase/config';
+import { authMessage } from '@/lib/supabase/errors';
+import { AuthErrorNote } from './auth-error';
 import { Eyebrow } from './ui';
 import { Reveal } from './motion';
 
 export function RegisterPage() {
+  const errorId = useId();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -16,6 +19,11 @@ export function RegisterPage() {
   const [password, setPassword] = useState('');
   const [state, setState] = useState<'idle' | 'loading' | 'error' | 'sent'>('idle');
   const [error, setError] = useState('');
+
+  const fieldA11y = {
+    'aria-invalid': state === 'error',
+    'aria-describedby': state === 'error' ? errorId : undefined,
+  };
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -47,7 +55,7 @@ export function RegisterPage() {
 
       setState('sent');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'No se pudo crear la cuenta.');
+      setError(authMessage(err, 'No se pudo crear la cuenta.'));
       setState('error');
     }
   }
@@ -67,7 +75,7 @@ export function RegisterPage() {
           <Reveal>
             <Eyebrow index="Registro">Crea tu cuenta</Eyebrow>
             <h1 className="mt-5 font-display text-4xl leading-[0.95] text-smoke lg:text-5xl">
-              Empieza tu <span className="text-signal">importación</span>
+              Empieza tu <span className="text-signal-text">importación</span>
             </h1>
             <p className="mt-4 text-sm text-ash">
               Crea tu cuenta para dar seguimiento a tus unidades, reservas y documentos.
@@ -82,7 +90,7 @@ export function RegisterPage() {
               className="mt-10 border border-line bg-ink-2 p-7 md:p-8"
             >
               <div className="flex size-12 items-center justify-center border border-signal/40 bg-signal/10">
-                <MailCheck className="size-5 text-signal" strokeWidth={1.7} />
+                <MailCheck className="size-5 text-signal-text" strokeWidth={1.7} />
               </div>
               <h2 className="mt-6 font-display text-2xl text-smoke">Revisa tu correo</h2>
               <p className="mt-3 text-sm text-ash">
@@ -94,7 +102,7 @@ export function RegisterPage() {
               </p>
               <a
                 href="/login"
-                className="btn-shine group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden bg-signal px-8 py-4 text-[11px] font-semibold tracking-[0.24em] text-ink uppercase transition-all duration-300 active:scale-[0.98] hover:bg-signal-light [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
+                className="btn-shine group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden bg-signal px-8 py-4 text-[11px] font-semibold tracking-[0.24em] text-white uppercase transition-all duration-300 active:scale-[0.98] hover:bg-signal-dark [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
               >
                 <span className="relative z-10 flex items-center gap-2.5">
                   <ArrowRight className="size-3.5" strokeWidth={1.8} />
@@ -119,6 +127,7 @@ export function RegisterPage() {
                     required
                     autoComplete="given-name"
                     placeholder="Juan"
+                    {...fieldA11y}
                     className={inputClass}
                   />
                 </Field>
@@ -130,6 +139,7 @@ export function RegisterPage() {
                     required
                     autoComplete="family-name"
                     placeholder="Pérez"
+                    {...fieldA11y}
                     className={inputClass}
                   />
                 </Field>
@@ -144,6 +154,7 @@ export function RegisterPage() {
                     required
                     autoComplete="email"
                     placeholder="tucorreo@ejemplo.com"
+                    {...fieldA11y}
                     className={inputClass}
                   />
                 </Field>
@@ -157,6 +168,7 @@ export function RegisterPage() {
                     onChange={(e) => setPhone(e.target.value)}
                     autoComplete="tel"
                     placeholder="+1 555 000 0000"
+                    {...fieldA11y}
                     className={inputClass}
                   />
                 </Field>
@@ -172,6 +184,7 @@ export function RegisterPage() {
                     minLength={8}
                     autoComplete="new-password"
                     placeholder="••••••••"
+                    {...fieldA11y}
                     className={inputClass}
                   />
                 </Field>
@@ -181,15 +194,13 @@ export function RegisterPage() {
               </div>
 
               {state === 'error' ? (
-                <p className="mt-5 border border-red-500/35 bg-red-500/8 px-4 py-2.5 text-[12px] text-red-300">
-                  {error}
-                </p>
+                <AuthErrorNote id={errorId}>{error}</AuthErrorNote>
               ) : null}
 
               <button
                 type="submit"
                 disabled={state === 'loading'}
-                className="btn-shine group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden bg-signal px-8 py-4 text-[11px] font-semibold tracking-[0.24em] text-ink uppercase transition-all duration-300 active:scale-[0.98] hover:bg-signal-light disabled:opacity-60 [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
+                className="btn-shine group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden bg-signal px-8 py-4 text-[11px] font-semibold tracking-[0.24em] text-white uppercase transition-all duration-300 active:scale-[0.98] hover:bg-signal-dark disabled:opacity-60 [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
               >
                 <span className="relative z-10 flex items-center gap-2.5">
                   {state === 'loading' ? (
@@ -201,9 +212,9 @@ export function RegisterPage() {
                 </span>
               </button>
 
-              <p className="mt-6 text-center text-[11px] text-ash">
+              <p className="mt-4 text-center text-[11px] text-ash">
                 ¿Ya tienes cuenta?{' '}
-                <a href="/login" className="text-signal hover:underline">
+                <a href="/login" className="inline-block py-2 text-signal-text hover:underline">
                   Inicia sesión
                 </a>
               </p>
@@ -229,7 +240,7 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="text-[10px] font-semibold tracking-[0.2em] text-signal uppercase">
+      <span className="text-[10px] font-semibold tracking-[0.2em] text-signal-text uppercase">
         {label}
       </span>
       <div className="relative mt-2.5">

@@ -1,14 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Loader2, Mail, MailCheck } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { authRedirect } from '@/lib/supabase/config';
+import { authMessage } from '@/lib/supabase/errors';
+import { AuthErrorNote } from './auth-error';
 import { Eyebrow } from './ui';
 import { Reveal } from './motion';
 
 export function VerifyEmail({ email: initialEmail = '' }: { email?: string }) {
+  const errorId = useId();
   const [email, setEmail] = useState(initialEmail);
   const [state, setState] = useState<'idle' | 'loading' | 'sent' | 'error'>('idle');
   const [error, setError] = useState('');
@@ -27,7 +30,7 @@ export function VerifyEmail({ email: initialEmail = '' }: { email?: string }) {
       if (resendError) throw resendError;
       setState('sent');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'No se pudo reenviar el correo.');
+      setError(authMessage(err, 'No se pudo reenviar el correo.'));
       setState('error');
     }
   }
@@ -48,7 +51,7 @@ export function VerifyEmail({ email: initialEmail = '' }: { email?: string }) {
           <Reveal>
             <Eyebrow index="Cuenta">Confirmar correo</Eyebrow>
             <h1 className="mt-5 font-display text-4xl leading-[0.95] text-smoke lg:text-5xl">
-              Verifica tu <span className="text-signal">correo</span>
+              Verifica tu <span className="text-signal-text">correo</span>
             </h1>
             <p className="mt-4 text-sm text-ash">
               Si tu cuenta aún no está confirmada, te enviamos un enlace nuevo.
@@ -63,7 +66,7 @@ export function VerifyEmail({ email: initialEmail = '' }: { email?: string }) {
               className="mt-10 border border-line bg-ink-2 p-7 md:p-8"
             >
               <div className="flex size-12 items-center justify-center border border-signal/40 bg-signal/10">
-                <MailCheck className="size-5 text-signal" strokeWidth={1.7} />
+                <MailCheck className="size-5 text-signal-text" strokeWidth={1.7} />
               </div>
               <h2 className="mt-6 font-display text-2xl text-smoke">Revisa tu correo</h2>
               <p className="mt-3 text-sm text-ash">
@@ -72,7 +75,7 @@ export function VerifyEmail({ email: initialEmail = '' }: { email?: string }) {
               </p>
               <a
                 href="/login"
-                className="btn-shine group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden bg-signal px-8 py-4 text-[11px] font-semibold tracking-[0.24em] text-ink uppercase transition-all duration-300 active:scale-[0.98] hover:bg-signal-light [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
+                className="btn-shine group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden bg-signal px-8 py-4 text-[11px] font-semibold tracking-[0.24em] text-white uppercase transition-all duration-300 active:scale-[0.98] hover:bg-signal-dark [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
               >
                 <span className="relative z-10 flex items-center gap-2.5">
                   <ArrowRight className="size-3.5" strokeWidth={1.8} />
@@ -89,7 +92,7 @@ export function VerifyEmail({ email: initialEmail = '' }: { email?: string }) {
               className="mt-10 border border-line bg-ink-2 p-7 md:p-8"
             >
               <label className="block">
-                <span className="text-[10px] font-semibold tracking-[0.2em] text-signal uppercase">
+                <span className="text-[10px] font-semibold tracking-[0.2em] text-signal-text uppercase">
                   Correo electrónico
                 </span>
                 <div className="relative mt-2.5">
@@ -104,21 +107,21 @@ export function VerifyEmail({ email: initialEmail = '' }: { email?: string }) {
                     required
                     autoComplete="email"
                     placeholder="tucorreo@ejemplo.com"
+                    aria-invalid={state === 'error'}
+                    aria-describedby={state === 'error' ? errorId : undefined}
                     className="w-full border border-line bg-ink py-3.5 pr-4 pl-11 text-sm text-smoke outline-none transition-colors placeholder:text-ash/50 focus:border-signal"
                   />
                 </div>
               </label>
 
               {state === 'error' ? (
-                <p className="mt-5 border border-red-500/35 bg-red-500/8 px-4 py-2.5 text-[12px] text-red-300">
-                  {error}
-                </p>
+                <AuthErrorNote id={errorId}>{error}</AuthErrorNote>
               ) : null}
 
               <button
                 type="submit"
                 disabled={state === 'loading'}
-                className="btn-shine group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden bg-signal px-8 py-4 text-[11px] font-semibold tracking-[0.24em] text-ink uppercase transition-all duration-300 active:scale-[0.98] hover:bg-signal-light disabled:opacity-60 [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
+                className="btn-shine group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden bg-signal px-8 py-4 text-[11px] font-semibold tracking-[0.24em] text-white uppercase transition-all duration-300 active:scale-[0.98] hover:bg-signal-dark disabled:opacity-60 [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
               >
                 <span className="relative z-10 flex items-center gap-2.5">
                   {state === 'loading' ? (
@@ -130,8 +133,11 @@ export function VerifyEmail({ email: initialEmail = '' }: { email?: string }) {
                 </span>
               </button>
 
-              <p className="mt-6 text-center text-[11px] text-ash">
-                <a href="/login" className="text-signal hover:underline">
+              <p className="mt-4 text-center text-[11px] text-ash">
+                <a
+                  href="/login"
+                  className="inline-flex min-h-11 items-center text-signal-text hover:underline"
+                >
                   Volver al inicio de sesión
                 </a>
               </p>

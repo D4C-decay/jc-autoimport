@@ -26,10 +26,10 @@ export function EmailVerifyBanner({ email }: { email: string }) {
   return (
     <div className="mb-6 flex flex-col gap-4 border border-signal/30 bg-signal/8 p-5 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-start gap-3">
-        <AlertTriangle className="mt-0.5 size-4 shrink-0 text-signal" strokeWidth={1.8} />
+        <AlertTriangle className="mt-0.5 size-4 shrink-0 text-signal-text" strokeWidth={1.8} />
         <div>
           <p className="text-sm text-smoke">Confirma tu correo electrónico</p>
-          <p className="mt-1 text-[12px] text-ash">
+          <p className="mt-1 text-[12px] text-ash" role="status" aria-live="polite">
             {state === 'sent'
               ? 'Te reenviamos el enlace de confirmación. Revisa tu bandeja de entrada.'
               : state === 'error'
@@ -42,7 +42,7 @@ export function EmailVerifyBanner({ email }: { email: string }) {
         type="button"
         onClick={resend}
         disabled={state === 'loading' || state === 'sent'}
-        className="inline-flex shrink-0 items-center justify-center gap-2 border border-signal px-5 py-2.5 text-[10px] font-semibold tracking-[0.2em] text-signal uppercase transition-colors active:scale-[0.98] hover:bg-signal hover:text-ink disabled:opacity-60"
+        className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 border border-signal px-5 py-2.5 text-[10px] font-semibold tracking-[0.2em] text-signal-text uppercase transition-colors active:scale-[0.98] hover:bg-signal hover:text-white disabled:opacity-60"
       >
         {state === 'loading' ? (
           <Loader2 className="size-3.5 animate-spin" />

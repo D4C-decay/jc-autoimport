@@ -42,17 +42,21 @@ Modo **oscuro (por defecto)**:
 | `--color-ash` | `#96969e` | Texto secundario |
 | `--color-line` | `#26262e` | Bordes/divisores |
 | `--color-signal` | **`#e8000d`** | Acento/CTA (SOLO 10%) |
+| `--color-signal-text` | `#ff1f28` / `#d0000c` | **Texto/iconos** rojos pequeños (AA sobre ink/ink-2/ink-3) |
 | `--color-signal-light` | `#ff3d46` | Hover/acento suave |
-| `--color-signal-dark` | `#9c000a` | Acento profundo |
+| `--color-signal-dark` | `#9c000a` | Acento profundo / hover de CTA |
+| `--color-danger` | `#ff9ea3` / `#b0000c` | Texto y avisos de error (AA en claro y oscuro) |
 
 Modo **claro** (`html[data-theme='light']`): `--color-signal` se mantiene `#e8000d`;
-`--color-signal-light: #a3000a`, `--color-signal-dark: #9c000a`; `--color-ink`→`#f5f5f6`,
+`--color-signal-text: #d0000c`, `--color-signal-light: #a3000a`, `--color-signal-dark: #9c000a`; `--color-ink`→`#f5f5f6`,
 `--color-smoke`→`#0c0c0f`, etc. La UI cambia sin tocar clases.
 
 **Reglas**:
 - Nunca escribir hex directamente en componentes; usar `var(--color-*)` o utilidades Tailwind
   (`bg-ink`, `text-smoke`, `border-line`, `text-signal`). **Prohibido `#f02434` (rojo antiguo)**.
 - El rojo `signal` es escaso: CTAs, un acento por sección, estados activos. Nunca fondos grandes.
+- El texto y los iconos rojos pequeños usan `text-signal-text` (no `text-signal`), y los errores
+  usan `text-danger` (no `text-red-300`, que falla AA en modo claro).
 - Glows rojos en `rgba(232, 0, 13, …)` (carril destacado, textos con glow).
 - Contraste mínimo **WCAG AA** (4.5:1 texto normal). Cuidado con `white/NN` sobre imágenes.
 

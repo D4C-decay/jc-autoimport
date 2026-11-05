@@ -44,7 +44,7 @@ export default async function AccountPage() {
       <div className="container-x relative">
         <Eyebrow index="Cuenta">Área de cliente</Eyebrow>
         <h1 className="mt-5 font-display text-4xl leading-[0.95] text-smoke lg:text-5xl">
-          Hola, <span className="text-signal">{name.split(' ')[0]}</span>
+          Hola, <span className="text-signal-text">{name.split(' ')[0]}</span>
         </h1>
         <p className="mt-4 max-w-xl text-sm text-ash">
           Aquí puedes revisar tu sesión y la seguridad de tu cuenta.
@@ -62,7 +62,7 @@ export default async function AccountPage() {
               <h2 className="font-display text-sm tracking-[0.16em] text-smoke uppercase">
                 Datos de la cuenta
               </h2>
-              <BadgeCheck className="size-5 text-signal" strokeWidth={1.7} />
+              <BadgeCheck className="size-5 text-signal-text" strokeWidth={1.7} />
             </div>
             <dl className="mt-7 space-y-5 text-sm">
               <div className="flex items-center gap-3">

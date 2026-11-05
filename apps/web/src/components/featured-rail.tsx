@@ -238,7 +238,7 @@ export function FeaturedRail({ vehicles }: { vehicles: VehicleCard[] }) {
         <Link
           href="/catalogo"
           data-cursor="Ver"
-          className="group/link inline-flex shrink-0 items-center gap-2 text-[10px] font-semibold tracking-[0.24em] text-smoke uppercase transition-colors hover:text-signal"
+          className="group/link inline-flex shrink-0 items-center gap-2 text-[10px] font-semibold tracking-[0.24em] text-smoke uppercase transition-colors hover:text-signal-text"
         >
           Ver las {vehicles.length} unidades
           <ArrowUpRight
@@ -276,13 +276,13 @@ function RailCard({ vehicle, tabbable = true }: { vehicle: VehicleCard; tabbable
           ) : null}
           <div className="absolute inset-0 bg-gradient-to-t from-ink-2 via-ink-2/20 to-transparent" />
 
-          <span className="absolute top-3 left-3 bg-signal px-2.5 py-1 text-[9px] font-bold tracking-[0.18em] text-ink uppercase">
+          <span className="absolute top-3 left-3 bg-signal px-2.5 py-1 text-[9px] font-bold tracking-[0.18em] text-white uppercase">
             Destacado
           </span>
 
           <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4">
             <div className="min-w-0">
-              <span className="block text-[9px] font-semibold tracking-[0.26em] text-signal uppercase">
+              <span className="block text-[9px] font-semibold tracking-[0.26em] text-signal-text uppercase">
                 {vehicle.brand}
               </span>
               <h3 className="mt-1 truncate font-display text-lg text-smoke">{vehicle.model}</h3>

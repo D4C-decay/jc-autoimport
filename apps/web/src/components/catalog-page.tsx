@@ -195,7 +195,7 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
           </Eyebrow>
           <h1 className="mt-5 font-display text-[clamp(2.2rem,6vw,5rem)] leading-[0.9] text-smoke">
             {textQuery ? 'Resultados' : 'Catálogo'}
-            {!textQuery ? <span className="text-signal">.</span> : null}
+            {!textQuery ? <span className="text-signal-text">.</span> : null}
           </h1>
           <p className="mt-5 max-w-xl text-sm leading-relaxed text-ash">
             Cada vehículo pasa inspección de 120 puntos en origen antes de ser listado. Precios
@@ -234,14 +234,14 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
               className={cn(
                 'flex items-center gap-2 border px-4 py-2.5 text-[10px] font-semibold tracking-[0.2em] uppercase transition-colors lg:hidden',
                 panelOpen || activeCount > 0
-                  ? 'border-signal text-signal'
-                  : 'border-line text-ash hover:border-signal hover:text-signal',
+                  ? 'border-signal text-signal-text'
+                  : 'border-line text-ash hover:border-signal hover:text-signal-text',
               )}
             >
               <SlidersHorizontal className="size-3.5" strokeWidth={1.7} />
               Filtros
               {activeCount > 0 ? (
-                <span className="flex size-4 items-center justify-center bg-signal text-[9px] text-ink">
+                <span className="flex size-4 items-center justify-center bg-signal text-[9px] text-white">
                   {activeCount}
                 </span>
               ) : null}
@@ -250,7 +250,7 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
               <button
                 type="button"
                 onClick={clearAll}
-                className="flex items-center gap-1.5 text-[10px] tracking-[0.18em] text-ash uppercase transition-colors hover:text-signal"
+                className="flex items-center gap-1.5 text-[10px] tracking-[0.18em] text-ash uppercase transition-colors hover:text-signal-text"
               >
                 <X className="size-3" /> Limpiar
               </button>
@@ -282,7 +282,7 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
                 ))}
               </select>
               <ChevronDown
-                className="pointer-events-none absolute top-1/2 right-3 size-3 -translate-y-1/2 text-signal"
+                className="pointer-events-none absolute top-1/2 right-3 size-3 -translate-y-1/2 text-signal-text"
                 strokeWidth={1.8}
               />
             </div>
@@ -320,7 +320,7 @@ export function CatalogPage({ initial }: { initial?: InitialCatalog }) {
                   <button
                     type="button"
                     onClick={clearAll}
-                    className="text-[10px] tracking-[0.18em] text-ash uppercase transition-colors hover:text-signal"
+                    className="text-[10px] tracking-[0.18em] text-ash uppercase transition-colors hover:text-signal-text"
                   >
                     Limpiar ({activeCount})
                   </button>
@@ -432,7 +432,7 @@ function SelectField({
 }) {
   return (
     <label className="block">
-      <span className="text-[10px] font-semibold tracking-[0.2em] text-signal uppercase">{label}</span>
+      <span className="text-[10px] font-semibold tracking-[0.2em] text-signal-text uppercase">{label}</span>
       <div className="relative mt-2.5">
         <select
           value={value}
@@ -472,7 +472,7 @@ function RangeField({
 }) {
   return (
     <div>
-      <span className="text-[10px] font-semibold tracking-[0.2em] text-signal uppercase">{label}</span>
+      <span className="text-[10px] font-semibold tracking-[0.2em] text-signal-text uppercase">{label}</span>
       <div className="mt-2.5 flex items-center gap-2">
         <input
           value={min}
@@ -516,7 +516,7 @@ function ViewButton({
       className={cn(
         'flex size-9 items-center justify-center transition-colors',
         active
-          ? 'bg-signal text-ink'
+          ? 'bg-signal text-white'
           : 'text-ash hover:bg-ink-3 hover:text-smoke',
       )}
     >

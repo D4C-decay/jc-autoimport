@@ -1,29 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ArrowRight, Loader2, Lock, Mail, ShieldCheck } from 'lucide-react';
-import type { AuthError, Factor } from '@supabase/supabase-js';
+import type { Factor } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/client';
+import { authMessage } from '@/lib/supabase/errors';
+import { AuthErrorNote } from './auth-error';
 import { Eyebrow } from './ui';
 import { Reveal } from './motion';
 
 function safeNext(value: string | undefined): string {
   if (!value || !value.startsWith('/') || value.startsWith('//')) return '/cuenta';
   return value;
-}
-
-function authMessage(error: AuthError): string {
-  const msg = error.message.toLowerCase();
-  if (msg.includes('invalid login credentials')) return 'Correo o contraseña incorrectos.';
-  if (msg.includes('email not confirmed')) {
-    return 'Tu correo aún no está confirmado. Revisa tu bandeja de entrada o reenvía el enlace.';
-  }
-  if (msg.includes('too many requests') || msg.includes('rate limit')) {
-    return 'Demasiados intentos. Espera unos minutos e inténtalo de nuevo.';
-  }
-  return error.message;
 }
 
 export function LoginPage({
@@ -34,6 +24,7 @@ export function LoginPage({
   initialError?: string;
 }) {
   const router = useRouter();
+  const errorId = useId();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [code, setCode] = useState('');
@@ -76,10 +67,7 @@ export function LoginPage({
 
       goNext();
     } catch (err) {
-      const message =
-        err && typeof err === 'object' && 'message' in err
-          ? authMessage(err as AuthError)
-          : 'No se pudo iniciar sesión.';
+      const message = authMessage(err, 'No se pudo iniciar sesión.');
       setError(message);
       setUnconfirmed(message.includes('no está confirmado'));
       setState('error');
@@ -100,7 +88,7 @@ export function LoginPage({
       if (verifyError) throw verifyError;
       goNext();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Código incorrecto.');
+      setError(authMessage(err, 'Código incorrecto.'));
       setState('error');
     }
   }
@@ -123,11 +111,11 @@ export function LoginPage({
             <h1 className="mt-5 font-display text-4xl leading-[0.95] text-smoke lg:text-5xl">
               {step === '2fa' ? (
                 <>
-                  Verifica tu <span className="text-signal">identidad</span>
+                  Verifica tu <span className="text-signal-text">identidad</span>
                 </>
               ) : (
                 <>
-                  Bienvenido de <span className="text-signal">vuelta</span>
+                  Bienvenido de <span className="text-signal-text">vuelta</span>
                 </>
               )}
             </h1>
@@ -147,7 +135,7 @@ export function LoginPage({
               className="mt-10 border border-line bg-ink-2 p-7 md:p-8"
             >
               <label className="block">
-                <span className="text-[10px] font-semibold tracking-[0.2em] text-signal uppercase">
+                <span className="text-[10px] font-semibold tracking-[0.2em] text-signal-text uppercase">
                   Correo electrónico
                 </span>
                 <div className="relative mt-2.5">
@@ -162,13 +150,15 @@ export function LoginPage({
                     required
                     autoComplete="email"
                     placeholder="tucorreo@ejemplo.com"
+                    aria-invalid={state === 'error'}
+                    aria-describedby={state === 'error' ? errorId : undefined}
                     className="w-full border border-line bg-ink py-3.5 pr-4 pl-11 text-sm text-smoke outline-none transition-colors placeholder:text-ash/50 focus:border-signal"
                   />
                 </div>
               </label>
 
               <label className="mt-5 block">
-                <span className="text-[10px] font-semibold tracking-[0.2em] text-signal uppercase">
+                <span className="text-[10px] font-semibold tracking-[0.2em] text-signal-text uppercase">
                   Contraseña
                 </span>
                 <div className="relative mt-2.5">
@@ -183,28 +173,31 @@ export function LoginPage({
                     required
                     autoComplete="current-password"
                     placeholder="••••••••"
+                    aria-invalid={state === 'error'}
+                    aria-describedby={state === 'error' ? errorId : undefined}
                     className="w-full border border-line bg-ink py-3.5 pr-4 pl-11 text-sm text-smoke outline-none transition-colors placeholder:text-ash/50 focus:border-signal"
                   />
                 </div>
               </label>
 
               {state === 'error' ? (
-                <ErrorNote error={error}>
+                <AuthErrorNote id={errorId}>
+                  <p>{error}</p>
                   {unconfirmed ? (
                     <a
                       href={`/verificar?email=${encodeURIComponent(email)}`}
-                      className="mt-1 inline-block text-signal hover:underline"
+                      className="mt-1 inline-block py-2 text-signal-text hover:underline"
                     >
                       Reenviar correo de confirmación
                     </a>
                   ) : null}
-                </ErrorNote>
+                </AuthErrorNote>
               ) : null}
 
               <button
                 type="submit"
                 disabled={state === 'loading'}
-                className="btn-shine group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden bg-signal px-8 py-4 text-[11px] font-semibold tracking-[0.24em] text-ink uppercase transition-all duration-300 active:scale-[0.98] hover:bg-signal-light disabled:opacity-60 [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
+                className="btn-shine group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden bg-signal px-8 py-4 text-[11px] font-semibold tracking-[0.24em] text-white uppercase transition-all duration-300 active:scale-[0.98] hover:bg-signal-dark disabled:opacity-60 [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
               >
                 <span className="relative z-10 flex items-center gap-2.5">
                   {state === 'loading' ? (
@@ -217,17 +210,23 @@ export function LoginPage({
               </button>
 
               <div className="mt-5 flex items-center justify-between text-[11px] text-ash">
-                <a href="/recuperar" className="text-signal hover:underline">
+                <a
+                  href="/recuperar"
+                  className="inline-flex min-h-11 items-center text-signal-text hover:underline"
+                >
                   ¿Olvidaste tu contraseña?
                 </a>
-                <a href="/verificar" className="hover:text-smoke">
+                <a href="/verificar" className="inline-flex min-h-11 items-center hover:text-smoke">
                   Confirmar correo
                 </a>
               </div>
 
-              <p className="mt-6 text-center text-[11px] text-ash">
+              <p className="mt-4 text-center text-[11px] text-ash">
                 ¿Aún no tienes cuenta?{' '}
-                <a href="/registro" className="text-signal hover:underline">
+                <a
+                  href="/registro"
+                  className="inline-block py-2 text-signal-text hover:underline"
+                >
                   Crear una cuenta
                 </a>
               </p>
@@ -242,7 +241,7 @@ export function LoginPage({
               className="mt-10 border border-line bg-ink-2 p-7 md:p-8"
             >
               <label className="block">
-                <span className="text-[10px] font-semibold tracking-[0.2em] text-signal uppercase">
+                <span className="text-[10px] font-semibold tracking-[0.2em] text-signal-text uppercase">
                   Código de verificación
                 </span>
                 <div className="relative mt-2.5">
@@ -258,17 +257,19 @@ export function LoginPage({
                     inputMode="numeric"
                     autoComplete="one-time-code"
                     placeholder="000000"
+                    aria-invalid={state === 'error'}
+                    aria-describedby={state === 'error' ? errorId : undefined}
                     className="w-full border border-line bg-ink py-3.5 pr-4 pl-11 text-center font-mono text-lg tracking-[0.4em] text-smoke outline-none transition-colors placeholder:text-ash/40 focus:border-signal"
                   />
                 </div>
               </label>
 
-              {state === 'error' ? <ErrorNote error={error} /> : null}
+              {state === 'error' ? <AuthErrorNote id={errorId}>{error}</AuthErrorNote> : null}
 
               <button
                 type="submit"
                 disabled={state === 'loading' || code.length < 6}
-                className="btn-shine group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden bg-signal px-8 py-4 text-[11px] font-semibold tracking-[0.24em] text-ink uppercase transition-all duration-300 active:scale-[0.98] hover:bg-signal-light disabled:opacity-60 [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
+                className="btn-shine group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden bg-signal px-8 py-4 text-[11px] font-semibold tracking-[0.24em] text-white uppercase transition-all duration-300 active:scale-[0.98] hover:bg-signal-dark disabled:opacity-60 [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
               >
                 <span className="relative z-10 flex items-center gap-2.5">
                   {state === 'loading' ? (
@@ -288,7 +289,7 @@ export function LoginPage({
                   setState('idle');
                   setError('');
                 }}
-                className="mt-4 w-full text-center text-[11px] text-ash hover:text-smoke"
+                className="mt-4 inline-flex min-h-11 w-full items-center justify-center text-center text-[11px] text-ash hover:text-smoke"
               >
                 Volver al inicio de sesión
               </button>
@@ -297,14 +298,5 @@ export function LoginPage({
         </div>
       </div>
     </section>
-  );
-}
-
-function ErrorNote({ error, children }: { error: string; children?: React.ReactNode }) {
-  return (
-    <div className="mt-5 border border-red-500/35 bg-red-500/8 px-4 py-2.5 text-[12px] text-red-300">
-      <p>{error}</p>
-      {children}
-    </div>
   );
 }

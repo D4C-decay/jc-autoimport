@@ -1,8 +1,10 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useId, useState } from 'react';
 import { Check, KeyRound, Loader2, Lock, ShieldCheck } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
+import { authMessage } from '@/lib/supabase/errors';
+import { AuthErrorNote } from './auth-error';
 import type { Factor } from '@supabase/supabase-js';
 
 type Enrollment = { factorId: string; secret: string; qr: string };
@@ -12,6 +14,7 @@ function qrSrc(raw: string): string {
 }
 
 export function TwoFactorSettings() {
+  const errorId = useId();
   const [enabled, setEnabled] = useState<boolean | null>(null);
   const [factorId, setFactorId] = useState('');
   const [state, setState] = useState<'idle' | 'loading' | 'error'>('idle');
@@ -53,7 +56,7 @@ export function TwoFactorSettings() {
       });
       setState('idle');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'No se pudo iniciar la configuración.');
+      setError(authMessage(err, 'No se pudo iniciar la configuración.'));
       setState('error');
     }
   }
@@ -74,7 +77,7 @@ export function TwoFactorSettings() {
       setCode('');
       setState('idle');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Código inválido.');
+      setError(authMessage(err, 'Código inválido.'));
       setState('error');
     }
   }
@@ -97,11 +100,15 @@ export function TwoFactorSettings() {
 
   async function confirmDisable() {
     if (code.length < 6) return;
+    if (!factorId) {
+      setError('No se encontró tu autenticador.');
+      setState('error');
+      return;
+    }
     setState('loading');
     setError('');
     try {
       const supabase = createClient();
-      if (!factorId) throw new Error('No se encontró tu autenticador.');
 
       // Supabase requires a fresh aal2 session to remove a factor.
       const { error: verifyError } = await supabase.auth.mfa.challengeAndVerify({
@@ -118,7 +125,7 @@ export function TwoFactorSettings() {
       setCode('');
       setState('idle');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Código inválido.');
+      setError(authMessage(err, 'Código inválido.'));
       setState('error');
     }
   }
@@ -128,7 +135,7 @@ export function TwoFactorSettings() {
       <div className="flex items-start justify-between gap-4">
         <div>
           <h2 className="flex items-center gap-2.5 font-display text-sm tracking-[0.16em] text-smoke uppercase">
-            <ShieldCheck className="size-4 text-signal" strokeWidth={1.7} />
+            <ShieldCheck className="size-4 text-signal-text" strokeWidth={1.7} />
             Verificación en dos pasos
           </h2>
           <p className="mt-3 text-xs leading-relaxed text-ash">
@@ -137,7 +144,7 @@ export function TwoFactorSettings() {
           </p>
         </div>
         {enabled === true ? (
-          <span className="flex shrink-0 items-center gap-1.5 border border-signal/40 px-3 py-1.5 text-[9px] font-semibold tracking-[0.2em] text-signal uppercase">
+          <span className="flex shrink-0 items-center gap-1.5 border border-signal/40 px-3 py-1.5 text-[9px] font-semibold tracking-[0.2em] text-signal-text uppercase">
             <Check className="size-3" strokeWidth={2.4} />
             Activo
           </span>
@@ -151,7 +158,7 @@ export function TwoFactorSettings() {
           type="button"
           onClick={startSetup}
           disabled={state === 'loading'}
-          className="btn-shine group relative mt-7 inline-flex items-center gap-2.5 overflow-hidden bg-signal px-6 py-3.5 text-[10px] font-semibold tracking-[0.22em] text-ink uppercase transition-all duration-300 active:scale-[0.98] hover:bg-signal-light disabled:opacity-60 [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
+          className="btn-shine group relative mt-7 inline-flex min-h-11 items-center gap-2.5 overflow-hidden bg-signal px-6 py-3.5 text-[10px] font-semibold tracking-[0.22em] text-white uppercase transition-all duration-300 active:scale-[0.98] hover:bg-signal-dark disabled:opacity-60 [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
         >
           <span className="relative z-10 flex items-center gap-2.5">
             {state === 'loading' ? <Loader2 className="size-3.5 animate-spin" /> : <Lock className="size-3.5" strokeWidth={1.8} />}
@@ -172,7 +179,7 @@ export function TwoFactorSettings() {
               className="border border-line bg-white p-2"
             />
             <div className="flex-1">
-              <p className="text-[10px] font-semibold tracking-[0.2em] text-signal uppercase">
+              <p className="text-[10px] font-semibold tracking-[0.2em] text-signal-text uppercase">
                 1. Escanea el código QR
               </p>
               <p className="mt-1.5 text-[11px] leading-relaxed text-ash">
@@ -187,7 +194,7 @@ export function TwoFactorSettings() {
           </div>
 
           <label className="mt-6 block">
-            <span className="text-[10px] font-semibold tracking-[0.2em] text-signal uppercase">
+            <span className="text-[10px] font-semibold tracking-[0.2em] text-signal-text uppercase">
               2. Código de confirmación
             </span>
             <input
@@ -196,18 +203,20 @@ export function TwoFactorSettings() {
               onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
               inputMode="numeric"
               placeholder="000000"
+              aria-invalid={state === 'error'}
+              aria-describedby={state === 'error' ? errorId : undefined}
               className="mt-2.5 w-full border border-line bg-ink py-3 text-center font-mono text-lg tracking-[0.4em] text-smoke outline-none transition-colors placeholder:text-ash/40 focus:border-signal"
             />
           </label>
 
-          {error ? <ErrorNote error={error} /> : null}
+          {error ? <AuthErrorNote id={errorId}>{error}</AuthErrorNote> : null}
 
           <div className="mt-5 flex flex-wrap gap-3">
             <button
               type="button"
               onClick={confirmSetup}
               disabled={state === 'loading' || code.length < 6}
-              className="btn-shine group relative inline-flex items-center gap-2.5 overflow-hidden bg-signal px-6 py-3.5 text-[10px] font-semibold tracking-[0.22em] text-ink uppercase transition-all duration-300 active:scale-[0.98] hover:bg-signal-light disabled:opacity-60 [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
+              className="btn-shine group relative inline-flex min-h-11 items-center gap-2.5 overflow-hidden bg-signal px-6 py-3.5 text-[10px] font-semibold tracking-[0.22em] text-white uppercase transition-all duration-300 active:scale-[0.98] hover:bg-signal-dark disabled:opacity-60 [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
             >
               <span className="relative z-10 flex items-center gap-2.5">
                 {state === 'loading' ? <Loader2 className="size-3.5 animate-spin" /> : <ShieldCheck className="size-3.5" strokeWidth={1.8} />}
@@ -218,7 +227,7 @@ export function TwoFactorSettings() {
               type="button"
               onClick={cancelSetup}
               disabled={state === 'loading'}
-              className="inline-flex items-center gap-2 border border-line px-6 py-3.5 text-[10px] font-semibold tracking-[0.22em] text-ash uppercase transition-colors duration-300 hover:border-signal hover:text-signal disabled:opacity-60"
+              className="inline-flex min-h-11 items-center gap-2 border border-line px-6 py-3.5 text-[10px] font-semibold tracking-[0.22em] text-ash uppercase transition-colors duration-300 hover:border-signal hover:text-signal-text disabled:opacity-60"
             >
               Cancelar
             </button>
@@ -239,19 +248,21 @@ export function TwoFactorSettings() {
               onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
               inputMode="numeric"
               placeholder="000000"
+              aria-invalid={state === 'error'}
+              aria-describedby={state === 'error' ? errorId : undefined}
               className="w-40 border border-line bg-ink py-3 text-center font-mono text-base tracking-[0.3em] text-smoke outline-none transition-colors placeholder:text-ash/40 focus:border-signal"
             />
             <button
               type="button"
               onClick={confirmDisable}
               disabled={state === 'loading' || code.length < 6}
-              className="inline-flex items-center gap-2 border border-line px-6 py-3 text-[10px] font-semibold tracking-[0.2em] text-ash uppercase transition-colors duration-300 hover:border-signal hover:text-signal active:scale-[0.98] disabled:opacity-60"
+              className="inline-flex min-h-11 items-center gap-2 border border-line px-6 py-3 text-[10px] font-semibold tracking-[0.2em] text-ash uppercase transition-colors duration-300 hover:border-signal hover:text-signal-text active:scale-[0.98] disabled:opacity-60"
             >
               {state === 'loading' ? <Loader2 className="size-3.5 animate-spin" /> : <Lock className="size-3.5" strokeWidth={1.8} />}
               Desactivar
             </button>
           </div>
-          {error ? <ErrorNote error={error} /> : null}
+          {error ? <AuthErrorNote id={errorId}>{error}</AuthErrorNote> : null}
         </div>
       ) : null}
     </div>
@@ -260,12 +271,4 @@ export function TwoFactorSettings() {
 
 function Skeleton() {
   return <div className="mt-7 h-24 animate-pulse bg-ink-3" />;
-}
-
-function ErrorNote({ error }: { error: string }) {
-  return (
-    <p className="mt-4 border border-red-500/35 bg-red-500/8 px-4 py-2.5 text-[12px] text-red-300">
-      {error}
-    </p>
-  );
 }

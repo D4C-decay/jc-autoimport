@@ -58,7 +58,7 @@ export default function Page() {
               { label: 'Oficina', value: CONTACT_ADDRESS, href: undefined },
             ].map((c) => (
               <div key={c.label} className="bg-ink-2 p-5">
-                <div className="text-[10px] font-semibold tracking-[0.24em] text-signal uppercase">
+                <div className="text-[10px] font-semibold tracking-[0.24em] text-signal-text uppercase">
                   {c.label}
                 </div>
                 {c.href ? (
@@ -66,7 +66,7 @@ export default function Page() {
                     href={c.href}
                     target={c.href.startsWith('http') ? '_blank' : undefined}
                     rel="noreferrer"
-                    className="mt-1.5 block text-sm text-smoke transition-colors hover:text-signal"
+                    className="mt-1.5 block text-sm text-smoke transition-colors hover:text-signal-text"
                   >
                     {c.value}
                   </a>

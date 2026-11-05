@@ -9,9 +9,9 @@ const base =
   'group relative inline-flex items-center justify-center gap-2.5 overflow-hidden px-8 py-4 text-[11px] font-semibold tracking-[0.24em] uppercase transition-all duration-500 active:scale-[0.98] disabled:pointer-events-none [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]';
 
 const variants: Record<ButtonVariant, string> = {
-  solid: 'bg-signal text-ink hover:bg-signal-light',
-  outline: 'border border-signal/45 text-signal hover:border-signal hover:bg-signal/8',
-  ghost: 'text-smoke/80 hover:text-signal',
+  solid: 'bg-signal text-white hover:bg-signal-dark',
+  outline: 'border border-signal/45 text-signal-text hover:border-signal hover:bg-signal/8',
+  ghost: 'text-smoke/80 hover:text-signal-text',
 };
 
 export function Button({
@@ -85,7 +85,7 @@ export function Eyebrow({
 }) {
   return (
     <div className={cn('flex items-center gap-4', className)}>
-      {index ? <span className="text-xs tracking-[0.3em] text-signal">{index}</span> : null}
+      {index ? <span className="text-xs tracking-[0.3em] text-signal-text">{index}</span> : null}
       <span className="h-px w-10 bg-signal/50" />
       <span className="text-[11px] font-medium tracking-[0.34em] text-ash uppercase">{children}</span>
     </div>

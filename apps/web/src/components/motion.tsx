@@ -296,7 +296,7 @@ export function SectionLabel({ children, index }: { children: ReactNode; index?:
   return (
     <Reveal className="flex items-center gap-4">
       {index ? (
-        <span className="font-display text-xs tracking-[0.3em] text-signal">{index}</span>
+        <span className="font-display text-xs tracking-[0.3em] text-signal-text">{index}</span>
       ) : null}
       <span className="h-px w-10 bg-signal/50" />
       <span className="text-[11px] font-medium tracking-[0.34em] text-ash uppercase">{children}</span>

@@ -1,14 +1,17 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Check, Loader2, Lock } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import type { Session } from '@supabase/supabase-js';
+import { authMessage } from '@/lib/supabase/errors';
+import { AuthErrorNote } from './auth-error';
 import { Eyebrow } from './ui';
 import { Reveal } from './motion';
 
 export function ResetPassword() {
+  const errorId = useId();
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [state, setState] = useState<'checking' | 'idle' | 'loading' | 'done' | 'invalid'>('checking');
@@ -58,7 +61,7 @@ export function ResetPassword() {
       if (updateError) throw updateError;
       setState('done');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'No se pudo actualizar la contraseña.');
+      setError(authMessage(err, 'No se pudo actualizar la contraseña.'));
       setState('idle');
     }
   }
@@ -79,7 +82,7 @@ export function ResetPassword() {
           <Reveal>
             <Eyebrow index="Acceso">Nueva contraseña</Eyebrow>
             <h1 className="mt-5 font-display text-4xl leading-[0.95] text-smoke lg:text-5xl">
-              Establece tu <span className="text-signal">contraseña</span>
+              Establece tu <span className="text-signal-text">contraseña</span>
             </h1>
             <p className="mt-4 text-sm text-ash">
               Elige una contraseña nueva para tu cuenta. Mínimo 8 caracteres.
@@ -94,7 +97,7 @@ export function ResetPassword() {
               className="mt-10 border border-line bg-ink-2 p-7 md:p-8"
             >
               <div className="flex size-12 items-center justify-center border border-signal/40 bg-signal/10">
-                <Check className="size-5 text-signal" strokeWidth={2} />
+                <Check className="size-5 text-signal-text" strokeWidth={2} />
               </div>
               <h2 className="mt-6 font-display text-2xl text-smoke">Contraseña actualizada</h2>
               <p className="mt-3 text-sm text-ash">
@@ -102,7 +105,7 @@ export function ResetPassword() {
               </p>
               <a
                 href="/cuenta"
-                className="btn-shine group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden bg-signal px-8 py-4 text-[11px] font-semibold tracking-[0.24em] text-ink uppercase transition-all duration-300 active:scale-[0.98] hover:bg-signal-light [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
+                className="btn-shine group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden bg-signal px-8 py-4 text-[11px] font-semibold tracking-[0.24em] text-white uppercase transition-all duration-300 active:scale-[0.98] hover:bg-signal-dark [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
               >
                 <span className="relative z-10 flex items-center gap-2.5">
                   <ArrowRight className="size-3.5" strokeWidth={1.8} />
@@ -123,21 +126,31 @@ export function ResetPassword() {
               onSubmit={onSubmit}
               className="mt-10 border border-line bg-ink-2 p-7 md:p-8"
             >
-              <PasswordField label="Nueva contraseña" value={password} onChange={setPassword} autoComplete="new-password" />
+              <PasswordField
+                label="Nueva contraseña"
+                value={password}
+                onChange={setPassword}
+                autoComplete="new-password"
+                invalid={Boolean(error)}
+                describedBy={error ? errorId : undefined}
+              />
               <div className="mt-5">
-                <PasswordField label="Repite la contraseña" value={confirm} onChange={setConfirm} autoComplete="new-password" />
+                <PasswordField
+                  label="Repite la contraseña"
+                  value={confirm}
+                  onChange={setConfirm}
+                  autoComplete="new-password"
+                  invalid={Boolean(error)}
+                  describedBy={error ? errorId : undefined}
+                />
               </div>
 
-              {error ? (
-                <p className="mt-5 border border-red-500/35 bg-red-500/8 px-4 py-2.5 text-[12px] text-red-300">
-                  {error}
-                </p>
-              ) : null}
+              {error ? <AuthErrorNote id={errorId}>{error}</AuthErrorNote> : null}
 
               <button
                 type="submit"
                 disabled={state === 'loading' || state === 'invalid' || password.length < 8}
-                className="btn-shine group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden bg-signal px-8 py-4 text-[11px] font-semibold tracking-[0.24em] text-ink uppercase transition-all duration-300 active:scale-[0.98] hover:bg-signal-light disabled:opacity-60 [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
+                className="btn-shine group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden bg-signal px-8 py-4 text-[11px] font-semibold tracking-[0.24em] text-white uppercase transition-all duration-300 active:scale-[0.98] hover:bg-signal-dark disabled:opacity-60 [clip-path:polygon(0_0,100%_0,100%_72%,0_100%)]"
               >
                 <span className="relative z-10 flex items-center gap-2.5">
                   {state === 'loading' ? (
@@ -150,8 +163,11 @@ export function ResetPassword() {
               </button>
 
               {state === 'invalid' ? (
-                <p className="mt-6 text-center text-[11px] text-ash">
-                  <a href="/recuperar" className="text-signal hover:underline">
+                <p className="mt-4 text-center text-[11px] text-ash">
+                  <a
+                    href="/recuperar"
+                    className="inline-flex min-h-11 items-center text-signal-text hover:underline"
+                  >
                     Solicitar un enlace nuevo
                   </a>
                 </p>
@@ -169,15 +185,19 @@ function PasswordField({
   value,
   onChange,
   autoComplete,
+  invalid,
+  describedBy,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   autoComplete: string;
+  invalid?: boolean;
+  describedBy?: string;
 }) {
   return (
     <label className="block">
-      <span className="text-[10px] font-semibold tracking-[0.2em] text-signal uppercase">
+      <span className="text-[10px] font-semibold tracking-[0.2em] text-signal-text uppercase">
         {label}
       </span>
       <div className="relative mt-2.5">
@@ -193,6 +213,8 @@ function PasswordField({
           minLength={8}
           autoComplete={autoComplete}
           placeholder="••••••••"
+          aria-invalid={invalid}
+          aria-describedby={describedBy}
           className="w-full border border-line bg-ink py-3.5 pr-4 pl-11 text-sm text-smoke outline-none transition-colors placeholder:text-ash/50 focus:border-signal"
         />
       </div>
